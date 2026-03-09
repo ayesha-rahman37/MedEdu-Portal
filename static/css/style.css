@@ -5,13 +5,13 @@ body {
     margin: 0;
     padding: 0;
 
-    font-family: Arial, Helvetica, sans-serif;
+    /* FORCE REPORT STYLE FONT */
+
+    font-family: "Times New Roman", Georgia, serif !important;
 
     color: white;
 
     height: 100vh;
-
-    /* DARK COLOR BACKGROUND */
 
     background: linear-gradient(
         135deg,
@@ -20,7 +20,7 @@ body {
         #3b0050,
         #0a2a45,
         #6a0035,
-        #c74209d9,
+        #cb410b,
         #0b0b0f
     );
 
@@ -54,7 +54,7 @@ body::before {
 
 
 
-/* ---------- COLOR GLOW OVERLAY ---------- */
+/* ---------- COLOR GLOW ---------- */
 
 body::after {
 
@@ -104,11 +104,13 @@ body::after {
 
 .title {
 
+    font-family: Georgia, "Times New Roman", serif;
+
     font-size: 72px;
 
     font-weight: bold;
 
-    letter-spacing: 4px;
+    letter-spacing: 3px;
 
     text-shadow: 0px 0px 20px rgba(255,255,255,0.25);
 
@@ -119,6 +121,8 @@ body::after {
 /* ---------- SUBTITLE ---------- */
 
 .subtitle {
+
+    font-family: "Times New Roman", Georgia, serif;
 
     font-size: 22px;
 
@@ -134,6 +138,8 @@ body::after {
 
 .btn {
 
+    font-family: "Times New Roman", Georgia, serif;
+
     margin-top: 40px;
 
     padding: 14px 36px;
@@ -148,9 +154,7 @@ body::after {
 
     color: white;
 
-    /* FLIRT COLOR BUTTON */
-
-    background: #b6035d;
+    background: #a2006d;
 
     box-shadow: 0px 0px 18px rgba(162,0,109,0.6);
 
