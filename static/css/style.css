@@ -3,15 +3,8 @@
 body {
 
     margin: 0;
-    padding: 0;
-
-    /* FORCE REPORT STYLE FONT */
-
-    font-family: "Times New Roman", Georgia, serif !important;
-
+    font-family: "Times New Roman", Georgia, serif;
     color: white;
-
-    height: 100vh;
 
     background: linear-gradient(
         135deg,
@@ -27,151 +20,184 @@ body {
 }
 
 
+/* ---------- HEADER ---------- */
 
-/* ---------- MEDICAL PATTERN ---------- */
-
-body::before {
-
-    content: "";
-
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background-image: url("/static/images/medical-pattern.png");
-
-    background-size: 260px;
-
-    opacity: 0.12;
-
-    z-index: -2;
-
-}
-
-
-
-/* ---------- COLOR GLOW ---------- */
-
-body::after {
-
-    content: "";
-
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: radial-gradient(
-        circle at 75% 60%,
-        rgba(255,0,120,0.25),
-        transparent 40%
-    );
-
-    z-index: -1;
-
-}
-
-
-
-/* ---------- CONTAINER ---------- */
-
-.container {
+.header {
 
     display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
+    justify-content: space-between;
     align-items: center;
 
-    height: 100vh;
+    padding: 15px 60px;
 
-    text-align: center;
+    background: rgba(0, 0, 0, 0.6);
+
+    position: fixed;
+    width: 100%;
+    top: 0;
 
 }
 
 
+/* LOGO */
 
-/* ---------- TITLE ---------- */
+.logo {
 
-.title {
-
-    font-family: Georgia, "Times New Roman", serif;
-
-    font-size: 72px;
-
+    font-size: 24px;
     font-weight: bold;
 
-    letter-spacing: 3px;
-
-    text-shadow: 0px 0px 20px rgba(255,255,255,0.25);
-
 }
 
 
+/* NAVBAR */
 
-/* ---------- SUBTITLE ---------- */
-
-.subtitle {
-
-    font-family: "Times New Roman", Georgia, serif;
-
-    font-size: 22px;
-
-    margin-top: 10px;
-
-    opacity: 0.9;
-
-}
-
-
-
-/* ---------- BUTTON ---------- */
-
-.btn {
-
-    font-family: "Times New Roman", Georgia, serif;
-
-    margin-top: 40px;
-
-    padding: 14px 36px;
-
-    font-size: 18px;
-
-    border: none;
-
-    border-radius: 8px;
-
-    cursor: pointer;
+.navbar a {
 
     color: white;
+    text-decoration: none;
 
-    background: #a2006d;
+    margin-left: 20px;
 
-    box-shadow: 0px 0px 18px rgba(162,0,109,0.6);
+    font-size: 16px;
+
+    padding: 8px 14px;
+    border-radius: 5px;
 
     transition: 0.3s;
 
 }
 
 
+.navbar a:hover {
 
-/* ---------- BUTTON HOVER ---------- */
+    background: #a2006d;
+
+}
+
+
+/* ---------- HERO SECTION ---------- */
+
+.hero {
+
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    background-image: url("/static/images/medical.png");
+    background-size: 260px;
+
+}
+
+
+/* HERO TEXT */
+
+.hero h1 {
+
+    font-size: 70px;
+
+}
+
+
+.hero p {
+
+    font-size: 22px;
+    margin-top: 10px;
+
+}
+
+
+/* BUTTON */
+
+.btn {
+
+    margin-top: 30px;
+
+    padding: 12px 30px;
+
+    font-size: 18px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #a2006d;
+
+    color: white;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+}
+
 
 .btn:hover {
 
-    transform: scale(1.08);
-
     background: #c00082;
 
-    box-shadow: 0px 0px 30px rgba(162,0,109,0.9);
+}
+
+
+/* ---------- ABOUT SECTION ---------- */
+
+.about {
+
+    padding: 80px 120px;
+    text-align: center;
+
+}
+
+
+/* ---------- FEATURES SECTION ---------- */
+
+.features {
+
+    display: flex;
+    justify-content: center;
+
+    gap: 30px;
+
+    padding: 50px;
+
+}
+
+
+.card {
+
+    background: rgba(255, 255, 255, 0.1);
+
+    padding: 30px;
+
+    width: 260px;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+}
+
+
+/* ---------- CONTACT ---------- */
+
+.contact {
+
+    text-align: center;
+    padding: 60px;
+
+}
+
+
+/* ---------- FOOTER ---------- */
+
+.footer {
+
+    text-align: center;
+
+    padding: 20px;
+
+    background: black;
 
 }
