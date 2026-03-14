@@ -2,29 +2,38 @@
 
 {% block content %}
 
-<div style="padding-top:120px; text-align:center;">
+<div class="auth-container">
 
-<h2>Login</h2>
+    <div class="auth-card">
 
-<form method="POST">
+        <h2>Login</h2>
 
-{% csrf_token %}
+        <form method="POST">
 
-<label>MedEdu ID</label>
-<br>
-<input type="text" name="mededu_id">
+            {% csrf_token %}
 
-<br><br>
+            <div class="form-group">
+                <label>MedEdu ID</label>
+                <input type="text" name="username" required>
+            </div>
 
-<label>Password</label>
-<br>
-<input type="password" name="password">
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" required>
+            </div>
 
-<br><br>
+            <button type="submit" class="auth-btn">
+                Login
+            </button>
 
-<button type="submit">Login</button>
+        </form>
 
-</form>
+        <p class="auth-link">
+            Don't have an account?
+            <a href="{% url 'signup' %}">Signup</a>
+        </p>
+
+    </div>
 
 </div>
 
