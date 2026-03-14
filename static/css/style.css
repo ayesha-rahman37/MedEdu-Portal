@@ -1,10 +1,16 @@
 /* ---------- BODY ---------- */
 
+/* BODY */
+
 body {
 
     margin: 0;
+
     font-family: "Times New Roman", Georgia, serif;
+
     color: white;
+
+    min-height: 100vh;
 
     background: linear-gradient(
         135deg,
@@ -17,7 +23,15 @@ body {
         #0b0b0f
     );
 
+    background-attachment: fixed;
+
+    background-repeat: no-repeat;
+
+    background-size: cover;
+
 }
+
+
 
 
 /* ---------- HEADER ---------- */
@@ -25,43 +39,40 @@ body {
 .header {
 
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 
-    padding: 15px 60px;
+    padding: 15px 20px;
 
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0,0,0,0.65);
 
     position: fixed;
+
     width: 100%;
+
     top: 0;
 
-}
-
-
-/* LOGO */
-
-.logo {
-
-    font-size: 24px;
-    font-weight: bold;
+    z-index: 1000;
 
 }
 
 
-/* NAVBAR */
+
+/* ---------- NAVBAR ---------- */
 
 .navbar a {
 
     color: white;
+
     text-decoration: none;
 
-    margin-left: 20px;
-
-    font-size: 16px;
+    margin: 0 15px;
 
     padding: 8px 14px;
+
     border-radius: 5px;
+
+    font-size: 16px;
 
     transition: 0.3s;
 
@@ -75,6 +86,7 @@ body {
 }
 
 
+
 /* ---------- HERO SECTION ---------- */
 
 .hero {
@@ -82,45 +94,59 @@ body {
     height: 100vh;
 
     display: flex;
+
     justify-content: center;
+
     align-items: center;
 
     text-align: center;
 
+    padding-top: 70px;
+
     background-image: url("/static/images/medical-pattern.png");
+
     background-size: 260px;
 
 }
 
 
-/* HERO TEXT */
+
+/* HERO TITLE */
 
 .hero h1 {
 
     font-size: 70px;
 
+    margin-bottom: 10px;
+
 }
 
+
+
+/* HERO TEXT */
 
 .hero p {
 
     font-size: 22px;
-    margin-top: 10px;
+
+    margin-bottom: 20px;
 
 }
 
 
-/* BUTTON */
+
+/* ---------- BUTTON ---------- */
 
 .btn {
 
-    margin-top: 30px;
+    margin-top: 20px;
 
     padding: 12px 30px;
 
     font-size: 18px;
 
     border: none;
+
     border-radius: 8px;
 
     background: #a2006d;
@@ -141,33 +167,28 @@ body {
 }
 
 
-/* ---------- ABOUT SECTION ---------- */
-
-.about {
-
-    padding: 80px 120px;
-    text-align: center;
-
-}
-
 
 /* ---------- FEATURES SECTION ---------- */
 
 .features {
 
     display: flex;
+
     justify-content: center;
 
     gap: 30px;
 
-    padding: 50px;
+    padding: 80px 40px;
 
 }
 
 
+
+/* FEATURE CARD */
+
 .card {
 
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255,255,255,0.1);
 
     padding: 30px;
 
@@ -177,27 +198,95 @@ body {
 
     text-align: center;
 
-}
-
-
-/* ---------- CONTACT ---------- */
-
-.contact {
-
-    text-align: center;
-    padding: 60px;
+    backdrop-filter: blur(4px);
 
 }
+
 
 
 /* ---------- FOOTER ---------- */
 
 .footer {
 
+    background: linear-gradient(
+        135deg,
+        #0b0b0f,
+        #1c0033,
+        #3b0050,
+        #0a2a45,
+        #6a0035,
+        #cb410b,
+        #0b0b0f
+    );
+
+    padding-top: 40px;
+
+}
+
+
+
+/* ---------- FOOTER GRID ---------- */
+
+.footer-container {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 60px;
+
+    padding: 20px 120px;
+
+}
+
+
+
+/* ---------- ABOUT ---------- */
+
+.footer-about h2 {
+
+    margin-bottom: 15px;
+
+}
+
+
+.footer-about p {
+
+    line-height: 1.6;
+
+}
+
+
+
+/* ---------- CONTACT ---------- */
+
+.footer-contact h2 {
+
+    margin-bottom: 15px;
+
+}
+
+
+.footer-contact p {
+
+    margin: 8px 0;
+
+}
+
+
+
+/* ---------- FOOTER BOTTOM ---------- */
+
+.footer-bottom {
+
     text-align: center;
 
-    padding: 20px;
-
     background: black;
+
+    color: white;
+
+    padding: 15px;
+
+    margin-top: 30px;
 
 }

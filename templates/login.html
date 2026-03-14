@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div style="padding-top:120px; text-align:center;">
+
+<h2>Login</h2>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<label>MedEdu ID</label>
+<br>
+<input type="text" name="mededu_id">
+
+<br><br>
+
+<label>Password</label>
+<br>
+<input type="password" name="password">
+
+<br><br>
+
+<button type="submit">Login</button>
+
+</form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div style="padding-top:120px; text-align:center;">
+
+<h2>Create Account</h2>
+
+<form method="POST">
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<button type="submit">Create Account</button>
+
+</form>
+
+</div>
+
+{% endblock %}

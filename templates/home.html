@@ -1,142 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
+{% block content %}
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<section class="hero">
 
-    <title>MedEdu Portal</title>
+<div class="hero-content">
 
-    <link rel="stylesheet" href="/static/css/style.css">
+<h1>MedEdu Portal</h1>
 
-</head>
+<p>Medical & Dental Management System</p>
 
-<body>
+<a href="{% url 'login' %}">
+<button class="btn">Enter Portal</button>
+</a>
 
-    <!-- HEADER -->
+</div>
 
-    <header class="header">
-
-        <!-- <div class="logo">
-            MedEdu Portal
-        </div> -->
-
-        <nav class="navbar">
-
-            <a href="#">Home</a>
-            <a href="#">Department</a>
-            <a href="#">Daily Exam</a>
-            <a href="#">Result</a>
-            <a href="#">Library</a>
-            <a href="#">Internship</a>
-            <a href="#">News & Events</a>
-            <a href="#">Search</a>
-            <a href="#">Settings</a>
-
-        </nav>
-
-    </header>
+</section>
 
 
-    <!-- HERO SECTION -->
 
-    <section class="hero">
+<section class="features">
 
-        <div class="hero-content">
+<div class="card">
 
-            <h1>
-                MedEdu Portal
-            </h1>
+<h3>Academic Management</h3>
 
-            <p>
-                Medical & Dental Management System
-            </p>
+<p>
+Manage exams, academic results and student progress.
+</p>
 
-            <button class="btn">
-                Enter Portal
-            </button>
-
-        </div>
-
-    </section>
+</div>
 
 
-    <!-- ABOUT SECTION -->
+<div class="card">
 
-    <section class="about">
+<h3>Clinical Case Logs</h3>
 
-        <h2>About MedEdu Portal</h2>
+<p>
+Record and verify clinical case experiences.
+</p>
 
-        <p>
-            MedEdu Portal is an integrated digital platform designed for managing
-            academic and clinical activities in medical and dental institutions.
-            It centralizes examination management, clinical case logs, internship
-            tracking, and academic records.
-        </p>
-
-    </section>
+</div>
 
 
-    <!-- FEATURES SECTION -->
+<div class="card">
 
-    <section class="features">
+<h3>Internship Management</h3>
 
-        <div class="card">
+<p>
+Track internship eligibility and rotations.
+</p>
 
-            <h3>Academic Management</h3>
+</div>
 
-            <p>
-                Manage exams, academic results and student progress.
-            </p>
-
-        </div>
-
-        <div class="card">
-
-            <h3>Clinical Case Logs</h3>
-
-            <p>
-                Record and verify clinical case experiences.
-            </p>
-
-        </div>
-
-        <div class="card">
-
-            <h3>Internship Management</h3>
-
-            <p>
-                Track internship eligibility and rotations.
-            </p>
-
-        </div>
-
-    </section>
+</section>
 
 
-    <!-- CONTACT SECTION -->
 
-    <section class="contact">
+<footer class="footer">
 
-        <h2>Contact</h2>
-
-        <p>Email: mededuportal@gmail.com</p>
-        <p>Phone: +880 1234 567890</p>
-
-    </section>
+<div class="footer-container">
 
 
-    <!-- FOOTER -->
+<div class="footer-about">
 
-    <footer class="footer">
+<h2>About Us</h2>
 
-        <p>
-            © 2026 MedEdu Portal | All Rights Reserved
-        </p>
+<p>
 
-    </footer>
+MedEdu Portal is an integrated digital platform developed
+to manage academic and clinical activities for medical
+and dental institutions.
 
-</body>
+</p>
 
-</html>
+</div>
+
+
+
+<div class="footer-contact">
+
+<h2>Contact</h2>
+
+<p>Email: mededuportal@gmail.com</p>
+
+<p>Phone: +880 1234 567890</p>
+
+<p>Address: Shahbagh, Dhaka-1000</p>
+
+</div>
+
+</div>
+
+
+<div class="footer-bottom">
+
+© 2026 MedEdu Portal | All Rights Reserved
+
+</div>
+
+</footer>
+
+
+{% endblock %}
