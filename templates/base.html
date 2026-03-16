@@ -5,6 +5,9 @@
 
 <head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>MedEdu Portal</title>
 
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -13,29 +16,90 @@
 
 <body>
 
+
 <header class="header">
 
 <nav class="navbar">
 
 <a href="/">Home</a>
-<a href="#">Department</a>
-<a href="#">Daily Exam</a>
-<a href="#">Result</a>
-<a href="#">Library</a>
-<a href="#">Internship</a>
-<a href="#">News & Events</a>
-<a href="#">Search</a>
-<a href="#">Settings</a>
 
 {% if user.is_authenticated %}
 
-<a href="{% url 'profile' %}">Profile</a>
-<a href="{% url 'logout' %}">Logout</a>
+    {% if user.role == "student" %}
+
+        <a href="#">Department</a>
+
+        <a href="#">Result</a>
+
+        <a href="#">Course & Syllabus</a>
+
+        <a href="#">Library</a>
+
+        <a href="#">Internship</a>
+
+        <a href="#">News & Events</a>
+
+    {% elif user.role == "intern" %}
+
+        <a href="#">Rotation Schedule</a>
+
+        <a href="#">Ward Duty</a>
+
+        <a href="#">OT Duty</a>
+
+        <a href="#">Internship Completion</a>
+
+    {% elif user.role == "faculty" %}
+
+        <a href="#">Upload Results</a>
+
+        <a href="#">Student Monitoring</a>
+
+        <a href="#">Academic Reports</a>
+
+    {% elif user.role == "doctor" %}
+
+        <a href="#">Ward Attendance</a>
+
+        <a href="#">OT Attendance</a>
+
+        <a href="#">Clinical Case Logs</a>
+
+    {% elif user.role == "ward" %}
+
+        <a href="#">Ward Posting</a>
+
+        <a href="#">OT Schedule</a>
+
+        <a href="#">Duty Monitoring</a>
+
+    {% elif user.role == "library" %}
+
+        <a href="#">Book Issue</a>
+
+        <a href="#">Book Return</a>
+
+        <a href="#">Library Records</a>
+
+    {% elif user.role == "admin" %}
+
+        <a href="#">Academic Control</a>
+
+        <a href="#">Eligibility Management</a>
+
+        <a href="#">Institution Reports</a>
+
+    {% endif %}
+
+    <a href="{% url 'profile' %}">Profile</a>
+
+    <a href="{% url 'logout' %}">Logout</a>
 
 {% else %}
 
-<a href="{% url 'login' %}">Login</a>
-<a href="{% url 'signup' %}">Signup</a>
+    <a href="{% url 'login' %}">Login</a>
+
+    <a href="{% url 'signup' %}">Signup</a>
 
 {% endif %}
 
@@ -44,8 +108,11 @@
 </header>
 
 
+
 {% block content %}
 {% endblock %}
 
+
 </body>
+
 </html>

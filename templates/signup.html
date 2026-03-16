@@ -9,6 +9,7 @@
         <h2>Create Account</h2>
 
         <form method="POST">
+
             {% csrf_token %}
 
             <div class="form-group">
@@ -42,9 +43,32 @@
 
         </form>
 
+
+        <!-- SHOW GENERATED ID -->
+
+        {% if mededu_id %}
+
+        <div style="margin-top:20px; text-align:center">
+
+            <h3>Your MedEdu ID</h3>
+
+            <p style="font-size:22px; color:#ff2d8f;">
+                {{ mededu_id }}
+            </p>
+
+            <p>Use this ID to login</p>
+
+        </div>
+
+        {% endif %}
+
+
         <p class="auth-link">
+
             Already have an account?
+
             <a href="{% url 'login' %}">Login</a>
+
         </p>
 
     </div>

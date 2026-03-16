@@ -1,15 +1,10 @@
 /* ---------- BODY ---------- */
 
-/* BODY */
-
 body {
 
     margin: 0;
-
     font-family: "Times New Roman", Georgia, serif;
-
     color: white;
-
     min-height: 100vh;
 
     background: linear-gradient(
@@ -24,13 +19,10 @@ body {
     );
 
     background-attachment: fixed;
-
     background-repeat: no-repeat;
-
     background-size: cover;
 
 }
-
 
 
 
@@ -49,7 +41,6 @@ body {
     position: fixed;
 
     width: 100%;
-
     top: 0;
 
     z-index: 1000;
@@ -60,13 +51,17 @@ body {
 
 /* ---------- NAVBAR ---------- */
 
+.navbar {
+
+    display: flex;
+    gap: 10px;
+
+}
+
 .navbar a {
 
     color: white;
-
     text-decoration: none;
-
-    margin: 0 15px;
 
     padding: 8px 14px;
 
@@ -77,7 +72,6 @@ body {
     transition: 0.3s;
 
 }
-
 
 .navbar a:hover {
 
@@ -94,17 +88,14 @@ body {
     height: 100vh;
 
     display: flex;
-
     justify-content: center;
-
     align-items: center;
 
     text-align: center;
 
-    padding-top: 70px;
+    padding-top: 80px;
 
     background-image: url("/static/images/medical-pattern.png");
-
     background-size: 260px;
 
 }
@@ -116,7 +107,6 @@ body {
 .hero h1 {
 
     font-size: 70px;
-
     margin-bottom: 10px;
 
 }
@@ -128,7 +118,6 @@ body {
 .hero p {
 
     font-size: 22px;
-
     margin-bottom: 20px;
 
 }
@@ -146,7 +135,6 @@ body {
     font-size: 18px;
 
     border: none;
-
     border-radius: 8px;
 
     background: #a2006d;
@@ -158,7 +146,6 @@ body {
     transition: 0.3s;
 
 }
-
 
 .btn:hover {
 
@@ -208,6 +195,8 @@ body {
 
 .footer {
 
+    padding-top: 40px;
+
     background: linear-gradient(
         135deg,
         #0b0b0f,
@@ -219,13 +208,11 @@ body {
         #0b0b0f
     );
 
-    padding-top: 40px;
-
 }
 
 
 
-/* ---------- FOOTER GRID ---------- */
+/* FOOTER GRID */
 
 .footer-container {
 
@@ -241,14 +228,13 @@ body {
 
 
 
-/* ---------- ABOUT ---------- */
+/* ABOUT */
 
 .footer-about h2 {
 
     margin-bottom: 15px;
 
 }
-
 
 .footer-about p {
 
@@ -258,14 +244,13 @@ body {
 
 
 
-/* ---------- CONTACT ---------- */
+/* CONTACT */
 
 .footer-contact h2 {
 
     margin-bottom: 15px;
 
 }
-
 
 .footer-contact p {
 
@@ -275,15 +260,13 @@ body {
 
 
 
-/* ---------- FOOTER BOTTOM ---------- */
+/* FOOTER BOTTOM */
 
 .footer-bottom {
 
     text-align: center;
 
     background: black;
-
-    color: white;
 
     padding: 15px;
 
@@ -292,7 +275,8 @@ body {
 }
 
 
-/* AUTH PAGE CONTAINER */
+
+/* ---------- AUTH PAGE ---------- */
 
 .auth-container{
 
@@ -304,13 +288,13 @@ body {
 
     align-items:center;
 
-    margin-top:80px;   /* navbar gap */
+    margin-top:80px;
 
 }
 
 
 
-/* CARD */
+/* LOGIN / SIGNUP CARD */
 
 .auth-card{
 
@@ -326,9 +310,8 @@ body {
 
     box-shadow:0 10px 35px rgba(0,0,0,0.6);
 
-    margin-bottom:40px;
-
 }
+
 
 
 /* TITLE */
@@ -344,6 +327,7 @@ body {
 }
 
 
+
 /* INPUT GROUP */
 
 .form-group{
@@ -351,6 +335,7 @@ body {
     margin-bottom:18px;
 
 }
+
 
 
 /* LABEL */
@@ -364,6 +349,7 @@ body {
     display:block;
 
 }
+
 
 
 /* INPUT */
@@ -388,6 +374,7 @@ body {
 }
 
 
+
 /* INPUT FOCUS */
 
 .form-group input:focus,
@@ -398,7 +385,8 @@ body {
 }
 
 
-/* BUTTON */
+
+/* AUTH BUTTON */
 
 .auth-btn{
 
@@ -422,12 +410,12 @@ body {
 
 }
 
-
 .auth-btn:hover{
 
     transform:scale(1.03);
 
 }
+
 
 
 /* LOGIN LINK */
@@ -447,5 +435,83 @@ body {
     color:#ff2d8f;
 
     text-decoration:none;
+
+}
+
+
+
+/* ---------- DASHBOARD ---------- */
+
+.dashboard-title{
+
+    text-align:center;
+    margin-top:100px;
+    font-size:32px;
+
+}
+
+
+
+/* GRID */
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+
+    padding:40px 80px;
+
+}
+
+
+
+/* DASHBOARD CARD */
+
+.dash-card{
+
+    background:#111;
+
+    padding:35px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+}
+
+.dash-card:hover{
+
+    transform:scale(1.05);
+
+    background:#ff0077;
+
+}
+
+.profile-info p{
+
+margin:10px 0;
+
+font-size:16px;
+
+}
+
+.profile-actions{
+
+margin-top:20px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:10px;
 
 }

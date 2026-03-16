@@ -28,12 +28,6 @@
 
         </form>
 
-        {% if error %}
-        <p style="color:red; text-align:center; margin-top:10px;">
-            {{ error }}
-        </p>
-        {% endif %}
-
         <p class="auth-link">
             Don't have an account?
             <a href="{% url 'signup' %}">Signup</a>

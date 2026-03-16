@@ -8,10 +8,25 @@
 
         <h2>User Profile</h2>
 
-        <p><b>Username:</b> {{ request.user.username }}</p>
-        <p><b>Email:</b> {{ request.user.email }}</p>
-        <p><b>Phone:</b> {{ request.user.phone }}</p>
-        <p><b>Role:</b> {{ request.user.role }}</p>
+        <div class="profile-info">
+
+            <p><b>Username:</b> {{ request.user.username }}</p>
+
+            <p><b>Email:</b> {{ request.user.email }}</p>
+
+            <p><b>Phone:</b> {{ request.user.phone }}</p>
+
+            <p><b>Role:</b> {{ request.user.role }}</p>
+
+        </div>
+
+        <div class="profile-actions">
+
+            <a href="#" class="auth-btn">Edit Profile</a>
+
+            <a href="#" class="auth-btn">Change Password</a>
+
+        </div>
 
     </div>
 
