@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="auth-container">
+
+<div class="auth-card">
+
+<h2>Account Created Successfully</h2>
+
+<p>Your MedEdu ID is:</p>
+
+<h3>{{ mededu_id }}</h3>
+
+<p>Please save this ID. You will use it to login.</p>
+
+<a href="{% url 'login' %}" class="auth-btn">
+Go to Login
+</a>
+
+</div>
+
+</div>
+
+{% endblock %}

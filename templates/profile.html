@@ -2,15 +2,18 @@
 
 {% block content %}
 
-<div style="padding-top:120px; text-align:center;">
+<div class="auth-container">
 
-<h2>User Profile</h2>
+    <div class="auth-card">
 
-<p>Username: {{ user.username }}</p>
+        <h2>User Profile</h2>
 
-<p>Email: {{ user.email }}</p>
+        <p><b>Username:</b> {{ request.user.username }}</p>
+        <p><b>Email:</b> {{ request.user.email }}</p>
+        <p><b>Phone:</b> {{ request.user.phone }}</p>
+        <p><b>Role:</b> {{ request.user.role }}</p>
 
-<p>Role: {{ user.role }}</p>
+    </div>
 
 </div>
 
