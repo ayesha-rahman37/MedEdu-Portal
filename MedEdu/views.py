@@ -5,14 +5,11 @@ from .models import User
 
 
 # HOME PAGE
-
 def home(request):
-
-    return render(request,"home.html")
+    return render(request, "home.html")
 
 
 # SIGNUP
-
 def signup_view(request):
 
     if request.method == "POST":
@@ -23,27 +20,35 @@ def signup_view(request):
         role = request.POST.get("role")
         password = request.POST.get("password")
 
-        user = User.objects.create_user(
+        user = User.objects.create(
             username=username,
             email=email,
-            password=password,
             phone=phone,
             role=role
         )
 
-        # ID prefix
+        user.set_password(password)
+
+        # Unique MedEdu ID generate
+
         if role == "student":
             prefix = "S"
-        elif role == "doctor":
-            prefix = "D"
+
         elif role == "faculty":
             prefix = "F"
+
         elif role == "intern":
             prefix = "I"
-        elif role == "library":
-            prefix = "L"
+
+        elif role == "doctor":
+            prefix = "D"
+
         elif role == "ward":
             prefix = "W"
+
+        elif role == "library":
+            prefix = "L"
+
         else:
             prefix = "A"
 
@@ -59,7 +64,6 @@ def signup_view(request):
 
 
 # LOGIN
-
 def login_view(request):
 
     if request.method == "POST":
@@ -68,24 +72,22 @@ def login_view(request):
         password = request.POST.get("password")
 
         try:
-
             user = User.objects.get(mededu_id=mededu_id)
 
             if user.check_password(password):
 
-                login(request,user)
+                login(request, user)
 
+                # IMPORTANT: redirect to dashboard (NOT admin)
                 return redirect("dashboard")
 
-        except:
-
-            pass
+        except User.DoesNotExist:
+            return render(request,"login.html",{"error":"Invalid ID or password"})
 
     return render(request,"login.html")
 
 
 # LOGOUT
-
 def logout_view(request):
 
     logout(request)
@@ -93,18 +95,24 @@ def logout_view(request):
     return redirect("home")
 
 
-# DASHBOARD REDIRECT
+# PROFILE
+@login_required
+def profile_view(request):
 
+    return render(request, "profile.html")
+
+
+# DASHBOARD REDIRECT
 @login_required
 def dashboard_redirect(request):
 
     role = request.user.role
 
-    if role == "student":
-        return redirect("student_dashboard")
+    if role == "admin":
+        return redirect("admin_dashboard")
 
-    elif role == "doctor":
-        return redirect("doctor_dashboard")
+    elif role == "student":
+        return redirect("student_dashboard")
 
     elif role == "faculty":
         return redirect("faculty_dashboard")
@@ -112,56 +120,50 @@ def dashboard_redirect(request):
     elif role == "intern":
         return redirect("intern_dashboard")
 
-    elif role == "library":
-        return redirect("library_dashboard")
+    elif role == "doctor":
+        return redirect("doctor_dashboard")
 
     elif role == "ward":
         return redirect("ward_dashboard")
 
-    else:
-        return redirect("admin_dashboard")
+    elif role == "library":
+        return redirect("library_dashboard")
+
+    return redirect("home")
 
 
 # DASHBOARDS
 
 @login_required
 def student_dashboard(request):
-    return render(request,"dashboards/student_dashboard.html")
-
-
-@login_required
-def doctor_dashboard(request):
-    return render(request,"dashboards/doctor_dashboard.html")
+    return render(request, "dashboards/student_dashboard.html")
 
 
 @login_required
 def faculty_dashboard(request):
-    return render(request,"dashboards/faculty_dashboard.html")
+    return render(request, "dashboards/faculty_dashboard.html")
 
 
 @login_required
 def intern_dashboard(request):
-    return render(request,"dashboards/intern_dashboard.html")
+    return render(request, "dashboards/intern_dashboard.html")
 
 
 @login_required
-def library_dashboard(request):
-    return render(request,"dashboards/library_dashboard.html")
+def doctor_dashboard(request):
+    return render(request, "dashboards/doctor_dashboard.html")
 
 
 @login_required
 def ward_dashboard(request):
-    return render(request,"dashboards/ward_dashboard.html")
+    return render(request, "dashboards/ward_dashboard.html")
+
+
+@login_required
+def library_dashboard(request):
+    return render(request, "dashboards/library_dashboard.html")
 
 
 @login_required
 def admin_dashboard(request):
-    return render(request,"dashboards/admin_dashboard.html")
-
-
-# PROFILE
-
-@login_required
-def profile_view(request):
-
-    return render(request,"profile.html")
+    return render(request, "dashboards/admin_dashboard.html")

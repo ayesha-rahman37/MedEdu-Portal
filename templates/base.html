@@ -1,118 +1,111 @@
-{% load static %}
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>MedEdu Portal</title>
-
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-
+    <meta charset="UTF-8">
+    <title>MedEdu Portal</title>
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 
 <body>
 
-
 <header class="header">
+    <nav class="navbar">
 
-<nav class="navbar">
+        {% if user.is_authenticated %}
 
-<a href="/">Home</a>
+            <!-- ================= STUDENT ================= -->
+            {% if user.role == "student" %}
+                <a href="{% url 'student_dashboard' %}">Home</a>
+                <a href="#">Class Schedule</a>
+                <a href="#">Course & Syllabus</a>
+                <a href="#">Exam</a>
+                <a href="#">Result</a>
+                <a href="#">Payment</a>
+                <a href="#">Library</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-{% if user.is_authenticated %}
+            <!-- ================= FACULTY ================= -->
+            {% elif user.role == "faculty" %}
+                <a href="{% url 'faculty_dashboard' %}">Home</a>
+                <a href="#">Class Schedule</a>
+                <a href="#">Upload Marks</a>
+                <a href="#">Edit Marks</a>
+                <a href="#">Exam Results</a>
+                <a href="#">Student Attendance</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-    {% if user.role == "student" %}
+            <!-- ================= INTERN ================= -->
+            {% elif user.role == "intern" %}
+                <a href="{% url 'intern_dashboard' %}">Home</a>
+                <a href="#">Duty Schedule</a>
+                <a href="#">Clinical Case Entry</a>
+                <a href="#">Payments</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-        <a href="#">Department</a>
+            <!-- ================= DOCTOR ================= -->
+            {% elif user.role == "doctor" %}
+                <a href="{% url 'doctor_dashboard' %}">Home</a>
+                <a href="#">Class Schedule</a>
+                <a href="#">Clinical Case Review</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-        <a href="#">Result</a>
+            <!-- ================= WARD AUTHORITY ================= -->
+            {% elif user.role == "ward" %}
+                <a href="{% url 'ward_dashboard' %}">Home</a>
+                <a href="#">Students Attendance</a>
+                <a href="#">Student Duty List</a>
+                <a href="#">Department Reports</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-        <a href="#">Course & Syllabus</a>
+            <!-- ================= LIBRARY ================= -->
+            {% elif user.role == "library" %}
+                <a href="{% url 'library_dashboard' %}">Home</a>
+                <a href="#">Book Issue</a>
+                <a href="#">Book Return</a>
+                <a href="#">Book Records</a>
+                <a href="#">Student Borrow History</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-        <a href="#">Library</a>
+            <!-- ================= ADMIN ================= -->
+            {% elif user.role == "admin" %}
+                <a href="{% url 'admin_dashboard' %}">Home</a>
+                <a href="#">Student Records</a>
+                <a href="#">Payments</a>
+                <a href="#">Academic Control</a>
+                <a href="#">Eligibility</a>
+                <a href="#">Reports</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-        <a href="#">Internship</a>
+            {% endif %}
 
-        <a href="#">News & Events</a>
+        {% else %}
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'signup' %}">Signup</a>
+        {% endif %}
 
-    {% elif user.role == "intern" %}
-
-        <a href="#">Rotation Schedule</a>
-
-        <a href="#">Ward Duty</a>
-
-        <a href="#">OT Duty</a>
-
-        <a href="#">Internship Completion</a>
-
-    {% elif user.role == "faculty" %}
-
-        <a href="#">Upload Results</a>
-
-        <a href="#">Student Monitoring</a>
-
-        <a href="#">Academic Reports</a>
-
-    {% elif user.role == "doctor" %}
-
-        <a href="#">Ward Attendance</a>
-
-        <a href="#">OT Attendance</a>
-
-        <a href="#">Clinical Case Logs</a>
-
-    {% elif user.role == "ward" %}
-
-        <a href="#">Ward Posting</a>
-
-        <a href="#">OT Schedule</a>
-
-        <a href="#">Duty Monitoring</a>
-
-    {% elif user.role == "library" %}
-
-        <a href="#">Book Issue</a>
-
-        <a href="#">Book Return</a>
-
-        <a href="#">Library Records</a>
-
-    {% elif user.role == "admin" %}
-
-        <a href="#">Academic Control</a>
-
-        <a href="#">Eligibility Management</a>
-
-        <a href="#">Institution Reports</a>
-
-    {% endif %}
-
-    <a href="{% url 'profile' %}">Profile</a>
-
-    <a href="{% url 'logout' %}">Logout</a>
-
-{% else %}
-
-    <a href="{% url 'login' %}">Login</a>
-
-    <a href="{% url 'signup' %}">Signup</a>
-
-{% endif %}
-
-</nav>
-
+    </nav>
 </header>
 
-
-
-{% block content %}
-{% endblock %}
-
+<div class="main-content">
+    {% block content %}
+    {% endblock %}
+</div>
 
 </body>
-
 </html>

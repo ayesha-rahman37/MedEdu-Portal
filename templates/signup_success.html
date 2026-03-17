@@ -3,25 +3,21 @@
 {% block content %}
 
 <div class="auth-container">
+    <div class="auth-card">
 
-<div class="auth-card">
+        <h2>Account Created Successfully</h2>
 
-<h2>Account Created Successfully</h2>
+        <p>Your MedEdu ID is:</p>
 
-<p>Your MedEdu ID is:</p>
+        <h3 style="color: #ff2d8f; text-align: center;">{{ mededu_id }}</h3>
 
-<h3 style="color:#ff2d8f; text-align:center;">
-{{ mededu_id }}
-</h3>
+        <p>Please save this ID. You will use it to login.</p>
 
-<p>Please save this ID. You will use it to login.</p>
+        <a href="{% url 'login' %}" class="auth-btn" style="text-decoration: none; display: block; text-align: center;">
+            Go to Login
+        </a>
 
-<a href="{% url 'login' %}" class="auth-btn" style="text-decoration:none; display:block; text-align:center;">
-Go to Login
-</a>
-
-</div>
-
+    </div>
 </div>
 
 {% endblock %}
