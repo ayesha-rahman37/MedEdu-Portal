@@ -15,7 +15,7 @@
         {% if user.is_authenticated %}
 
             <!-- ================= STUDENT ================= -->
-            {% if user.role == "student" %}
+            {% if user.role == "medical_student" or user.role == "dental_student" %}
                 <a href="{% url 'student_dashboard' %}">Home</a>
                 <a href="#">Class Schedule</a>
                 <a href="#">Course & Syllabus</a>

@@ -31,8 +31,11 @@ def signup_view(request):
 
         # Unique MedEdu ID generate
 
-        if role == "student":
-            prefix = "S"
+        if role == "medical_student":
+            prefix = "MS"
+
+        elif role == "dental_student":
+            prefix = "DS"
 
         elif role == "faculty":
             prefix = "F"
@@ -108,10 +111,7 @@ def dashboard_redirect(request):
 
     role = request.user.role
 
-    if role == "admin":
-        return redirect("admin_dashboard")
-
-    elif role == "student":
+    if role == "medical_student" or role == "dental_student":
         return redirect("student_dashboard")
 
     elif role == "faculty":
@@ -128,6 +128,9 @@ def dashboard_redirect(request):
 
     elif role == "library":
         return redirect("library_dashboard")
+
+    elif role == "admin":
+        return redirect("admin_dashboard")
 
     return redirect("home")
 
