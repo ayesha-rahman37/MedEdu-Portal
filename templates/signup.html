@@ -4,74 +4,60 @@
 
 <div class="auth-container">
 
-    <div class="auth-card">
+<div class="auth-card">
 
-        <h2>Create Account</h2>
+<h2>Create Account</h2>
 
-        <form method="POST">
+<form method="POST">
 
-            {% csrf_token %}
+{% csrf_token %}
 
-            <div class="form-group">
-                <label>Username</label>
-                {{ form.username }}
-            </div>
+<div class="form-group">
+<label>Username</label>
+<input type="text" name="username" required>
+</div>
 
-            <div class="form-group">
-                <label>Email</label>
-                {{ form.email }}
-            </div>
+<div class="form-group">
+<label>Email</label>
+<input type="email" name="email" required>
+</div>
 
-            <div class="form-group">
-                <label>Phone</label>
-                {{ form.phone }}
-            </div>
+<div class="form-group">
+<label>Phone</label>
+<input type="text" name="phone" required>
+</div>
 
-            <div class="form-group">
-                <label>Role</label>
-                {{ form.role }}
-            </div>
+<div class="form-group">
+<label>Role</label>
 
-            <div class="form-group">
-                <label>Password</label>
-                {{ form.password }}
-            </div>
+<select name="role">
 
-            <button type="submit" class="auth-btn">
-                Create Account
-            </button>
+<option value="student">Medical & Dental Student</option>
+<option value="intern">Intern Doctor</option>
+<option value="faculty">Faculty</option>
+<option value="doctor">Doctor</option>
+<option value="ward">Ward Authority</option>
+<option value="library">Library Staff</option>
+<option value="admin">Admin</option>
 
-        </form>
+</select>
 
+</div>
 
-        <!-- SHOW GENERATED ID -->
+<div class="form-group">
+<label>Password</label>
+<input type="password" name="password" required>
+</div>
 
-        {% if mededu_id %}
+<button type="submit" class="auth-btn">
 
-        <div style="margin-top:20px; text-align:center">
+Create Account
 
-            <h3>Your MedEdu ID</h3>
+</button>
 
-            <p style="font-size:22px; color:#ff2d8f;">
-                {{ mededu_id }}
-            </p>
+</form>
 
-            <p>Use this ID to login</p>
-
-        </div>
-
-        {% endif %}
-
-
-        <p class="auth-link">
-
-            Already have an account?
-
-            <a href="{% url 'login' %}">Login</a>
-
-        </p>
-
-    </div>
+</div>
 
 </div>
 

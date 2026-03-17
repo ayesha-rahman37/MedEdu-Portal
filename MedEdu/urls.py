@@ -28,4 +28,5 @@ urlpatterns = [
     path('ward/dashboard/', views.ward_dashboard, name="ward_dashboard"),
 
     path('admin/dashboard/', views.admin_dashboard, name="admin_dashboard"),
+
 ]
