@@ -2,32 +2,58 @@
 
 {% block content %}
 
-<div class="dashboard-container">
+<div style="padding: 40px; text-align: center; color: white;">
 
-<div class="dashboard-grid">
+    <h2>Welcome Admin, {{ request.user.username }}</h2>
 
-<a href="/admin/users/" class="dash-card">
-<h3>User Management</h3>
-</a>
-
-<a href="/admin/academic-control/" class="dash-card">
-<h3>Academic Control</h3>
-</a>
-
-<a href="/admin/reports/" class="dash-card">
-<h3>Reports</h3>
-</a>
-
-<a href="/admin/settings/" class="dash-card">
-<h3>System Settings</h3>
-</a>
-
-<a href="/admin/notifications/" class="dash-card">
-<h3>Notifications</h3>
-</a>
+    <div id="content-area"></div>
 
 </div>
 
-</div>
+<script>
+
+function loadContent(type) {
+
+    let c = document.getElementById("content-area");
+
+    if (type === "home") {
+
+        c.innerHTML = "<h3>Admin Dashboard</h3>";
+
+    } 
+    else if (type === "student") {
+
+        c.innerHTML = "<h3>Student Records</h3>";
+
+    } 
+    else if (type === "payment") {
+
+        c.innerHTML = "<h3>Payments</h3>";
+
+    } 
+    else if (type === "academic") {
+
+        c.innerHTML = "<h3>Academic Control</h3>";
+
+    } 
+    else if (type === "eligibility") {
+
+        c.innerHTML = "<h3>Eligibility</h3>";
+
+    } 
+    else if (type === "report") {
+
+        c.innerHTML = "<h3>Reports</h3>";
+
+    } 
+    else if (type === "notification") {
+
+        c.innerHTML = "<h3>Notifications</h3>";
+
+    }
+
+}
+
+</script>
 
 {% endblock %}

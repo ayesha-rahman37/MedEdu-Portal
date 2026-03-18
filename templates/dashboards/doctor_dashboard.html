@@ -2,32 +2,43 @@
 
 {% block content %}
 
-<div class="dashboard-container">
+<div style="padding: 40px; text-align: center; color: white;">
 
-<div class="dashboard-grid">
+    <h2>Welcome Doctor, {{ request.user.username }}</h2>
 
-<a href="/doctor/ward-attendance/" class="dash-card">
-<h3>Ward Attendance</h3>
-</a>
-
-<a href="/doctor/ot-attendance/" class="dash-card">
-<h3>OT Attendance</h3>
-</a>
-
-<a href="/doctor/clinical-review/" class="dash-card">
-<h3>Clinical Case Review</h3>
-</a>
-
-<a href="/doctor/student-activity/" class="dash-card">
-<h3>Student Activity</h3>
-</a>
-
-<a href="/doctor/notifications/" class="dash-card">
-<h3>Notifications</h3>
-</a>
+    <div id="content-area"></div>
 
 </div>
 
-</div>
+<script>
+
+function loadContent(type) {
+
+    let c = document.getElementById("content-area");
+
+    if (type === "home") {
+
+        c.innerHTML = "<h3>Doctor Dashboard</h3>";
+
+    } 
+    else if (type === "class") {
+
+        c.innerHTML = "<h3>Class Schedule</h3>";
+
+    } 
+    else if (type === "review") {
+
+        c.innerHTML = "<h3>Clinical Case Review</h3>";
+
+    } 
+    else if (type === "notification") {
+
+        c.innerHTML = "<h3>Notifications</h3>";
+
+    }
+
+}
+
+</script>
 
 {% endblock %}

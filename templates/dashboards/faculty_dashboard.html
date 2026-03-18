@@ -2,32 +2,58 @@
 
 {% block content %}
 
-<div class="dashboard-container">
+<div style="padding: 40px; text-align: center; color: white;">
 
-<div class="dashboard-grid">
+    <h2>Welcome Faculty, {{ request.user.username }}</h2>
 
-<a href="/faculty/upload-results/" class="dash-card">
-<h3>Upload Results</h3>
-</a>
-
-<a href="/faculty/edit-results/" class="dash-card">
-<h3>Edit Results</h3>
-</a>
-
-<a href="/faculty/student-list/" class="dash-card">
-<h3>Student List</h3>
-</a>
-
-<a href="/faculty/reports/" class="dash-card">
-<h3>Reports</h3>
-</a>
-
-<a href="/faculty/notifications/" class="dash-card">
-<h3>Notifications</h3>
-</a>
+    <div id="content-area"></div>
 
 </div>
 
-</div>
+<script>
+
+function loadContent(type) {
+
+    let c = document.getElementById("content-area");
+
+    if (type === "home") {
+
+        c.innerHTML = "<h3>Faculty Dashboard</h3>";
+
+    } 
+    else if (type === "class") {
+
+        c.innerHTML = "<h3>Class Schedule</h3>";
+
+    } 
+    else if (type === "upload") {
+
+        c.innerHTML = "<h3>Upload Marks</h3>";
+
+    } 
+    else if (type === "edit") {
+
+        c.innerHTML = "<h3>Edit Marks</h3>";
+
+    } 
+    else if (type === "result") {
+
+        c.innerHTML = "<h3>Exam Results</h3>";
+
+    } 
+    else if (type === "attendance") {
+
+        c.innerHTML = "<h3>Student Attendance</h3>";
+
+    } 
+    else if (type === "notification") {
+
+        c.innerHTML = "<h3>Notifications</h3>";
+
+    }
+
+}
+
+</script>
 
 {% endblock %}

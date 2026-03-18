@@ -2,44 +2,77 @@
 
 {% block content %}
 
-<div class="dashboard-container">
+<div style="padding: 40px; text-align: center; color: white;">
 
-<div class="dashboard-grid">
+    <h2>Welcome, {{ request.user.username }}</h2>
 
-<a href="/student/results/" class="dash-card">
-<h3>Results</h3>
-</a>
+    <div id="content-area">
 
-<a href="/student/course/" class="dash-card">
-<h3>Course & Syllabus</h3>
-</a>
+        <h3>Student Dashboard</h3>
 
-<a href="/student/schedule/" class="dash-card">
-<h3>Class Schedule</h3>
-</a>
-
-<a href="/student/ward/" class="dash-card">
-<h3>Ward Posting</h3>
-</a>
-
-<a href="/student/logbook/" class="dash-card">
-<h3>Clinical Case Log</h3>
-</a>
-
-<a href="/student/library/" class="dash-card">
-<h3>Library</h3>
-</a>
-
-<a href="/student/payment/" class="dash-card">
-<h3>Payments</h3>
-</a>
-
-<a href="/student/notifications/" class="dash-card">
-<h3>Notifications</h3>
-</a>
+    </div>
 
 </div>
 
-</div>
+<script>
+
+function loadContent(type) {
+
+    let c = document.getElementById("content-area");
+
+    if (type === "home") {
+
+        c.innerHTML = "<h3>Welcome Student</h3>";
+
+    } 
+    else if (type === "class") {
+
+        c.innerHTML = "<h3>Class Schedule</h3>";
+
+    } 
+    else if (type === "course") {
+
+        c.innerHTML = "<h3>Course & Syllabus</h3>";
+
+    } 
+    else if (type === "exam") {
+
+        c.innerHTML = `
+            <h3>Exam</h3>
+            <label><input type="radio"> Item</label><br>
+            <label><input type="radio"> Card</label><br>
+            <label><input type="radio"> Term</label>
+        `;
+
+    } 
+    else if (type === "result") {
+
+        c.innerHTML = `
+            <h3>Result</h3>
+            <label><input type="radio"> Item</label><br>
+            <label><input type="radio"> Card</label><br>
+            <label><input type="radio"> Term</label>
+        `;
+
+    } 
+    else if (type === "payment") {
+
+        c.innerHTML = "<h3>Payment</h3>";
+
+    } 
+    else if (type === "library") {
+
+        c.innerHTML = "<h3>Library</h3>";
+
+    } 
+    else if (type === "notification") {
+
+        c.innerHTML = "<h3>Notifications</h3>";
+
+    }
+
+}
+
+</script>
 
 {% endblock %}
