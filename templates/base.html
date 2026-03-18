@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>MedEdu Portal</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
@@ -14,84 +15,141 @@
 
         {% if user.is_authenticated %}
 
-            <!-- ================= STUDENT ================= -->
-            {% if user.role == "medical_student" or user.role == "dental_student" %}
-                <a href="{% url 'student_dashboard' %}">Home</a>
-                <a href="#">Class Schedule</a>
-                <a href="#">Course & Syllabus</a>
-                <a href="#">Exam</a>
-                <a href="#">Result</a>
-                <a href="#">Payment</a>
-                <a href="#">Library</a>
-                <a href="#">Notifications</a>
-                <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'logout' %}">Logout</a>
+        <!-- ================= STUDENT ================= -->
+        {% if user.role == "medical_student" or user.role == "dental_student" %}
 
-            <!-- ================= FACULTY ================= -->
-            {% elif user.role == "faculty" %}
-                <a href="{% url 'faculty_dashboard' %}">Home</a>
-                <a href="#">Class Schedule</a>
-                <a href="#">Upload Marks</a>
-                <a href="#">Edit Marks</a>
-                <a href="#">Exam Results</a>
-                <a href="#">Student Attendance</a>
-                <a href="#">Notifications</a>
-                <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'student_dashboard' %}">Home</a>
+            <a href="#" onclick="loadContent('class')">Class Schedule</a>
+            <a href="#" onclick="loadContent('course')">Course & Syllabus</a>
 
-            <!-- ================= INTERN ================= -->
-            {% elif user.role == "intern" %}
-                <a href="{% url 'intern_dashboard' %}">Home</a>
-                <a href="#">Duty Schedule</a>
-                <a href="#">Clinical Case Entry</a>
-                <a href="#">Payments</a>
-                <a href="#">Notifications</a>
-                <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'logout' %}">Logout</a>
+            <!-- EXAM -->
+            <div class="nav-select">
+                <div class="select-box" onclick="toggleSelect('examSelect', event)">
+                    Exam
+                </div>
+            </div>
+            
+            <div id="examSelect" class="select-options">
+                <div onclick="selectOption(event,'exam_item','Item')">Item</div>
+                <div onclick="selectOption(event,'exam_card','Card')">Card</div>
+                <div onclick="selectOption(event,'exam_term','Term')">Term</div>
 
-            <!-- ================= DOCTOR ================= -->
-            {% elif user.role == "doctor" %}
-                <a href="{% url 'doctor_dashboard' %}">Home</a>
-                <a href="#">Class Schedule</a>
-                <a href="#">Clinical Case Review</a>
-                <a href="#">Notifications</a>
-                <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'logout' %}">Logout</a>
+            </div>
 
-            <!-- ================= WARD AUTHORITY ================= -->
-            {% elif user.role == "ward" %}
-                <a href="{% url 'ward_dashboard' %}">Home</a>
-                <a href="#">Students Attendance</a>
-                <a href="#">Student Duty List</a>
-                <a href="#">Department Reports</a>
-                <a href="#">Notifications</a>
-                <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'logout' %}">Logout</a>
+            <!-- RESULT -->
+            <div class="nav-select">
+                <div class="select-box" onclick="toggleSelect('resultSelect', event)">
+                    Result
+                </div>
+            </div>
 
-            <!-- ================= LIBRARY ================= -->
-            {% elif user.role == "library" %}
-                <a href="{% url 'library_dashboard' %}">Home</a>
-                <a href="#">Book Issue</a>
-                <a href="#">Book Return</a>
-                <a href="#">Book Records</a>
-                <a href="#">Student Borrow History</a>
-                <a href="#">Notifications</a>
-                <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'logout' %}">Logout</a>
+            <div id="resultSelect" class="select-options">
+                <div onclick="selectOption(event,'result_item','Item Result')">Item History</div>
+                <div onclick="selectOption(event,'result_card','Card Result')">Card Result</div>
+                <div onclick="selectOption(event,'result_term','Term Result')">Term Result</div>
+            </div>
 
-            <!-- ================= ADMIN ================= -->
-            {% elif user.role == "admin" %}
-                <a href="{% url 'admin_dashboard' %}">Home</a>
-                <a href="#">Student Records</a>
-                <a href="#">Payments</a>
-                <a href="#">Academic Control</a>
-                <a href="#">Eligibility</a>
-                <a href="#">Reports</a>
-                <a href="#">Notifications</a>
-                <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'logout' %}">Logout</a>
+            <a href="#" onclick="loadContent('payment')">Payment</a>
+            <a href="#" onclick="loadContent('library')">Library</a>
+            <a href="#" onclick="loadContent('notification')">Notifications</a>
 
-            {% endif %}
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% elif user.role == "faculty" %}
+
+            <a href="{% url 'faculty_dashboard' %}">Home</a>
+            <a href="#" onclick="loadContent('class')">Class Schedule</a>
+            <a href="#" onclick="loadContent('upload')">Upload Marks</a>
+            <a href="#" onclick="loadContent('edit')">Edit Marks</a>
+            <a href="#" onclick="loadContent('result')">Exam Results</a>
+            <a href="#" onclick="loadContent('attendance')">Student Attendance</a>
+            <a href="#" onclick="loadContent('notification')">Notifications</a>
+
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% elif user.role == "intern" %}
+
+            <a href="{% url 'intern_dashboard' %}">Home</a>
+
+            <div class="nav-select">
+                <div class="select-box" onclick="toggleSelect('dutySelect', event)">
+                    Duty Schedule
+                </div>
+            </div>
+
+            <div id="dutySelect" class="select-options">
+                <div onclick="selectOption(event,'duty_department','Department')">Department</div>
+                <div onclick="selectOption(event,'duty_ward','Ward Duty')">Ward Duty</div>
+                <div onclick="selectOption(event,'duty_ot','OT Duty')">OT Duty</div>
+            </div>
+
+            <a href="#" onclick="loadContent('case')">Clinical Case Entry</a>
+            <a href="#" onclick="loadContent('payment')">Payments</a>
+            <a href="#" onclick="loadContent('notification')">Notifications</a>
+
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% elif user.role == "doctor" %}
+
+            <a href="{% url 'doctor_dashboard' %}">Home</a>
+            <a href="#" onclick="loadContent('class')">Class Schedule</a>
+            <a href="#" onclick="loadContent('review')">Clinical Case Review</a>
+            <a href="#" onclick="loadContent('notification')">Notifications</a>
+
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% elif user.role == "ward" %}
+
+            <a href="{% url 'ward_dashboard' %}">Home</a>
+
+            <div class="nav-select">
+                <div class="select-box" onclick="toggleSelect('attendanceSelect', event)">
+                    Students Attendance
+                </div>
+            </div>
+
+            <div id="attendanceSelect" class="select-options">
+                <div onclick="selectOption(event,'attendance_ward','Ward')">Ward</div>
+                <div onclick="selectOption(event,'attendance_ot','OT')">OT</div>
+            </div>
+
+            <a href="#" onclick="loadContent('duty')">Student Duty List</a>
+            <a href="#" onclick="loadContent('report')">Department Reports</a>
+            <a href="#" onclick="loadContent('notification')">Notifications</a>
+
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% elif user.role == "library" %}
+
+            <a href="{% url 'library_dashboard' %}">Home</a>
+            <a href="#" onclick="loadContent('issue')">Book Issue</a>
+            <a href="#" onclick="loadContent('return')">Book Return</a>
+            <a href="#" onclick="loadContent('record')">Book Records</a>
+            <a href="#" onclick="loadContent('history')">Student Borrow History</a>
+            <a href="#" onclick="loadContent('notification')">Notifications</a>
+
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% elif user.role == "admin" %}
+
+            <a href="{% url 'admin_dashboard' %}">Home</a>
+            <a href="#" onclick="loadContent('student')">Student Records</a>
+            <a href="#" onclick="loadContent('payment')">Payments</a>
+            <a href="#" onclick="loadContent('academic')">Academic Control</a>
+            <a href="#" onclick="loadContent('eligibility')">Eligibility</a>
+            <a href="#" onclick="loadContent('report')">Reports</a>
+            <a href="#" onclick="loadContent('notification')">Notifications</a>
+
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% endif %}
 
         {% else %}
             <a href="{% url 'home' %}">Home</a>
@@ -103,9 +161,10 @@
 </header>
 
 <div class="main-content">
-    {% block content %}
-    {% endblock %}
+    {% block content %}{% endblock %}
 </div>
+
+<script src="{% static 'js/main.js' %}"></script>
 
 </body>
 </html>
