@@ -16,20 +16,27 @@ class MedEduTest(TestCase):
         self.user.set_password('12345')
         self.user.save()
 
-    # ✅ User Created Test
+    # ================= BASIC =================
+
     def test_user_created(self):
         user = User.objects.get(username='student1')
         self.assertEqual(user.role, 'medical_student')
 
-    # ✅ Login Test (using mededu_id)
+    def test_password_check(self):
+        self.assertTrue(self.user.check_password("12345"))
+
+    def test_wrong_password(self):
+        self.assertFalse(self.user.check_password("wrong"))
+
+    # ================= LOGIN =================
+
     def test_login(self):
         response = self.client.post(reverse("login"), {
             "mededu_id": self.user.mededu_id,
             "password": "12345"
         })
-        self.assertEqual(response.status_code, 302)  # redirect means success
+        self.assertEqual(response.status_code, 302)
 
-    # ❌ Invalid Login Test
     def test_invalid_login(self):
         response = self.client.post(reverse("login"), {
             "mededu_id": self.user.mededu_id,
@@ -38,14 +45,40 @@ class MedEduTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Invalid")
 
-    # ✅ Dashboard Access Test
+    # ================= DASHBOARD =================
+
     def test_student_dashboard(self):
         self.client.login(username='student1', password='12345')
-
         response = self.client.get('/student/dashboard/')
         self.assertEqual(response.status_code, 200)
 
-    # 🔥 Extra: Password Reset Test
+    def test_dashboard_without_login(self):
+        response = self.client.get('/student/dashboard/')
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_dashboard_redirect(self):
+        self.client.login(username='student1', password='12345')
+        response = self.client.get('/dashboard/')
+        self.assertEqual(response.status_code, 302)
+
+    # ================= PROFILE =================
+
+    def test_profile_access(self):
+        self.client.login(username='student1', password='12345')
+        response = self.client.get('/profile/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_profile_update(self):
+        self.client.login(username='student1', password='12345')
+
+        response = self.client.post(reverse('edit_profile'), {
+            # file optional
+        })
+
+        self.assertEqual(response.status_code, 302)
+
+    # ================= PASSWORD RESET =================
+
     def test_reset_password(self):
         response = self.client.post(reverse("forgot_password"), {
             "mededu_id": self.user.mededu_id,
@@ -56,3 +89,11 @@ class MedEduTest(TestCase):
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password("newpass123"))
 
+    def test_reset_password_mismatch(self):
+        response = self.client.post(reverse("forgot_password"), {
+            "mededu_id": self.user.mededu_id,
+            "new_password": "abc123",
+            "confirm_password": "wrong"
+        })
+
+        self.assertContains(response, "match")
