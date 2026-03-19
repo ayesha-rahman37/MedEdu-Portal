@@ -4,32 +4,55 @@ from django.urls import reverse
 
 User = get_user_model()
 
+
 class MedEduTest(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user(
+        self.user = User.objects.create(
             username='student1',
-            password='12345',
-            role='medical_student'
+            role='medical_student',
+            is_verified=True
         )
+        self.user.set_password('12345')
+        self.user.save()
 
-    # ✅ Signup / User Create Test
+    # ✅ User Created Test
     def test_user_created(self):
         user = User.objects.get(username='student1')
         self.assertEqual(user.role, 'medical_student')
 
-    # ✅ Login Test
+    # ✅ Login Test (using mededu_id)
     def test_login(self):
-        login = self.client.login(username='student1', password='12345')
-        self.assertTrue(login)
+        response = self.client.post(reverse("login"), {
+            "mededu_id": self.user.mededu_id,
+            "password": "12345"
+        })
+        self.assertEqual(response.status_code, 302)  # redirect means success
 
-    # ❌ Wrong Login Test
+    # ❌ Invalid Login Test
     def test_invalid_login(self):
-        login = self.client.login(username='student1', password='wrong')
-        self.assertFalse(login)
+        response = self.client.post(reverse("login"), {
+            "mededu_id": self.user.mededu_id,
+            "password": "wrong"
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Invalid")
 
-    # ✅ Role-based Dashboard Test
+    # ✅ Dashboard Access Test
     def test_student_dashboard(self):
         self.client.login(username='student1', password='12345')
+
         response = self.client.get('/student/dashboard/')
         self.assertEqual(response.status_code, 200)
+
+    # 🔥 Extra: Password Reset Test
+    def test_reset_password(self):
+        response = self.client.post(reverse("forgot_password"), {
+            "mededu_id": self.user.mededu_id,
+            "new_password": "newpass123",
+            "confirm_password": "newpass123"
+        })
+
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password("newpass123"))
+
