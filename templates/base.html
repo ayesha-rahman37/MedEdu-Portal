@@ -10,6 +10,7 @@
 
 <body>
 
+<!-- ================= NAVBAR ================= -->
 <header class="header">
     <nav class="navbar">
 
@@ -27,13 +28,11 @@
                 <div class="select-box" onclick="toggleSelect('examSelect', event)">
                     Exam
                 </div>
-            </div>
-            
-            <div id="examSelect" class="select-options">
-                <div onclick="selectOption(event,'exam_item','Item')">Item</div>
-                <div onclick="selectOption(event,'exam_card','Card')">Card</div>
-                <div onclick="selectOption(event,'exam_term','Term')">Term</div>
-
+                <div id="examSelect" class="select-options">
+                    <div onclick="selectOption(event,'exam_item','Item')">Item</div>
+                    <div onclick="selectOption(event,'exam_card','Card')">Card</div>
+                    <div onclick="selectOption(event,'exam_term','Term')">Term</div>
+                </div>
             </div>
 
             <!-- RESULT -->
@@ -41,12 +40,11 @@
                 <div class="select-box" onclick="toggleSelect('resultSelect', event)">
                     Result
                 </div>
-            </div>
-
-            <div id="resultSelect" class="select-options">
-                <div onclick="selectOption(event,'result_item','Item Result')">Item History</div>
-                <div onclick="selectOption(event,'result_card','Card Result')">Card Result</div>
-                <div onclick="selectOption(event,'result_term','Term Result')">Term Result</div>
+                <div id="resultSelect" class="select-options">
+                    <div onclick="selectOption(event,'result_item','Item Result')">Item Result</div>
+                    <div onclick="selectOption(event,'result_card','Card Result')">Card Result</div>
+                    <div onclick="selectOption(event,'result_term','Term Result')">Term Result</div>
+                </div>
             </div>
 
             <a href="#" onclick="loadContent('payment')">Payment</a>
@@ -56,6 +54,8 @@
             <a href="{% url 'profile' %}">Profile</a>
             <a href="{% url 'logout' %}">Logout</a>
 
+
+        <!-- ================= FACULTY ================= -->
         {% elif user.role == "faculty" %}
 
             <a href="{% url 'faculty_dashboard' %}">Home</a>
@@ -69,6 +69,8 @@
             <a href="{% url 'profile' %}">Profile</a>
             <a href="{% url 'logout' %}">Logout</a>
 
+
+        <!-- ================= INTERN ================= -->
         {% elif user.role == "intern" %}
 
             <a href="{% url 'intern_dashboard' %}">Home</a>
@@ -77,12 +79,11 @@
                 <div class="select-box" onclick="toggleSelect('dutySelect', event)">
                     Duty Schedule
                 </div>
-            </div>
-
-            <div id="dutySelect" class="select-options">
-                <div onclick="selectOption(event,'duty_department','Department')">Department</div>
-                <div onclick="selectOption(event,'duty_ward','Ward Duty')">Ward Duty</div>
-                <div onclick="selectOption(event,'duty_ot','OT Duty')">OT Duty</div>
+                <div id="dutySelect" class="select-options">
+                    <div onclick="selectOption(event,'duty_department','Department')">Department</div>
+                    <div onclick="selectOption(event,'duty_ward','Ward Duty')">Ward Duty</div>
+                    <div onclick="selectOption(event,'duty_ot','OT Duty')">OT Duty</div>
+                </div>
             </div>
 
             <a href="#" onclick="loadContent('case')">Clinical Case Entry</a>
@@ -92,6 +93,8 @@
             <a href="{% url 'profile' %}">Profile</a>
             <a href="{% url 'logout' %}">Logout</a>
 
+
+        <!-- ================= DOCTOR ================= -->
         {% elif user.role == "doctor" %}
 
             <a href="{% url 'doctor_dashboard' %}">Home</a>
@@ -102,6 +105,8 @@
             <a href="{% url 'profile' %}">Profile</a>
             <a href="{% url 'logout' %}">Logout</a>
 
+
+        <!-- ================= WARD ================= -->
         {% elif user.role == "ward" %}
 
             <a href="{% url 'ward_dashboard' %}">Home</a>
@@ -110,11 +115,10 @@
                 <div class="select-box" onclick="toggleSelect('attendanceSelect', event)">
                     Students Attendance
                 </div>
-            </div>
-
-            <div id="attendanceSelect" class="select-options">
-                <div onclick="selectOption(event,'attendance_ward','Ward')">Ward</div>
-                <div onclick="selectOption(event,'attendance_ot','OT')">OT</div>
+                <div id="attendanceSelect" class="select-options">
+                    <div onclick="selectOption(event,'attendance_ward','Ward')">Ward</div>
+                    <div onclick="selectOption(event,'attendance_ot','OT')">OT</div>
+                </div>
             </div>
 
             <a href="#" onclick="loadContent('duty')">Student Duty List</a>
@@ -124,6 +128,8 @@
             <a href="{% url 'profile' %}">Profile</a>
             <a href="{% url 'logout' %}">Logout</a>
 
+
+        <!-- ================= LIBRARY ================= -->
         {% elif user.role == "library" %}
 
             <a href="{% url 'library_dashboard' %}">Home</a>
@@ -136,6 +142,8 @@
             <a href="{% url 'profile' %}">Profile</a>
             <a href="{% url 'logout' %}">Logout</a>
 
+
+        <!-- ================= ADMIN ================= -->
         {% elif user.role == "admin" %}
 
             <a href="{% url 'admin_dashboard' %}">Home</a>
@@ -152,14 +160,18 @@
         {% endif %}
 
         {% else %}
+
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'login' %}">Login</a>
             <a href="{% url 'signup' %}">Signup</a>
+
         {% endif %}
 
     </nav>
 </header>
 
+
+<!-- ================= MAIN CONTENT ================= -->
 <div class="main-content">
     {% block content %}{% endblock %}
 </div>

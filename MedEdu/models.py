@@ -6,13 +6,14 @@ import random
 class User(AbstractUser):
 
     ROLE_CHOICES = (
-        ('student', 'Medical & Dental Student'),
+        ('medical_student', 'Medical Student'),
+        ('dental_student', 'Dental Student'),
         ('intern', 'Intern Doctor'),
-        ('faculty', 'Faculty / Department Head'),
+        ('faculty', 'Faculty'),
         ('doctor', 'Doctor'),
-        ('ward', 'Hospital Register'),
+        ('ward', 'Ward Authority'),
         ('library', 'Library Staff'),
-        ('admin', 'Academic Administration'),
+        ('admin', 'Admin'),
     )
 
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
@@ -21,11 +22,17 @@ class User(AbstractUser):
 
     phone = models.CharField(max_length=15, blank=True)
 
+    is_verified = models.BooleanField(default=False)
 
+    profile_pic = models.ImageField(upload_to="profile/", null=True, blank=True)
+
+
+    # ================= ID GENERATOR =================
     def generate_id(self):
 
         prefix_map = {
-            "student": "ST",
+            "medical_student": "MS",
+            "dental_student": "DS",
             "intern": "IN",
             "faculty": "FA",
             "doctor": "DR",
@@ -34,13 +41,18 @@ class User(AbstractUser):
             "admin": "AD"
         }
 
-        prefix = prefix_map.get(self.role)
+        prefix = prefix_map.get(self.role, "US")
 
-        number = random.randint(1000, 9999)
+        # 🔥 ensure unique ID
+        while True:
+            number = random.randint(1000, 9999)
+            new_id = f"{prefix}-{number}"
 
-        return f"{prefix}-{number}"
+            if not User.objects.filter(mededu_id=new_id).exists():
+                return new_id
 
 
+    # ================= SAVE =================
     def save(self, *args, **kwargs):
 
         if not self.mededu_id:

@@ -1,4 +1,4 @@
-/* ---------- BODY ---------- */
+/* ================= BODY ================= */
 body {
     margin: 0;
     font-family: "Times New Roman", Georgia, serif;
@@ -22,7 +22,7 @@ body {
 }
 
 
-/* ---------- HEADER ---------- */
+/* ================= HEADER ================= */
 .header {
     display: flex;
     justify-content: center;
@@ -36,7 +36,7 @@ body {
 }
 
 
-/* ---------- NAVBAR ---------- */
+/* ================= NAVBAR ================= */
 .navbar {
     display: flex;
     gap: 10px;
@@ -56,7 +56,7 @@ body {
 }
 
 
-/* ---------- SELECT DROPDOWN ---------- */
+/* ================= SELECT DROPDOWN ================= */
 .nav-select {
     position: relative;
     cursor: pointer;
@@ -77,14 +77,11 @@ body {
 .select-options {
     position: absolute;
     width: 200px;
-
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(10px);
-
     color: white;
     border-radius: 8px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-
     display: none;
     z-index: 9999;
 }
@@ -103,7 +100,7 @@ body {
 }
 
 
-/* ---------- HERO ---------- */
+/* ================= HERO ================= */
 .hero {
     height: 100vh;
     display: flex;
@@ -111,6 +108,7 @@ body {
     align-items: center;
     text-align: center;
     padding-top: 80px;
+
     background-image: url("/static/images/medical-pattern.png");
     background-size: 260px;
 }
@@ -126,7 +124,7 @@ body {
 }
 
 
-/* ---------- BUTTON ---------- */
+/* ================= BUTTON ================= */
 .btn {
     margin-top: 20px;
     padding: 12px 30px;
@@ -144,7 +142,7 @@ body {
 }
 
 
-/* ---------- FEATURES ---------- */
+/* ================= FEATURES ================= */
 .features {
     display: flex;
     justify-content: center;
@@ -162,7 +160,7 @@ body {
 }
 
 
-/* ---------- FOOTER ---------- */
+/* ================= FOOTER ================= */
 .footer {
     padding-top: 40px;
     background: linear-gradient(
@@ -192,61 +190,66 @@ body {
 }
 
 
-/* ---------- AUTH ---------- */
+/* ================= AUTH ================= */
 .auth-container {
-    min-height:85vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin-top:80px;
+    min-height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
 }
 
 .auth-card {
-    width:420px;
+    width: 420px;
     background: rgba(0,0,0,0.65);
     backdrop-filter: blur(10px);
-    padding:45px;
-    border-radius:14px;
-    box-shadow:0 10px 35px rgba(0,0,0,0.6);
+    padding: 45px;
+    border-radius: 14px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.6);
 }
 
 .auth-card h2 {
-    text-align:center;
-    margin-bottom:30px;
-    font-size:30px;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 30px;
 }
 
 .form-group {
-    margin-bottom:18px;
+    margin-bottom: 18px;
 }
 
 .form-group input,
 .form-group select {
-    width:100%;
-    padding:10px;
-    border-radius:6px;
-    border:none;
-    background:#f1f1f1;
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    background: #f1f1f1;
 }
 
+
+/* ================= AUTH BUTTON ================= */
 .auth-btn {
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:6px;
-    background:linear-gradient(135deg,#a2006d,#ff2d8f);
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-    margin-top:15px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background: linear-gradient(135deg,#a2006d,#ff2d8f);
+    color: white;
+    font-size: 16px;
+    font-family: "Times New Roman", Georgia, serif;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
 }
 
 .auth-btn:hover {
-    transform:scale(1.03);
+    transform: scale(1.03);
 }
 
 
-/* ---------- DASHBOARD ---------- */
+/* ================= DASHBOARD ================= */
 .dashboard-container {
     display: flex;
     justify-content: center;
@@ -258,4 +261,71 @@ body {
     font-size: 32px;
     font-weight: bold;
     text-align: center;
+}
+
+
+/* ================= PROFILE ================= */
+.profile-info p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+
+/* label */
+.profile-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
+}
+
+
+/* button group */
+.profile-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+/* secondary button */
+.secondary-btn {
+    text-align: center;
+    padding: 12px;
+    border-radius: 6px;
+    background: transparent;
+    border: 1px solid #ff2d8f;
+    color: #ff2d8f;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.secondary-btn:hover {
+    background: #ff2d8f;
+    color: white;
+}
+
+
+/* file input */
+.file-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+
+    background: rgba(255,255,255,0.08);
+    color: #ccc;
+
+    cursor: pointer;
+}
+
+/* file button */
+.file-input::file-selector-button {
+    background: linear-gradient(135deg,#a2006d,#ff2d8f);
+    border: none;
+    padding: 8px 14px;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
 }

@@ -8,25 +8,50 @@
 
         <h2>User Profile</h2>
 
+        <!-- PROFILE IMAGE -->
+        <div style="text-align:center; margin-bottom:20px;">
+            {% if request.user.profile_pic %}
+                <img src="{{ request.user.profile_pic.url }}" 
+                     style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #ff2d8f;">
+            {% else %}
+                <p>No Profile Image</p>
+            {% endif %}
+        </div>
+
+        <!-- USER INFO -->
         <div class="profile-info">
-
             <p><b>Username:</b> {{ request.user.username }}</p>
-
             <p><b>Email:</b> {{ request.user.email }}</p>
-
             <p><b>Phone:</b> {{ request.user.phone }}</p>
-
             <p><b>Role:</b> {{ request.user.role }}</p>
-
+            <p><b>MedEdu ID:</b> {{ request.user.mededu_id }}</p>
         </div>
 
-        <div class="profile-actions">
+        <!-- FORM -->
+        <form method="POST" enctype="multipart/form-data" action="{% url 'edit_profile' %}">
+            {% csrf_token %}
 
-            <a href="#" class="auth-btn">Edit Profile</a>
+            <div class="form-group">
+                <label class="profile-label">Change Profile Picture</label>
+                <input type="file" name="profile_pic" class="file-input">
+            </div>
 
-            <a href="#" class="auth-btn">Change Password</a>
+            <!-- BUTTONS -->
+            <div class="profile-actions">
 
-        </div>
+                <!-- 🔼 Change Password -->
+                <a href="{% url 'forgot_password' %}" class="secondary-btn">
+                    Change Password
+                </a>
+
+                <!-- 🔽 Update Profile -->
+                <button type="submit" class="auth-btn">
+                    Update Profile
+                </button>
+
+            </div>
+
+        </form>
 
     </div>
 
