@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2>Exam Routine</h2>
+
+    <table border="1">
+        <tr>
+            <th>Date</th>
+            <th>Subject</th>
+            <th>Type</th>
+            <th>Topic</th>
+        </tr>
+
+        {% for e in exams %}
+        <tr>
+            <td>{{ e.date }}</td>
+            <td>{{ e.subject.name }}</td>
+            <td>{{ e.exam_type }}</td>
+            <td>{{ e.topic.title }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+{% endblock %}

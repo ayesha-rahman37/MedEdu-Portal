@@ -1,113 +1,210 @@
+/* ================= RESET ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 /* ================= BODY ================= */
 body {
-    margin: 0;
     font-family: "Times New Roman", Georgia, serif;
-    color: white;
+    color: #2b2b2b;
     min-height: 100vh;
 
     background: linear-gradient(
-        135deg,
-        #0b0b0f,
-        #1c0033,
-        #3b0050,
-        #0a2a45,
-        #6a0035,
-        #cb410b,
-        #0b0b0f
+        120deg,
+        #b7adb5,
+        #d4b4b4,
+        #e3b7b7,
+        #d9bfb2,
+        #e8dccf
     );
 
     background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: cover;
 }
-
 
 /* ================= HEADER ================= */
 .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 60px;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 15px 20px;
-    background: rgba(0,0,0,0.65);
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
-}
 
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(12px);
+
+    z-index: 9999;
+}
 
 /* ================= NAVBAR ================= */
 .navbar {
     display: flex;
-    gap: 10px;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
 .navbar a {
-    color: white;
     text-decoration: none;
+    color: #3a2f2f;
+
     padding: 8px 14px;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: 8px;
+
+    font-size: 15px;
+    font-weight: 600;
+
     transition: 0.3s;
 }
 
 .navbar a:hover {
-    background: #a2006d;
+    background: #e3b7b7;
+    color: white;
 }
 
-
-/* ================= SELECT DROPDOWN ================= */
+/* ================= DROPDOWN ================= */
 .nav-select {
     position: relative;
-    cursor: pointer;
+    display: inline-flex;
 }
 
+/* button */
 .select-box {
     padding: 8px 14px;
-    border-radius: 6px;
-    background: rgba(255,255,255,0.1);
-    color: white;
+    border-radius: 8px;
+
+    color: #3a2f2f;
+    font-weight: 600;
+
+    cursor: pointer;
     transition: 0.3s;
 }
 
 .select-box:hover {
-    background: #a2006d;
+    background: #e3b7b7;
+    color: white;
 }
 
+/* dropdown box */
 .select-options {
     position: absolute;
+
+    top: 100%;   /* 🔥 FIX */
+    left: 0;
+
     width: 200px;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(10px);
-    color: white;
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+
+    background: white;
+
+    border-radius: 12px;
+    padding: 6px 0;
+
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+
     display: none;
+
     z-index: 9999;
 }
 
-.select-options.show {
+/* 🔥 hover show */
+.nav-select:hover .select-options {
     display: block;
 }
 
+/* dropdown items */
 .select-options div {
-    padding: 10px;
+    padding: 10px 16px;
+    color: #333;
     cursor: pointer;
 }
 
 .select-options div:hover {
-    background: #a2006d;
+    background: #e3b7b7;
+    color: white;
 }
 
+/* ================= PHASE ================= */
+.phase {
+    position: relative;
+    padding: 10px 16px;
+    cursor: pointer;
+    color: #333;
+}
+
+.phase:hover {
+    background: #e3b7b7;
+    color: white;
+}
+
+/* ================= SUBMENU (FINAL FIX) ================= */
+.submenu {
+    display: none;
+    position: absolute;
+
+    left: 98%;   /* 🔥 gap fix */
+    top: 0;
+
+    width: 200px;
+
+    background: white;
+    border-radius: 10px;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+    z-index: 9999;
+}
+
+/* 🔥 MAIN FIX */
+.phase:hover .submenu,
+.submenu:hover {
+    display: block;
+}
+
+/* 🔥 hover bridge */
+.phase::after {
+    content: "";
+    position: absolute;
+    right: -10px;
+    top: 0;
+
+    width: 15px;
+    height: 100%;
+}
+
+/* submenu links */
+.submenu a {
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+}
+
+.submenu a:hover {
+    background: #d4b4b4;
+    color: white;
+}
+
+/* ================= MAIN CONTENT ================= */
+.main-content {
+    padding-top: 70px;
+}
 
 /* ================= HERO ================= */
 .hero {
     height: 100vh;
+
     display: flex;
     justify-content: center;
     align-items: center;
+
     text-align: center;
-    padding-top: 80px;
 
     background-image: url("/static/images/medical-pattern.png");
     background-size: 260px;
@@ -115,32 +212,35 @@ body {
 
 .hero h1 {
     font-size: 70px;
-    margin-bottom: 10px;
+    color: #2a1f1f;
 }
 
 .hero p {
     font-size: 22px;
-    margin-bottom: 20px;
+    color: #4a3a3a;
 }
-
 
 /* ================= BUTTON ================= */
 .btn {
     margin-top: 20px;
     padding: 12px 30px;
-    font-size: 18px;
+
+    font-size: 16px;
+
     border: none;
-    border-radius: 8px;
-    background: #a2006d;
+    border-radius: 10px;
+
+    background: #c79a9a;
     color: white;
+    font-weight: bold;
+
     cursor: pointer;
     transition: 0.3s;
 }
 
 .btn:hover {
-    background: #c00082;
+    background: #b88c8c;
 }
-
 
 /* ================= FEATURES ================= */
 .features {
@@ -151,28 +251,18 @@ body {
 }
 
 .card {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.5);
     padding: 30px;
     width: 260px;
-    border-radius: 10px;
+    border-radius: 12px;
     text-align: center;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(10px);
 }
-
 
 /* ================= FOOTER ================= */
 .footer {
     padding-top: 40px;
-    background: linear-gradient(
-        135deg,
-        #0b0b0f,
-        #1c0033,
-        #3b0050,
-        #0a2a45,
-        #6a0035,
-        #cb410b,
-        #0b0b0f
-    );
+    background: #e8dccf;
 }
 
 .footer-container {
@@ -184,11 +274,10 @@ body {
 
 .footer-bottom {
     text-align: center;
-    background: black;
+    background: #d9bfb2;
     padding: 15px;
     margin-top: 30px;
 }
-
 
 /* ================= AUTH ================= */
 .auth-container {
@@ -196,22 +285,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 80px;
 }
 
 .auth-card {
     width: 420px;
-    background: rgba(0,0,0,0.65);
-    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(15px);
     padding: 45px;
-    border-radius: 14px;
-    box-shadow: 0 10px 35px rgba(0,0,0,0.6);
-}
-
-.auth-card h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
 .form-group {
@@ -222,64 +304,32 @@ body {
 .form-group select {
     width: 100%;
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 8px;
     border: none;
-    background: #f1f1f1;
+    background: #f5f2f2;
 }
 
-
-/* ================= AUTH BUTTON ================= */
 .auth-btn {
     width: 100%;
     padding: 12px;
     border: none;
-    border-radius: 6px;
-    background: linear-gradient(135deg,#a2006d,#ff2d8f);
+    border-radius: 8px;
+    background: #d4b4b4;
     color: white;
-    font-size: 16px;
-    font-family: "Times New Roman", Georgia, serif;
     font-weight: bold;
     cursor: pointer;
     margin-top: 15px;
-    transition: 0.3s;
 }
 
 .auth-btn:hover {
-    transform: scale(1.03);
+    background: #c79a9a;
 }
-
-
-/* ================= DASHBOARD ================= */
-.dashboard-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-}
-
-.dashboard-title {
-    font-size: 32px;
-    font-weight: bold;
-    text-align: center;
-}
-
 
 /* ================= PROFILE ================= */
 .profile-info p {
     margin: 10px 0;
-    font-size: 16px;
 }
 
-
-/* label */
-.profile-label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 6px;
-}
-
-
-/* button group */
 .profile-actions {
     margin-top: 20px;
     display: flex;
@@ -287,45 +337,88 @@ body {
     gap: 12px;
 }
 
-
-/* secondary button */
 .secondary-btn {
     text-align: center;
     padding: 12px;
-    border-radius: 6px;
+    border-radius: 8px;
     background: transparent;
-    border: 1px solid #ff2d8f;
-    color: #ff2d8f;
+    border: 1px solid #d4b4b4;
+    color: #d4b4b4;
     text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
 }
 
 .secondary-btn:hover {
-    background: #ff2d8f;
+    background: #d4b4b4;
     color: white;
 }
 
-
-/* file input */
-.file-input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-
-    background: rgba(255,255,255,0.08);
-    color: #ccc;
-
-    cursor: pointer;
+/* ================= DASHBOARD ================= */
+.dashboard-content {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-/* file button */
-.file-input::file-selector-button {
-    background: linear-gradient(135deg,#a2006d,#ff2d8f);
-    border: none;
-    padding: 8px 14px;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
+/* CENTER BOX */
+.dashboard-container {
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* CARD */
+.welcome-box {
+    text-align: center;
+    padding: 40px 60px;
+
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* TEXT (NORMAL STYLE) */
+.welcome-text {
+    font-family: "Times New Roman", Georgia, serif; /* আগের font */
+    font-size: 26px; /* normal size */
+    font-weight: 600;
+    color: #222; /* normal black */
+}
+
+/* ROLE (NO COLOR CHANGE) */
+.role {
+    color: #222;   /* same color */
+    font-weight: 600;
+}
+
+/* USER NAME */
+.welcome-user {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+/* ================= PAGE CONTAINER ================= */
+.page-container {
+    margin-top: 100px;
+    text-align: center;
+}
+
+.page-title {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.page-box {
+    width: 60%;
+    margin: auto;
+    padding: 30px;
+
+    background: rgba(255,255,255,0.6);
+    border-radius: 12px;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }

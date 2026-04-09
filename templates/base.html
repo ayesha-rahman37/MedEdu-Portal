@@ -1,16 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>MedEdu Portal</title>
-
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
 <header class="header">
     <nav class="navbar">
 
@@ -19,159 +18,212 @@
         <!-- ================= STUDENT ================= -->
         {% if user.role == "medical_student" or user.role == "dental_student" %}
 
-            <a href="{% url 'student_dashboard' %}">Home</a>
-            <a href="#" onclick="loadContent('class')">Class Schedule</a>
-            <a href="#" onclick="loadContent('course')">Course & Syllabus</a>
+        <a href="{% url 'student_dashboard' %}">Home</a>
+        <a href="#">Class Schedule</a>
 
-            <!-- EXAM -->
-            <div class="nav-select">
-                <div class="select-box" onclick="toggleSelect('examSelect', event)">
-                    Exam
+        <!-- COURSE -->
+        <div class="nav-select">
+            <a href="{% url 'subjects' %}">Course & Syllabus</a>
+
+            <div class="select-options">
+
+                {% if user.role == "medical_student" %}
+
+                <div class="phase">
+                    Phase 1 ▸
+                    <div class="submenu">
+                        <a href="{% url 'subject_detail' 'anatomy' %}">Anatomy</a>
+                        <a href="{% url 'subject_detail' 'physiology' %}">Physiology</a>
+                        <a href="{% url 'subject_detail' 'biochemistry' %}">Biochemistry</a>
+                    </div>
                 </div>
-                <div id="examSelect" class="select-options">
-                    <div onclick="selectOption(event,'exam_item','Item')">Item</div>
-                    <div onclick="selectOption(event,'exam_card','Card')">Card</div>
-                    <div onclick="selectOption(event,'exam_term','Term')">Term</div>
+
+                <div class="phase">
+                    Phase 2 ▸
+                    <div class="submenu">
+                        <a href="{% url 'subject_detail' 'pharmacology_therapeutics' %}">Pharmacology & Therapeutics</a>
+                        <a href="{% url 'subject_detail' 'forensic-medicine-toxicology' %}">Forensic Medicine & Toxicology</a>
+                        <a href="{% url 'subject_detail' 'general-pathology' %}">General Pathology (Basic)</a>
+                        <a href="{% url 'subject_detail' 'general-microbiology' %}">General Microbiology (Basic)</a>
+                        <a href="{% url 'subject_detail' 'medicine' %}">Medicine (Intro)</a>
+                        <a href="{% url 'subject_detail' 'surgery' %}">Surgery (Intro)</a>
+                    </div>
                 </div>
+
+                <div class="phase">
+                    Phase 3 ▸
+                    <div class="submenu">
+                        <a href="{% url 'subject_detail' 'community-medicine-public-health' %}">Community Medicine & Public Health</a>
+                        <a href="{% url 'subject_detail' 'pathology' %}">Pathology</a>
+                        <a href="{% url 'subject_detail' 'microbiology' %}">Microbiology</a>
+                        <a href="{% url 'subject_detail' 'medicine' %}">Medicine (Clinical)</a>
+                        <a href="{% url 'subject_detail' 'surgery' %}">Surgery (Clinical)</a>
+                        <a href="{% url 'subject_detail' 'obstetrics-gynaecology' %}">Obstetrics & Gynaecology (Intro)</a>
+                    </div>
+                </div>
+
+                <div class="phase">
+                    Phase 4 ▸
+                    <div class="submenu">
+                        <a href="{% url 'subject_detail' 'medicine' %}">Medicine & Allied Subjects</a>
+                        <a href="{% url 'subject_detail' 'surgery' %}">Surgery & Allied Subjects</a>
+                        <a href="{% url 'subject_detail' 'obstetrics-gynaecology' %}">Obstetrics & Gynaecology</a>
+                    </div>
+                </div>
+
+                {% elif user.role == "dental_student" %}
+
+                <div class="phase">
+                    Phase 1 ▸
+                    <div class="submenu">
+                        <a href="{% url 'subject_detail' 'general-anatomy' %}">General Anatomy</a>
+                        <a href="{% url 'subject_detail' 'dental-anatomy' %}">Dental Anatomy</a>
+                        <a href="{% url 'subject_detail' 'physiology-biochemistry' %}">Physiology & Biochemistry</a>
+                        <a href="{% url 'subject_detail' 'science-of-dental-materials' %}">Science of Dental Materials</a>
+                    </div>
+                </div>
+
+                <div class="phase">
+                    Phase 2 ▸
+                    <div class="submenu">
+                        <a href="{% url 'subject_detail' 'general-dental-pharmacology' %}">General & Dental Pharmacology</a>
+                        <a href="{% url 'subject_detail' 'pathology-microbiology' %}">Pathology & Microbiology</a>
+                    </div>
+                </div>
+
+                <div class="phase">
+                    Phase 3 ▸
+                    <div class="submenu">
+                        <a href="{% url 'subject_detail' 'medicine-bds' %}">Medicine</a>
+                        <a href="{% url 'subject_detail' 'surgery-bds' %}">Surgery</a>
+                        <a href="{% url 'subject_detail' 'periodontology-oral-pathology' %}">Periodontology & Oral Pathology</a>
+                    </div>
+                </div>
+
+                <div class="phase">
+                    Phase 4 ▸
+                    <div class="submenu">
+                        <a href="{% url 'subject_detail' 'oral-maxillofacial-surgery' %}">Oral & Maxillofacial Surgery</a>
+                        <a href="{% url 'subject_detail' 'conservative-dentistry-endodontics' %}">Conservative Dentistry & Endodontics</a>
+                        <a href="{% url 'subject_detail' 'prosthodontics' %}">Prosthodontics</a>
+                        <a href="{% url 'subject_detail' 'orthodontics-dentofacial-orthopedics' %}">Orthodontics & Dentofacial Orthopedics</a>
+                        <a href="{% url 'subject_detail' 'pedodontics-dental-public-health' %}">Pedodontics & Dental Public Health</a>
+                    </div>
+                </div>
+
+                {% endif %}
             </div>
+        </div>
 
-            <!-- RESULT -->
-            <div class="nav-select">
-                <div class="select-box" onclick="toggleSelect('resultSelect', event)">
-                    Result
-                </div>
-                <div id="resultSelect" class="select-options">
-                    <div onclick="selectOption(event,'result_item','Item Result')">Item Result</div>
-                    <div onclick="selectOption(event,'result_card','Card Result')">Card Result</div>
-                    <div onclick="selectOption(event,'result_term','Term Result')">Term Result</div>
-                </div>
+        <!-- EXAM -->
+        <div class="nav-select">
+            <a href="{% url 'exam' %}">Exam</a>
+            <div class="select-options">
+                <div>Item</div>
+                <div>Card</div>
+                <div>Term</div>
             </div>
+        </div>
 
-            <a href="#" onclick="loadContent('payment')">Payment</a>
-            <a href="#" onclick="loadContent('library')">Library</a>
-            <a href="#" onclick="loadContent('notification')">Notifications</a>
+        <!-- RESULT -->
+        <div class="nav-select">
+            <a href="{% url 'result' %}">Result</a>
+            <div class="select-options">
+                <div>Item Result</div>
+                <div>Card Result</div>
+                <div>Term Result</div>
+            </div>
+        </div>
 
-            <a href="{% url 'profile' %}">Profile</a>
-            <a href="{% url 'logout' %}">Logout</a>
+        <a href="#">Payment</a>
+        <a href="#">Library</a>
+        <a href="#">Notifications</a>
+
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'logout' %}">Logout</a>
 
 
         <!-- ================= FACULTY ================= -->
         {% elif user.role == "faculty" %}
 
-            <a href="{% url 'faculty_dashboard' %}">Home</a>
-            <a href="#" onclick="loadContent('class')">Class Schedule</a>
-            <a href="#" onclick="loadContent('upload')">Upload Marks</a>
-            <a href="#" onclick="loadContent('edit')">Edit Marks</a>
-            <a href="#" onclick="loadContent('result')">Exam Results</a>
-            <a href="#" onclick="loadContent('attendance')">Student Attendance</a>
-            <a href="#" onclick="loadContent('notification')">Notifications</a>
-
-            <a href="{% url 'profile' %}">Profile</a>
-            <a href="{% url 'logout' %}">Logout</a>
-
+        <a href="{% url 'faculty_dashboard' %}">Home</a>
+        <a href="#">Class Schedule</a>
+        <a href="#">Upload Marks</a>
+        <a href="#">Edit Marks</a>
+        <a href="#">Exam Results</a>
+        <a href="#">Attendance</a>
+        <a href="#">Notifications</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'logout' %}">Logout</a>
 
         <!-- ================= INTERN ================= -->
         {% elif user.role == "intern" %}
 
-            <a href="{% url 'intern_dashboard' %}">Home</a>
-
-            <div class="nav-select">
-                <div class="select-box" onclick="toggleSelect('dutySelect', event)">
-                    Duty Schedule
-                </div>
-                <div id="dutySelect" class="select-options">
-                    <div onclick="selectOption(event,'duty_department','Department')">Department</div>
-                    <div onclick="selectOption(event,'duty_ward','Ward Duty')">Ward Duty</div>
-                    <div onclick="selectOption(event,'duty_ot','OT Duty')">OT Duty</div>
-                </div>
-            </div>
-
-            <a href="#" onclick="loadContent('case')">Clinical Case Entry</a>
-            <a href="#" onclick="loadContent('payment')">Payments</a>
-            <a href="#" onclick="loadContent('notification')">Notifications</a>
-
-            <a href="{% url 'profile' %}">Profile</a>
-            <a href="{% url 'logout' %}">Logout</a>
-
+        <a href="{% url 'intern_dashboard' %}">Home</a>
+        <a href="#">Duty Schedule</a>
+        <a href="#">Clinical Case</a>
+        <a href="#">Payment</a>
+        <a href="#">Notifications</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'logout' %}">Logout</a>
 
         <!-- ================= DOCTOR ================= -->
         {% elif user.role == "doctor" %}
 
-            <a href="{% url 'doctor_dashboard' %}">Home</a>
-            <a href="#" onclick="loadContent('class')">Class Schedule</a>
-            <a href="#" onclick="loadContent('review')">Clinical Case Review</a>
-            <a href="#" onclick="loadContent('notification')">Notifications</a>
-
-            <a href="{% url 'profile' %}">Profile</a>
-            <a href="{% url 'logout' %}">Logout</a>
-
+        <a href="{% url 'doctor_dashboard' %}">Home</a>
+        <a href="#">Class Schedule</a>
+        <a href="#">Case Review</a>
+        <a href="#">Notifications</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'logout' %}">Logout</a>
 
         <!-- ================= WARD ================= -->
         {% elif user.role == "ward" %}
 
-            <a href="{% url 'ward_dashboard' %}">Home</a>
-
-            <div class="nav-select">
-                <div class="select-box" onclick="toggleSelect('attendanceSelect', event)">
-                    Students Attendance
-                </div>
-                <div id="attendanceSelect" class="select-options">
-                    <div onclick="selectOption(event,'attendance_ward','Ward')">Ward</div>
-                    <div onclick="selectOption(event,'attendance_ot','OT')">OT</div>
-                </div>
-            </div>
-
-            <a href="#" onclick="loadContent('duty')">Student Duty List</a>
-            <a href="#" onclick="loadContent('report')">Department Reports</a>
-            <a href="#" onclick="loadContent('notification')">Notifications</a>
-
-            <a href="{% url 'profile' %}">Profile</a>
-            <a href="{% url 'logout' %}">Logout</a>
-
+        <a href="{% url 'ward_dashboard' %}">Home</a>
+        <a href="#">Attendance</a>
+        <a href="#">Duty List</a>
+        <a href="#">Reports</a>
+        <a href="#">Notifications</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'logout' %}">Logout</a>
 
         <!-- ================= LIBRARY ================= -->
         {% elif user.role == "library" %}
 
-            <a href="{% url 'library_dashboard' %}">Home</a>
-            <a href="#" onclick="loadContent('issue')">Book Issue</a>
-            <a href="#" onclick="loadContent('return')">Book Return</a>
-            <a href="#" onclick="loadContent('record')">Book Records</a>
-            <a href="#" onclick="loadContent('history')">Student Borrow History</a>
-            <a href="#" onclick="loadContent('notification')">Notifications</a>
-
-            <a href="{% url 'profile' %}">Profile</a>
-            <a href="{% url 'logout' %}">Logout</a>
-
+        <a href="{% url 'library_dashboard' %}">Home</a>
+        <a href="#">Book Issue</a>
+        <a href="#">Return</a>
+        <a href="#">Records</a>
+        <a href="#">History</a>
+        <a href="#">Notifications</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'logout' %}">Logout</a>
 
         <!-- ================= ADMIN ================= -->
         {% elif user.role == "admin" %}
 
-            <a href="{% url 'admin_dashboard' %}">Home</a>
-            <a href="#" onclick="loadContent('student')">Student Records</a>
-            <a href="#" onclick="loadContent('payment')">Payments</a>
-            <a href="#" onclick="loadContent('academic')">Academic Control</a>
-            <a href="#" onclick="loadContent('eligibility')">Eligibility</a>
-            <a href="#" onclick="loadContent('report')">Reports</a>
-            <a href="#" onclick="loadContent('notification')">Notifications</a>
-
-            <a href="{% url 'profile' %}">Profile</a>
-            <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'admin_dashboard' %}">Home</a>
+        <a href="#">Student Records</a>
+        <a href="#">Payments</a>
+        <a href="#">Academic</a>
+        <a href="#">Eligibility</a>
+        <a href="#">Reports</a>
+        <a href="#">Notifications</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'logout' %}">Logout</a>
 
         {% endif %}
 
         {% else %}
-
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'login' %}">Login</a>
-            <a href="{% url 'signup' %}">Signup</a>
-
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'signup' %}">Signup</a>
         {% endif %}
 
     </nav>
 </header>
 
-
-<!-- ================= MAIN CONTENT ================= -->
 <div class="main-content">
     {% block content %}{% endblock %}
 </div>

@@ -32,4 +32,11 @@ urlpatterns = [
     path('ward/dashboard/', views.ward_dashboard, name="ward_dashboard"),
     path('library/dashboard/', views.library_dashboard, name="library_dashboard"),
     path('admin/dashboard/', views.admin_dashboard, name="admin_dashboard"),
+
+    # ================= SUBJECTS & EXAMS =================
+    path("subjects/", views.subject_list, name="subjects"),
+    # path("subject/<str:name>/", views.subject_detail, name="subject_detail"),
+    path("subject/<slug:slug>/", views.subject_detail, name="subject_detail"),
+    path("exam/", views.exam_page, name="exam"),
+    path("result/", views.result_page, name="result"),
 ]

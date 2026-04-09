@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="syllabus-container">
+
+    <h2 class="syllabus-title">
+        {{ subject.name }} Syllabus
+    </h2>
+
+    <table class="syllabus-table">
+
+        <tr>
+            <th>Sl No</th>
+            <th>Topic</th>
+            <th>Full Marks</th>
+        </tr>
+
+        {% for t in topics %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ t.title }}</td>
+            <td>{{ t.full_marks }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}

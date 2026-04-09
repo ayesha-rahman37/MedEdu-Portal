@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2>My Result</h2>
+
+    <table border="1">
+        <tr>
+            <th>Sl</th>
+            <th>Subject</th>
+            <th>Topic</th>
+            <th>Marks</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+
+        {% for r in results %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ r.topic.subject.name }}</td>
+            <td>{{ r.topic.title }}</td>
+            <td>{{ r.marks }}</td>
+            <td>{{ r.status }}</td>
+            <td>{{ r.date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+{% endblock %}

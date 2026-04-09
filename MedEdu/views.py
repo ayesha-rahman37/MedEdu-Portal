@@ -4,9 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from django.contrib import messages
-from .models import User
-
+from .models import User, Subject, Topic, ExamSchedule, Result
+from django.shortcuts import render, get_object_or_404
 
 # ================= HOME =================
 def home(request):
@@ -24,7 +23,7 @@ def signup_view(request):
         role = request.POST.get("role")
         password = request.POST.get("password")
 
-        # 🔥 duplicate check
+        # duplicate check
         if User.objects.filter(username=username).exists():
             return render(request, "signup.html", {"error": "Username already exists"})
 
@@ -41,7 +40,7 @@ def signup_view(request):
 
         user.set_password(password)
 
-        # ===== MedEdu ID generate =====
+        # ===== MedEdu ID =====
         if role == "medical_student":
             prefix = "MS"
         elif role == "dental_student":
@@ -64,14 +63,14 @@ def signup_view(request):
 
         user.save()
 
-        # ===== EMAIL VERIFICATION =====
+        # ===== EMAIL VERIFY =====
         link = request.build_absolute_uri(
             reverse("verify_account", args=[user.id])
         )
 
         send_mail(
             "Verify Your Account",
-            f"Click this link to verify your account: {link}",
+            f"Click to verify: {link}",
             settings.EMAIL_HOST_USER,
             [email],
         )
@@ -109,7 +108,6 @@ def login_view(request):
                     "error": "Please verify your account first"
                 })
 
-            # 🔥 CHECK PASSWORD
             if user.check_password(password):
                 login(request, user)
                 return redirect("dashboard")
@@ -132,7 +130,7 @@ def logout_view(request):
     return redirect("home")
 
 
-# ================= FORGOT PASSWORD =================
+# ================= RESET PASSWORD =================
 def forgot_password(request):
 
     if request.method == "POST":
@@ -141,17 +139,11 @@ def forgot_password(request):
         new_password = request.POST.get("new_password")
         confirm_password = request.POST.get("confirm_password")
 
-        # 🔥 check empty
         if not mededu_id or not new_password or not confirm_password:
-            return render(request, "reset.html", {
-                "error": "All fields are required"
-            })
+            return render(request, "reset.html", {"error": "All fields required"})
 
-        # 🔥 check password match
         if new_password != confirm_password:
-            return render(request, "reset.html", {
-                "error": "Passwords do not match"
-            })
+            return render(request, "reset.html", {"error": "Passwords do not match"})
 
         try:
             user = User.objects.get(mededu_id=mededu_id)
@@ -159,14 +151,10 @@ def forgot_password(request):
             user.set_password(new_password)
             user.save()
 
-            return render(request, "reset.html", {
-                "success": "Password reset successful! Now login."
-            })
+            return render(request, "reset.html", {"success": "Password updated!"})
 
         except User.DoesNotExist:
-            return render(request, "reset.html", {
-                "error": "Invalid MedEdu ID"
-            })
+            return render(request, "reset.html", {"error": "Invalid ID"})
 
     return render(request, "reset.html")
 
@@ -177,7 +165,7 @@ def profile_view(request):
     return render(request, "profile.html")
 
 
-# ================= PROFILE EDIT =================
+# ================= EDIT PROFILE =================
 @login_required
 def edit_profile(request):
 
@@ -225,34 +213,119 @@ def dashboard_redirect(request):
 # ================= DASHBOARDS =================
 @login_required
 def student_dashboard(request):
-    return render(request, "dashboards/student_dashboard.html")
+    role = request.user.role.replace("_", " ").title()
+
+    return render(request, "dashboards/student_dashboard.html", {
+        "role": role
+    })
 
 
 @login_required
 def faculty_dashboard(request):
-    return render(request, "dashboards/faculty_dashboard.html")
+    role = request.user.role.replace("_", " ").title()
+
+    return render(request, "dashboards/faculty_dashboard.html", {
+        "role": role
+    })
 
 
 @login_required
 def intern_dashboard(request):
-    return render(request, "dashboards/intern_dashboard.html")
+    role = request.user.role.replace("_", " ").title()
+
+    return render(request, "dashboards/intern_dashboard.html", {
+        "role": role
+    })
 
 
 @login_required
 def doctor_dashboard(request):
-    return render(request, "dashboards/doctor_dashboard.html")
+    role = request.user.role.replace("_", " ").title()
+
+    return render(request, "dashboards/doctor_dashboard.html", {
+        "role": role
+    })
 
 
 @login_required
 def ward_dashboard(request):
-    return render(request, "dashboards/ward_dashboard.html")
+    role = request.user.role.replace("_", " ").title()
+
+    return render(request, "dashboards/ward_dashboard.html", {
+        "role": role
+    })
 
 
 @login_required
 def library_dashboard(request):
-    return render(request, "dashboards/library_dashboard.html")
+    role = request.user.role.replace("_", " ").title()
+
+    return render(request, "dashboards/library_dashboard.html", {
+        "role": role
+    })
 
 
 @login_required
 def admin_dashboard(request):
-    return render(request, "dashboards/admin_dashboard.html")
+    role = request.user.role.replace("_", " ").title()
+
+    return render(request, "dashboards/admin_dashboard.html", {
+        "role": role
+    })
+
+
+# ================= SUBJECT =================
+@login_required
+def subject_list(request):
+
+    if request.user.role == "medical_student":
+        subjects = Subject.objects.filter(course_type="medical")
+
+    elif request.user.role == "dental_student":
+        subjects = Subject.objects.filter(course_type="dental")
+
+    else:
+        subjects = Subject.objects.all()
+
+    return render(request, "subjects.html", {
+        "subjects": subjects
+    })
+
+@login_required
+def subject_detail(request, slug):
+    subject = get_object_or_404(Subject, slug=slug)
+    topics = Topic.objects.filter(subject=subject)
+
+    return render(request, "subject_detail.html", {
+        "subject": subject,
+        "topics": topics
+    })
+
+@login_required
+def exam_page(request):
+
+    # 🔥 optional: filter based on student type
+    if request.user.role == "medical_student":
+        exams = ExamSchedule.objects.filter(subject__course_type="medical")
+
+    elif request.user.role == "dental_student":
+        exams = ExamSchedule.objects.filter(subject__course_type="dental")
+
+    else:
+        exams = ExamSchedule.objects.all()
+
+    exams = exams.order_by("date")
+
+    return render(request, "exam.html", {
+        "exams": exams
+    })
+
+@login_required
+def result_page(request):
+
+    # 🔥 ONLY own result
+    results = Result.objects.filter(user=request.user)
+
+    return render(request, "result.html", {
+        "results": results
+    })

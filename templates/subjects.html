@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2>Subjects</h2>
+
+    {% for s in subjects %}
+        <div class="card">
+            <a href="{% url 'subject_detail' s.slug %}">
+                {{ s.name }}
+            </a>
+        </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
