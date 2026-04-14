@@ -1,6 +1,3 @@
-from pydoc_data.topics import topics
-from urllib import request
-
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -9,6 +6,7 @@ from django.urls import reverse
 from django.conf import settings
 from .models import User, Subject, Topic, ExamSchedule, Result
 from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect
 
 # ================= HOME =================
 def home(request):
@@ -299,11 +297,15 @@ def subject_list(request):
 
 @login_required
 def subject_detail(request, slug):
+    # 🔥 ONLY STUDENTS CAN ACCESS
+    if request.user.role not in ["medical_student", "dental_student"]:
+        return redirect("dashboard")
+
     subject = get_object_or_404(Subject, slug=slug)
     topics = Topic.objects.filter(subject=subject)
 
     user = request.user
-
+    course = None
     # 🔥 course detect (IMPORTANT - uppercase folder match)
     if user.role == "medical_student":
         course = "MBBS"

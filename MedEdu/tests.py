@@ -97,3 +97,70 @@ class MedEduTest(TestCase):
         })
 
         self.assertContains(response, "match")
+
+# ================= SUBJECT =================
+
+def test_subject_detail_page(self):
+    from .models import Subject
+
+    subject = Subject.objects.create(
+        name="Anatomy",
+        slug="anatomy"
+    )
+
+    self.client.login(username='student1', password='12345')
+
+    response = self.client.get(reverse("subject_detail", args=["anatomy"]))
+
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, "Syllabus")
+
+
+def test_subject_requires_login(self):
+    from .models import Subject
+
+    Subject.objects.create(name="Anatomy", slug="anatomy")
+
+    response = self.client.get(reverse("subject_detail", args=["anatomy"]))
+
+    # should redirect (login required)
+    self.assertNotEqual(response.status_code, 200)
+
+
+# ================= ROLE BASED =================
+
+def test_medical_student_access(self):
+    self.client.login(username='student1', password='12345')
+
+    response = self.client.get('/student/dashboard/')
+    self.assertEqual(response.status_code, 200)
+
+
+def test_dental_student_access(self):
+    dental_user = User.objects.create(
+        username='dental1',
+        role='dental_student',
+        is_verified=True
+    )
+    dental_user.set_password('12345')
+    dental_user.save()
+
+    self.client.login(username='dental1', password='12345')
+
+    response = self.client.get('/student/dashboard/')
+    self.assertEqual(response.status_code, 200)
+
+
+# ================= PDF LOGIC =================
+
+def test_pdf_load(self):
+    from .models import Subject
+
+    Subject.objects.create(name="Anatomy", slug="anatomy")
+
+    self.client.login(username='student1', password='12345')
+
+    response = self.client.get(reverse("subject_detail", args=["anatomy"]))
+
+    # check PDF path exists in response
+    self.assertContains(response, "/static/pdfs/")
