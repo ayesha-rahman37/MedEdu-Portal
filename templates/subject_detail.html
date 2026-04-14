@@ -2,24 +2,23 @@
 
 {% block content %}
 
-<div class="pdf-container">
+<div class="pdf-wrapper">
 
     <!-- 🔥 SUBJECT TITLE -->
-    <h2 style="text-transform: capitalize; margin-bottom: 20px;">
+    <h2 class="pdf-title">
         {{ subject.name }} Syllabus
     </h2>
 
-
     <!-- 🔥 MAIN PDF -->
     {% if pdf_path %}
-        <iframe src="{{ pdf_path }}" width="100%" height="600px" style="border-radius:10px;"></iframe>
+        <div class="pdf-container">
+            <iframe src="{{ pdf_path }}" class="pdf-frame"></iframe>
+        </div>
     {% else %}
-        <p>No PDF available</p>
+        <p class="no-pdf">No PDF available</p>
     {% endif %}
 
-
     <!-- 🔥 EXTRA MATERIALS -->
-
     {% if extra_pdfs %}
     <div class="extra-pdf-list">
         <h3>Extra Materials</h3>

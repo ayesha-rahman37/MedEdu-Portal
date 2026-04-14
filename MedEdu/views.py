@@ -345,7 +345,30 @@ def subject_detail(request, slug):
             f"/static/pdfs/{course}/Phase 4/Paediatrics.pdf",
             f"/static/pdfs/{course}/Phase 4/Psychiatry.pdf",
             f"/static/pdfs/{course}/Phase 4/Skin & VD.pdf",
-        ]
+        ],
+
+        # dental subjects
+        # phase 1
+        "general-anatomy": f"/static/pdfs/{course}/Phase 1/Anatomy (Paper - I).pdf",
+        "dental-anatomy": f"/static/pdfs/{course}/Phase 1/Dental Anatomy (Paper - II).pdf",
+        "physiology-biochemistry": f"/static/pdfs/{course}/Phase 1/Physiology & Biochemistry.pdf",
+        "science-of-dental-materials": f"/static/pdfs/{course}/Phase 1/Science of Dental Materials.pdf",
+
+        # phase 2
+        "general-pharmacology-dental-therapeutics": f"/static/pdfs/{course}/Phase 2/General Pharmacology & Dental Therapeutics.pdf",
+        "pathology-microbiology": f"/static/pdfs/{course}/Phase 2/Pathology & Microbiology.pdf",
+
+        # phase 3
+        "medicine-bds": f"/static/pdfs/{course}/Phase 3/Medicine.pdf",
+        "surgery-bds": f"/static/pdfs/{course}/Phase 3/Surgery.pdf",
+        "periodontology-oral-pathology": f"/static/pdfs/{course}/Phase 3/Periodontology & Oral Pathology.pdf",
+
+        # phase 4
+        "oral-maxillofacial-surgery": f"/static/pdfs/{course}/Phase 4/Oral & Maxillofacial Surgery.pdf",
+        "conservative-dentistry-endodontics": f"/static/pdfs/{course}/Phase 4/Conservative Dentistry & Endodontics.pdf",
+        "prosthodontics": f"/static/pdfs/{course}/Phase 4/Prosthodontics.pdf",
+        "orthodontics-dentofacial-orthopedics": f"/static/pdfs/{course}/Phase 4/Orthodontics & Dentofacial Orthopedics.pdf",
+        "pedodontics-dental-public-health": f"/static/pdfs/{course}/Phase 4/Pedodontics & Dental Public Health.pdf",
 
         # # ===== EXTRA FILE =====
         # "internship": f"/static/pdfs/{course}/Internship.pdf",
@@ -353,7 +376,10 @@ def subject_detail(request, slug):
         #     f"/static/pdfs/{course}/Phase 1/Anatomy Card.pdf",
         #     f"/static/pdfs/{course}/Internship.pdf",
         # ]
+        
     }
+
+    
 
     data = pdf_map.get(slug)
 
