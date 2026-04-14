@@ -9,15 +9,6 @@
         {{ subject.name }} Syllabus
     </h2>
 
-    <!-- 🔥 MAIN PDF -->
-    {% if pdf_path %}
-        <div class="pdf-container">
-            <iframe src="{{ pdf_path }}" class="pdf-frame"></iframe>
-        </div>
-    {% else %}
-        <p class="no-pdf">No PDF available</p>
-    {% endif %}
-
     <!-- 🔥 EXTRA MATERIALS -->
     {% if extra_pdfs %}
     <div class="extra-pdf-list">
@@ -29,6 +20,28 @@
             </a>
         {% endfor %}
     </div>
+    {% endif %}
+
+    <!-- 🔥 ADDITIONAL RESOURCES (IT, Internship etc.) -->
+    {% if additional_resources %}
+    <div class="extra-pdf-list">
+        <h3>Additional Resources</h3>
+
+        {% for item in additional_resources %}
+            <a href="{{ item.file }}" target="_blank" class="pdf-btn">
+                {{ item.name }}
+            </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- 🔥 MAIN PDF -->
+    {% if pdf_path %}
+        <div class="pdf-container">
+            <iframe src="{{ pdf_path }}" class="pdf-frame"></iframe>
+        </div>
+    {% else %}
+        <p class="no-pdf">No PDF available</p>
     {% endif %}
 
 </div>

@@ -492,11 +492,21 @@ body {
 
 /* ===== EXTRA MATERIALS ===== */
 .extra-pdf-list {
-    margin-top: 25px;
+    margin-top: 20px;
 }
 
 .extra-pdf-list h3 {
     margin-bottom: 10px;
+}
+
+/* 🔥 NEW ADD */
+.extra-pdf-list .pdf-btn {
+    margin-bottom: 15px;
+}
+
+/* 🔥 IMPORTANT — PDF viewer below watch */
+.pdf-container iframe {
+    margin-top: 20px;
 }
 
 /* ===== BUTTON ===== */

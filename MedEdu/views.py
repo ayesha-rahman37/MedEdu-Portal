@@ -359,8 +359,8 @@ def subject_detail(request, slug):
         "pathology-microbiology": f"/static/pdfs/{course}/Phase 2/Pathology & Microbiology.pdf",
 
         # phase 3
-        "medicine-bds": f"/static/pdfs/{course}/Phase 3/Medicine.pdf",
-        "surgery-bds": f"/static/pdfs/{course}/Phase 3/Surgery.pdf",
+        "medicine": f"/static/pdfs/{course}/Phase 3/Medicine.pdf",
+        "surgery": f"/static/pdfs/{course}/Phase 3/Surgery.pdf",
         "periodontology-oral-pathology": f"/static/pdfs/{course}/Phase 3/Periodontology & Oral Pathology.pdf",
 
         # phase 4
@@ -402,12 +402,57 @@ def subject_detail(request, slug):
 
     if slug in phase4_subjects:
         extra_pdfs = pdf_map.get("extras", [])
+    
+    # 🔥 Additional Resources (IT + Internship)
+
+    if course == "MBBS":
+        additional_resources = [
+            {
+                "name": "IT (Phase 1)",
+                "file": f"/static/pdfs/{course}/Phase 1/IT Phase 1.pdf"
+            },
+            {
+                "name": "IT (Phase 2)",
+                "file": f"/static/pdfs/{course}/Phase 2/IT Phase 2.pdf"
+            },
+            {
+                "name": "IT (Phase 3)",
+                "file": f"/static/pdfs/{course}/Phase 3/IT Phase 3.pdf"
+            },
+            {
+                "name": "IT (Phase 4)",
+                "file": f"/static/pdfs/{course}/Phase 4/IT Phase 4.pdf"
+            },
+            {
+                "name": "Internship",
+                "file": f"/static/pdfs/{course}/Internship.pdf"
+            },
+            {
+                "name": "Prescription",
+                "file": f"/static/pdfs/{course}/Prescription.pdf"
+            }
+        ]
+    
+
+    elif course == "BDS":
+        additional_resources = [
+            {
+                "name": "IT (Phase 1)",
+                "file": f"/static/pdfs/{course}/Phase 1/IT Phase 1.pdf"
+            },
+            {
+                "name": "Prescription",
+                "file": f"/static/pdfs/{course}/Prescription.pdf"
+            }
+        ]
+    
 
     return render(request, "subject_detail.html", {
         "subject": subject,
         "topics": topics,
         "pdf_path": pdf_path,
-        "extra_pdfs": extra_pdfs
+        "extra_pdfs": extra_pdfs,
+        "additional_resources": additional_resources
     })
 
 
