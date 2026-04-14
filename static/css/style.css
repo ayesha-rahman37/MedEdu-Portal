@@ -422,3 +422,34 @@ body {
 
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
+
+/* ================= EXTRA PDF SECTION ================= */
+.extra-pdf-list {
+    margin-top: 20px;
+}
+
+/* BUTTON STYLE (THEME MATCHED) */
+.pdf-btn {
+    display: inline-block;
+    margin: 10px 10px 0 0;
+    padding: 10px 18px;
+
+    background: rgba(255,255,255,0.6);   /* glass effect */
+    backdrop-filter: blur(8px);
+
+    color: #3a2f2f;   /* navbar color match */
+    border-radius: 10px;
+
+    text-decoration: none;
+    font-weight: 600;
+
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+
+    transition: 0.3s;
+}
+
+/* HOVER (your pink tone) */
+.pdf-btn:hover {
+    background: #e3b7b7;
+    color: white;
+}

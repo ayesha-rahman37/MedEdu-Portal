@@ -1,3 +1,6 @@
+from pydoc_data.topics import topics
+from urllib import request
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -291,15 +294,97 @@ def subject_list(request):
         "subjects": subjects
     })
 
+
+# ================= SUBJECT DETAIL =================
+
 @login_required
 def subject_detail(request, slug):
     subject = get_object_or_404(Subject, slug=slug)
     topics = Topic.objects.filter(subject=subject)
 
+    user = request.user
+
+    # 🔥 course detect (IMPORTANT - uppercase folder match)
+    if user.role == "medical_student":
+        course = "MBBS"
+    elif user.role == "dental_student":
+        course = "BDS"
+
+    # 🔥 EXACT PDF PATH (your real files)
+    pdf_map = {
+
+        # medical subjects
+        # phase 1
+        "anatomy": f"/static/pdfs/{course}/Phase 1/Anatomy.pdf",
+        "physiology": f"/static/pdfs/{course}/Phase 1/Physiology.pdf",
+        "biochemistry": f"/static/pdfs/{course}/Phase 1/Biochemistry.pdf",
+
+        # phase 2
+        "pharmacology-therapeutics": f"/static/pdfs/{course}/Phase 2/Pharmacology & Therapeutics.pdf",
+        "forensic-medicine-toxicology": f"/static/pdfs/{course}/Phase 2/Forensic Medicine & Toxicology.pdf",
+        "general-pathology-basic": f"/static/pdfs/{course}/Phase 3/Pathology.pdf",
+        "general-microbiology-basic": f"/static/pdfs/{course}/Phase 3/Microbiology.pdf",
+        "medicine-intro": f"/static/pdfs/{course}/Phase 4/Medicine.pdf",
+        "surgery-intro": f"/static/pdfs/{course}/Phase 4/Surgery & Allied Subjects.pdf",
+
+        # phase 3
+        "community-medicine-public-health": f"/static/pdfs/{course}/Phase 3/Community Medicine & Public Health.pdf",
+        "pathology": f"/static/pdfs/{course}/Phase 3/Pathology.pdf",
+        "microbiology": f"/static/pdfs/{course}/Phase 3/Microbiology.pdf",
+        "medicine-clinical": f"/static/pdfs/{course}/Phase 4/Medicine.pdf",
+        "surgery-clinical": f"/static/pdfs/{course}/Phase 4/Surgery & Allied Subjects.pdf",
+        "obstetrics-gynaecology-intro": f"/static/pdfs/{course}/Phase 4/Obstetrics & Gynaecology.pdf",
+
+        # phase 4
+        "medicine": f"/static/pdfs/{course}/Phase 4/Medicine.pdf",
+        "surgery": f"/static/pdfs/{course}/Phase 4/Surgery & Allied Subjects.pdf",
+        "obstetrics-gynaecology": f"/static/pdfs/{course}/Phase 4/Obstetrics & Gynaecology.pdf",
+        "extras": [
+            f"/static/pdfs/{course}/Phase 4/Ophthalmology.pdf",
+            f"/static/pdfs/{course}/Phase 4/Otorhinolaryngology & Head-Neck Surgery.pdf",
+            f"/static/pdfs/{course}/Phase 4/Paediatrics.pdf",
+            f"/static/pdfs/{course}/Phase 4/Psychiatry.pdf",
+            f"/static/pdfs/{course}/Phase 4/Skin & VD.pdf",
+        ]
+
+        # # ===== EXTRA FILE =====
+        # "internship": f"/static/pdfs/{course}/Internship.pdf",
+        # "extras": [
+        #     f"/static/pdfs/{course}/Phase 1/Anatomy Card.pdf",
+        #     f"/static/pdfs/{course}/Internship.pdf",
+        # ]
+    }
+
+    data = pdf_map.get(slug)
+
+    if isinstance(data, str):
+        pdf_path = data
+    
+    elif isinstance(data, dict):
+        pdf_path = data.get("main")
+    
+    else:
+        pdf_path = None
+    
+    extra_pdfs = []
+
+    phase4_subjects = [
+        "medicine",
+        "surgery",
+        "obstetrics-gynaecology",
+    ]
+
+    if slug in phase4_subjects:
+        extra_pdfs = pdf_map.get("extras", [])
+
     return render(request, "subject_detail.html", {
         "subject": subject,
-        "topics": topics
+        "topics": topics,
+        "pdf_path": pdf_path,
+        "extra_pdfs": extra_pdfs
     })
+
+
 
 @login_required
 def exam_page(request):
