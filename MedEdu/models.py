@@ -122,3 +122,28 @@ class Result(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.topic.title}"
+
+# ================= DOCTOR SCHEDULE =================
+
+class DoctorSchedule(models.Model):
+
+    DUTY_CHOICES = (
+        ("ward", "Ward Round"),
+        ("ot", "Operation"),
+        ("lecture", "Lecture"),
+        ("opd", "OPD"),
+    )
+
+    doctor = models.ForeignKey(User, on_delete=models.CASCADE)
+    duty_type = models.CharField(max_length=20, choices=DUTY_CHOICES)
+
+    title = models.CharField(max_length=200)
+
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    location = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return f"{self.doctor.mededu_id} - {self.duty_type}"

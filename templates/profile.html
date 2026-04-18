@@ -10,12 +10,13 @@
 
         <!-- PROFILE IMAGE -->
         <div style="text-align:center; margin-bottom:20px;">
+            
             {% if request.user.profile_pic %}
-                <img src="{{ request.user.profile_pic.url }}" 
-                     style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #ff2d8f;">
+                <img src="{{ request.user.profile_pic.url }}" class="profile-img">
             {% else %}
-                <p>No Profile Image</p>
+                <img src="/static/images/default.png" class="profile-img">
             {% endif %}
+
         </div>
 
         <!-- USER INFO -->

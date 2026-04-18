@@ -171,7 +171,7 @@
         {% elif user.role == "doctor" %}
 
         <a href="{% url 'doctor_dashboard' %}">Home</a>
-        <a href="#">Class Schedule</a>
+        <a href="{% url 'doctor_schedule' %}">Schedule</a>
         <a href="#">Case Review</a>
         <a href="#">Notifications</a>
         <a href="{% url 'profile' %}">Profile</a>

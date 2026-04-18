@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="schedule-container">
+
+    <h2 style="text-align:center; margin-bottom:25px;">
+        Doctor Schedule
+    </h2>
+
+    <!-- 🔥 TODAY SECTION -->
+    <div class="schedule-section">
+        <h3>Today's Duty</h3>
+
+        {% if today_schedules %}
+            {% for s in today_schedules %}
+            <div class="schedule-card today-highlight">
+
+                <div class="schedule-info">
+                    <div class="schedule-title">{{ s.title }}</div>
+                    <div class="schedule-date">{{ s.date }}</div>
+                    <div class="schedule-location">{{ s.location }}</div>
+                </div>
+
+                <div class="schedule-time">
+                    {{ s.start_time }} - {{ s.end_time }}
+                </div>
+
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-duty">No duty today</p>
+        {% endif %}
+    </div>
+
+
+    <!-- 🔥 ALL SCHEDULE -->
+    <div class="schedule-section">
+        <h3>All Schedule</h3>
+
+        {% if schedules %}
+            {% for s in schedules %}
+            <div class="schedule-card">
+
+                <div class="schedule-info">
+                    <div class="schedule-title">{{ s.title }}</div>
+                    <div class="schedule-date">{{ s.date }}</div>
+                    <div class="schedule-location">{{ s.location }}</div>
+                </div>
+
+                <div class="schedule-time">
+                    {{ s.start_time }} - {{ s.end_time }}
+                </div>
+
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-duty">No schedule available</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

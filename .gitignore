@@ -17,3 +17,4 @@ _pycache_/
 # --- Django DB ---
 db.sqlite3
 *.sqlite3
+.env

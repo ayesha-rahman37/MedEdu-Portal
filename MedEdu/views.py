@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import User, Subject, Topic, ExamSchedule, Result
+from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule
 from django.shortcuts import render, get_object_or_404
-from django.shortcuts import redirect
+from datetime import date
 
 # ================= HOME =================
 def home(request):
@@ -486,4 +486,36 @@ def result_page(request):
 
     return render(request, "result.html", {
         "results": results
+    })
+
+# ================= DOCTOR SCHEDULE =================
+
+@login_required
+def doctor_schedule(request):
+
+    # DEBUG (optional)
+    print(DoctorSchedule.objects.all())
+
+    # ❌ doctor না হলে block
+    if request.user.role != "doctor":
+        return render(request, "access_denied.html")
+
+    # ✅ today's date
+    today = date.today()
+
+    # ✅ today's schedules
+    today_schedules = DoctorSchedule.objects.filter(
+        doctor=request.user,
+        date=today
+    ).order_by("start_time")
+
+    # ✅ all schedules
+    schedules = DoctorSchedule.objects.filter(
+        doctor=request.user
+    ).order_by("date", "start_time")
+
+    # ✅ FINAL RETURN (IMPORTANT)
+    return render(request, "doctor_schedule.html", {
+        "today_schedules": today_schedules,
+        "schedules": schedules
     })

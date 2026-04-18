@@ -535,3 +535,118 @@ body {
         height: 500px;
     }
 }
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;   /* 🔥 main thing */
+    border-radius: 50%;  /* circle */
+    border: 3px solid #caeebb;
+    display: block;
+    margin: auto;
+}
+
+/* ================= DOCTOR SCHEDULE ================= */
+
+.schedule-container {
+    max-width: 850px;
+    margin: 50px auto;
+    padding: 10px 20px;
+}
+
+/* SECTION TITLE */
+.schedule-section h3 {
+    margin-bottom: 12px;
+    color: #3a2f2f;
+    font-weight: 700;
+}
+
+/* CARD */
+.schedule-card {
+    background: rgba(255, 255, 255, 0.55);  /* 🔥 match bg */
+    backdrop-filter: blur(10px);
+
+    padding: 16px 18px;
+    border-radius: 14px;
+
+    margin-bottom: 12px;
+
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    transition: 0.3s;
+}
+
+/* HOVER */
+.schedule-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.15);
+}
+
+/* LEFT SIDE */
+.schedule-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+/* TITLE */
+.schedule-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2b2b2b;
+}
+
+/* DATE */
+.schedule-date {
+    font-size: 13px;
+    color: #6b5b5b;
+}
+
+/* LOCATION */
+.schedule-location {
+    font-size: 13px;
+    color: #7a6a6a;
+}
+
+/* TIME BADGE */
+.schedule-time {
+    background: #d4b4b4;   /* 🔥 theme color */
+    color: white;
+
+    padding: 7px 12px;
+    border-radius: 10px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    min-width: 120px;
+    text-align: center;
+}
+
+/* TODAY HIGHLIGHT */
+.today-highlight {
+    border-left: 4px solid #d4b4b4;
+}
+
+/* EMPTY TEXT */
+.no-duty {
+    color: #5a4a4a;
+    font-size: 14px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .schedule-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .schedule-time {
+        width: 100%;
+    }
+}

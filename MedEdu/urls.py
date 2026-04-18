@@ -39,4 +39,7 @@ urlpatterns = [
     path("subject/<slug:slug>/", views.subject_detail, name="subject_detail"),
     path("exam/", views.exam_page, name="exam"),
     path("result/", views.result_page, name="result"),
+
+    # ================= DOCTOR SCHEDULE =================
+    path("doctor/schedule/", views.doctor_schedule, name="doctor_schedule"),
 ]
