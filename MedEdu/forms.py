@@ -1,5 +1,5 @@
 from django import forms
-from .models import User
+from .models import User, Book
 
 
 class SignupForm(forms.ModelForm):
@@ -16,3 +16,13 @@ class SignupForm(forms.ModelForm):
             "role",
             "password"
         ]
+
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'isbn', 'publisher', 'edition', 'year', 
+                  'category', 'total_copies', 'available_copies', 'location', 'description']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 3}),
+        }

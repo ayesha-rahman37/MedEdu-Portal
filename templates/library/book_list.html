@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="padding: 30px; max-width: 1200px; margin: 0 auto;">
+    <h2>📚 Library Catalog</h2>
+    
+    <div style="background: rgba(255,255,255,0.5); padding: 20px; border-radius: 10px; margin: 20px 0;">
+        <form method="GET" style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <input type="text" name="search" placeholder="Search by title, author, or ISBN" 
+                   value="{{ search_query }}" style="flex: 2; padding: 10px; border-radius: 5px; border: none;">
+            <button type="submit" class="auth-btn" style="width: auto;">Search</button>
+        </form>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+        {% for book in books %}
+        <div class="card" style="text-align: left; padding: 20px;">
+            <h3>{{ book.title }}</h3>
+            <p><strong>Author:</strong> {{ book.author }}</p>
+            <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+            <p><strong>Category:</strong> {{ book.get_category_display }}</p>
+            <p><strong>Available:</strong> 
+                {% if book.available_copies > 0 %}
+                    <span style="color: green;">{{ book.available_copies }} copies</span>
+                {% else %}
+                    <span style="color: red;">Not Available</span>
+                {% endif %}
+            </p>
+            <a href="{% url 'book_detail' book.id %}" class="pdf-btn" style="display: inline-block; margin-top: 10px;">View Details</a>
+        </div>
+        {% empty %}
+        <p>No books found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

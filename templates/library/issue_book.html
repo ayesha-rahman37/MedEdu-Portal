@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>📖 Issue Book</h2>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: green; text-align: center;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Student/User MedEdu ID</label>
+                <input type="text" name="mededu_id" placeholder="e.g., MS-1001" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Book Title or ISBN</label>
+                <input type="text" name="book_title" placeholder="Enter book title or ISBN" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Due Date</label>
+                <input type="date" name="due_date" required>
+            </div>
+            
+            <button type="submit" class="auth-btn">Issue Book</button>
+        </form>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="{% url 'library_dashboard' %}" class="secondary-btn">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
