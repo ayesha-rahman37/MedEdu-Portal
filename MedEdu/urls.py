@@ -14,7 +14,7 @@ urlpatterns = [
     # ================= ACCOUNT =================
     path('verify/<int:user_id>/', views.verify_account, name="verify_account"),
 
-    # 🔥 ONLY ONE FORGOT PASSWORD (FIXED)
+    # ONLY ONE FORGOT PASSWORD (FIXED)
     path('forgot-password/', views.forgot_password, name='forgot_password'),
 
     # ================= PROFILE =================
@@ -35,11 +35,19 @@ urlpatterns = [
 
     # ================= SUBJECTS & EXAMS =================
     path("subjects/", views.subject_list, name="subjects"),
-    # path("subject/<str:name>/", views.subject_detail, name="subject_detail"),
     path("subject/<slug:slug>/", views.subject_detail, name="subject_detail"),
     path("exam/", views.exam_page, name="exam"),
     path("result/", views.result_page, name="result"),
 
     # ================= DOCTOR SCHEDULE =================
     path("doctor/schedule/", views.doctor_schedule, name="doctor_schedule"),
+    
+    # ================= LIBRARY URLS =================
+    path('library/books/', views.book_list, name="book_list"),
+    path('library/book/<int:book_id>/', views.book_detail, name="book_detail"),
+    path('library/issue/', views.issue_book, name="issue_book"),
+    path('library/return/', views.return_book, name="return_book"),
+    path('library/my-books/', views.my_issued_books, name="my_issued_books"),
+    path('library/reserve/<int:book_id>/', views.reserve_book, name="reserve_book"),
+    path('library/add-book/', views.add_book, name="add_book"),
 ]
