@@ -1,52 +1,105 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="auth-container">
-    <div class="auth-card" style="width: 600px;">
-        <h2>🔄 Return Book</h2>
+<div style="max-width: 800px; margin: 50px auto; padding: 30px; background: rgba(255,255,255,0.5); border-radius: 10px;">
+    <h2 style="text-align: center; margin-bottom: 30px;">🔄 Return Book</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: {% if 'error' in message.tags %}red{% else %}green{% endif %}; text-align: center; padding: 10px; background: rgba(255,255,255,0.8); border-radius: 5px;">
+                {{ message }}
+            </p>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Return Form -->
+    <form method="POST" style="margin-bottom: 30px;">
+        {% csrf_token %}
         
-        {% if messages %}
-            {% for message in messages %}
-                <p style="color: {% if 'error' in message.tags %}red{% else %}green{% endif %}; text-align: center;">
-                    {{ message }}
-                </p>
-            {% endfor %}
-        {% endif %}
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Issue ID:</label>
+            <input type="number" name="issue_id" placeholder="Enter Issue ID" required 
+                   style="width: 100%; padding: 10px; border: none; border-radius: 5px;">
+        </div>
         
-        <form method="POST">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label>Issue ID</label>
-                <input type="number" name="issue_id" placeholder="Enter Issue ID" required>
-            </div>
-            
-            <button type="submit" class="auth-btn">Return Book</button>
-        </form>
-        
-        <h3 style="margin-top: 30px;">Currently Issued Books</h3>
-        <table border="1" style="width: 100%; margin-top: 10px; border-collapse: collapse;">
-            <tr style="background: #d4b4b4;">
-                <th style="padding: 8px;">Issue ID</th>
-                <th style="padding: 8px;">Book</th>
-                <th style="padding: 8px;">Student</th>
-                <th style="padding: 8px;">Due Date</th>
-            </tr>
-            {% for issue in current_issues %}
-            <tr>
-                <td style="padding: 8px;">{{ issue.id }}</td>
-                <td style="padding: 8px;">{{ issue.book.title }}</td>
-                <td style="padding: 8px;">{{ issue.user.username }}</td>
-                <td style="padding: 8px; color: {% if issue.status == 'overdue' %}red{% endif %};">
-                    {{ issue.due_date }}
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4" style="text-align: center; padding: 20px;">No books currently issued</td>
-            </tr>
-            {% endfor %}
-        </table>
+        <button type="submit" style="background: #f44336; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 16px;">
+            🔄 Return Book
+        </button>
+    </form>
+    
+    <hr style="margin: 30px 0;">
+    
+    <!-- Currently Issued Books List -->
+    <h3 style="margin-bottom: 15px;">📖 Currently Issued Books</h3>
+    
+    {% if current_issues %}
+        <div style="overflow-x: auto;">
+            <table border="1" style="width: 100%; border-collapse: collapse; background: rgba(255,255,255,0.7);">
+                <thead>
+                    <tr style="background: #d4b4b4;">
+                        <th style="padding: 12px;">Issue ID</th>
+                        <th style="padding: 12px;">Book Title</th>
+                        <th style="padding: 12px;">Student Name</th>
+                        <th style="padding: 12px;">Student ID</th>
+                        <th style="padding: 12px;">Issue Date</th>
+                        <th style="padding: 12px;">Due Date</th>
+                        <th style="padding: 12px;">Days Overdue</th>
+                        <th style="padding: 12px;">Fine</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for issue in current_issues %}
+                    <tr style="{% if issue.due_date < now %}background: rgba(255,200,200,0.5);{% endif %}">
+                        <td style="padding: 8px; text-align: center;">{{ issue.id }}</td>
+                        <td style="padding: 8px;">{{ issue.book.title }}</td>
+                        <td style="padding: 8px;">{{ issue.user.username }}</td>
+                        <td style="padding: 8px;">{{ issue.user.mededu_id }}</td>
+                        <td style="padding: 8px;">{{ issue.issue_date }}</td>
+                        <td style="padding: 8px; {% if issue.due_date < now %}color: red; font-weight: bold;{% endif %}">
+                            {{ issue.due_date }}
+                        </td>
+                        <td style="padding: 8px; text-align: center;">
+                            {% if issue.due_date < now %}
+                                {{ issue.due_date|timeuntil }} overdue
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td style="padding: 8px; text-align: center;">
+                            {% if issue.due_date < now %}
+                                ৳ {{ issue.due_date|timesince|cut:"days"|add:"5" }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p style="text-align: center; padding: 20px; background: rgba(255,255,255,0.5); border-radius: 5px;">
+            ✅ No books currently issued
+        </p>
+    {% endif %}
+    
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="{% url 'library_dashboard' %}" style="color: #666; text-decoration: none;">← Back to Dashboard</a>
     </div>
 </div>
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #d4b4b4;
+    }
+</style>
 {% endblock %}

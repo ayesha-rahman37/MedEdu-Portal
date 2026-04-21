@@ -5,7 +5,7 @@
 <div class="dashboard-container" style="display: block; padding: 30px;">
     <div class="welcome-box" style="margin-bottom: 30px;">
         <h2>📚 Library Management Dashboard</h2>
-        <p>Welcome, {{ request.user.username }}</p>
+        <p>Welcome, {{ request.user.username }} ({{ request.user.mededu_id }})</p>
     </div>
     
     <!-- Statistics Cards -->
@@ -30,63 +30,151 @@
     
     <!-- Action Buttons -->
     <div style="display: flex; justify-content: center; gap: 15px; margin: 30px 0; flex-wrap: wrap;">
-        <a href="{% url 'issue_book' %}" class="auth-btn" style="width: auto; padding: 12px 25px; text-decoration: none;">
+        <a href="{% url 'issue_book' %}" class="auth-btn" style="width: auto; padding: 12px 25px; text-decoration: none; background: #4CAF50; color: white; border-radius: 5px;">
             📖 Issue Book
         </a>
-        <a href="{% url 'return_book' %}" class="auth-btn" style="width: auto; padding: 12px 25px; text-decoration: none; background: #c79a9a;">
+        <a href="{% url 'return_book' %}" class="auth-btn" style="width: auto; padding: 12px 25px; text-decoration: none; background: #f44336; color: white; border-radius: 5px;">
             🔄 Return Book
         </a>
-        <a href="{% url 'add_book' %}" class="auth-btn" style="width: auto; padding: 12px 25px; text-decoration: none; background: #b88c8c;">
+        <a href="{% url 'add_book' %}" class="auth-btn" style="width: auto; padding: 12px 25px; text-decoration: none; background: #2196F3; color: white; border-radius: 5px;">
             ➕ Add New Book
         </a>
-        <a href="{% url 'book_list' %}" class="auth-btn" style="width: auto; padding: 12px 25px; text-decoration: none;">
+        <a href="{% url 'book_list' %}" class="auth-btn" style="width: auto; padding: 12px 25px; text-decoration: none; background: #9C27B0; color: white; border-radius: 5px;">
             🔍 View All Books
         </a>
     </div>
     
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+        <div style="margin: 10px auto; max-width: 800px; padding: 10px; border-radius: 5px; background: {% if message.tags == 'error' %}rgba(244,67,54,0.2){% else %}rgba(76,175,80,0.2){% endif %}; border-left: 4px solid {% if message.tags == 'error' %}#f44336{% else %}#4CAF50{% endif %};">
+            <p style="margin: 0; color: {% if message.tags == 'error' %}#d32f2f{% else %}#388E3C{% endif %};">
+                {{ message }}
+            </p>
+        </div>
+        {% endfor %}
+    {% endif %}
+    
     <!-- Low Stock Alert -->
     {% if low_stock_books %}
-    <div style="margin: 20px auto; max-width: 800px; background: rgba(255,200,200,0.3); padding: 15px; border-radius: 10px;">
-        <h3 style="color: #d9534f;">⚠️ Low Stock Alert</h3>
+    <div style="margin: 20px auto; max-width: 800px; background: rgba(255,200,200,0.3); padding: 15px; border-radius: 10px; border-left: 4px solid #f44336;">
+        <h3 style="color: #d9534f; margin: 0 0 10px 0;">⚠️ Low Stock Alert</h3>
         {% for book in low_stock_books %}
-        <p>• {{ book.title }} - Only {{ book.available_copies }} copy(s) left</p>
+        <p style="margin: 5px 0;">• {{ book.title }} - Only {{ book.available_copies }} copy(s) left</p>
         {% endfor %}
     </div>
     {% endif %}
     
     <!-- Recently Issued Books -->
     <div style="margin-top: 30px;">
-        <h3>Recently Issued Books</h3>
-        <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-            <tr style="background: #d4b4b4;">
-                <th style="padding: 10px;">Student ID</th>
-                <th style="padding: 10px;">Student Name</th>
-                <th style="padding: 10px;">Book Title</th>
-                <th style="padding: 10px;">Issue Date</th>
-                <th style="padding: 10px;">Due Date</th>
-                <th style="padding: 10px;">Status</th>
-            </tr>
-            {% for issue in recent_issues %}
-            <tr>
-                <td style="padding: 8px;">{{ issue.user.mededu_id }}</td>
-                <td style="padding: 8px;">{{ issue.user.username }}</td>
-                <td style="padding: 8px;">{{ issue.book.title }}</td>
-                <td style="padding: 8px;">{{ issue.issue_date }}</td>
-                <td style="padding: 8px;">{{ issue.due_date }}</td>
-                <td style="padding: 8px;">
-                    {% if issue.status == 'overdue' %}
-                        <span style="color: red;">⚠️ Overdue</span>
-                    {% else %}
-                        <span style="color: green;">✅ Issued</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="6" style="text-align: center; padding: 20px;">No recent issues</td>
-            </tr>
-            {% endfor %}
-        </table>
+        <h3>📋 Recently Issued Books</h3>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(255,255,255,0.5); border-radius: 10px;">
+                <thead>
+                    <tr style="background: #d4b4b4;">
+                        <th style="padding: 12px; text-align: left;">Student ID</th>
+                        <th style="padding: 12px; text-align: left;">Student Name</th>
+                        <th style="padding: 12px; text-align: left;">Book Title</th>
+                        <th style="padding: 12px; text-align: left;">Issue Date</th>
+                        <th style="padding: 12px; text-align: left;">Due Date</th>
+                        <th style="padding: 12px; text-align: left;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for issue in recent_issues %}
+                    <tr style="border-bottom: 1px solid #ddd; {% if issue.status == 'overdue' %}background: rgba(244,67,54,0.1);{% endif %}">
+                        <td style="padding: 10px;">{{ issue.user.mededu_id }}</td>
+                        <td style="padding: 10px;">{{ issue.user.username }}</td>
+                        <td style="padding: 10px;">{{ issue.book.title }}</td>
+                        <td style="padding: 10px;">{{ issue.issue_date|date:"d M Y" }}</td>
+                        <td style="padding: 10px; {% if issue.status == 'overdue' %}color: red; font-weight: bold;{% endif %}">
+                            {{ issue.due_date|date:"d M Y" }}
+                        </td>
+                        <td style="padding: 10px;">
+                            {% if issue.status == 'overdue' %}
+                                <span style="background: #f44336; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px;">⚠️ Overdue</span>
+                            {% else %}
+                                <span style="background: #4CAF50; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px;">✅ Issued</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: #666;">
+                            📭 No recent issues
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Footer Stats -->
+    <div style="margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.3); border-radius: 10px; text-align: center;">
+        <p style="margin: 0; color: #666;">
+            <strong>📊 Summary:</strong> 
+            Total Books: {{ total_books }} | 
+            Available: {{ available_books }} | 
+            Issued: {{ total_issued }} | 
+            Overdue: {{ total_overdue }}
+        </p>
     </div>
 </div>
+
+<style>
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .welcome-box {
+        text-align: center;
+        background: rgba(255,255,255,0.6);
+        backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .card {
+        transition: transform 0.3s ease;
+        text-align: center;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .auth-btn {
+        transition: all 0.3s ease;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    
+    .auth-btn:hover {
+        opacity: 0.85;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    
+    @media (max-width: 768px) {
+        .features {
+            justify-content: center;
+        }
+        
+        .auth-btn {
+            width: 100% !important;
+            text-align: center;
+        }
+        
+        table {
+            font-size: 12px;
+        }
+        
+        th, td {
+            padding: 6px !important;
+        }
+    }
+</style>
 {% endblock %}
