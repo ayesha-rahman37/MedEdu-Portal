@@ -54,20 +54,20 @@
             📖 Issue Book
         </a>
         <a href="{% url 'return_book' %}" class="auth-btn" style="width: auto; padding: 12px 25px; text-decoration: none; background: #f44336; color: white; border-radius: 5px;">
-            🔄 Return Book
+            Return Book
         </a>
         <a href="{% url 'add_book' %}" class="auth-btn" style="width: auto; padding: 12px 25px; text-decoration: none; background: #2196F3; color: white; border-radius: 5px;">
-            ➕ Add New Book
+            Add New Book
         </a>
         <a href="{% url 'book_list' %}" class="auth-btn" style="width: auto; padding: 12px 25px; text-decoration: none; background: #9C27B0; color: white; border-radius: 5px;">
-            🔍 View All Books
+            View All Books
         </a>
     </div>
     
     <!-- Overdue Books Alert -->
     {% if overdue_books %}
     <div style="margin: 20px auto; max-width: 100%; background: rgba(244,67,54,0.15); padding: 15px; border-radius: 10px; border-left: 4px solid #f44336;">
-        <h3 style="color: #d32f2f; margin: 0 0 10px 0;">⚠️ Overdue Books Alert</h3>
+        <h3 style="color: #d32f2f; margin: 0 0 10px 0;">Overdue Books Alert</h3>
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse;">
                 <thead>
@@ -107,7 +107,7 @@
     
     <!-- Recently Issued Books with Due Date -->
     <div style="margin-top: 30px;">
-        <h3>📋 Recently Issued Books</h3>
+        <h3> Recently Issued Books</h3>
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(255,255,255,0.5); border-radius: 10px;">
                 <thead>
@@ -153,7 +153,7 @@
                     {% empty %}
                     <tr>
                         <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
-                            📭 No recent issues
+                            No recent issues
                         </td>
                     </tr>
                     {% endfor %}

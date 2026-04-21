@@ -4,7 +4,7 @@
 <div style="padding: 30px; max-width: 1200px; margin: 0 auto;">
     <h2 style="text-align: center; margin-bottom: 10px;">My Library Account</h2>
     <p style="text-align: center; color: #666; margin-bottom: 30px;">
-        Today's Date: {{ today|date:"d M Y" }}
+    Today's Date: {{ today|date:"d M Y" }}
     </p>
     
     <!-- Currently Issued Books -->
@@ -79,7 +79,7 @@
     
     <!-- Return History -->
     <div style="background: rgba(255,255,255,0.5); padding: 20px; border-radius: 10px;">
-        <h3>📜 Return History</h3>
+        <h3> Return History</h3>
         
         {% if history %}
             <div style="overflow-x: auto;">
@@ -107,7 +107,7 @@
                 </table>
             </div>
         {% else %}
-            <p style="text-align: center; padding: 40px;">📭 No return history found</p>
+            <p style="text-align: center; padding: 40px;"> No return history found</p>
         {% endif %}
     </div>
     

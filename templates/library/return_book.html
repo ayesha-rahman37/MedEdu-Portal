@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="max-width: 1000px; margin: 50px auto; padding: 30px; background: rgba(255,255,255,0.5); border-radius: 10px;">
-    <h2 style="text-align: center; margin-bottom: 30px;"> Return Book</h2>
+<div style="max-width: 1200px; margin: 50px auto; padding: 30px; background: rgba(255,255,255,0.5); border-radius: 10px;">
+    <h2 style="text-align: center; margin-bottom: 30px;">🔄 Return Book</h2>
     
     <p style="text-align: center; color: #666; margin-bottom: 20px;">
         Today's Date: {{ today|date:"d M Y" }}
@@ -23,17 +23,26 @@
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Issue ID:</label>
             <input type="number" name="issue_id" placeholder="Enter Issue ID" required 
-        style="width: 100%; padding: 10px; border: none; border-radius: 5px;">
+                style="width: 100%; padding: 10px; border: none; border-radius: 5px;">
         </div>
         
-        <button type="submit" style="background: #f44336; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 16px;"> Return Book
+        <button type="submit" style="background: #f44336; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 16px;">
+            🔄 Return Book
         </button>
     </form>
     
     <hr style="margin: 30px 0;">
     
+    <!-- Fine Information Box -->
+    <div style="background: rgba(33,150,243,0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #2196F3;">
+        <h4 style="margin: 0 0 10px 0; color: #1976D2;"> Fine Information</h4>
+        <p style="margin: 5px 0;">• Fine rate: <strong>5 Taka per day</strong> for overdue books</p>
+        <p style="margin: 5px 0;">• Fine is calculated from the due date to the return date</p>
+        <p style="margin: 5px 0;">• Overdue books are highlighted in <span style="color: red; font-weight: bold;">red</span></p>
+    </div>
+    
     <!-- Currently Issued Books List -->
-    <h3 style="margin-bottom: 15px;"> Currently Issued Books ({{ current_issues|length }})</h3>
+    <h3 style="margin-bottom: 15px;">📖 Currently Issued Books ({{ current_issues|length }})</h3>
     
     {% if current_issues %}
         <div style="overflow-x: auto;">
@@ -47,7 +56,7 @@
                         <th style="padding: 12px;">Issue Date</th>
                         <th style="padding: 12px;">Due Date</th>
                         <th style="padding: 12px;">Days Left/Overdue</th>
-                        <th style="padding: 12px;">Fine (if overdue)</th>
+                        <th style="padding: 12px;">Fine Amount</th>
                         <th style="padding: 12px;">Status</th>
                     </tr>
                 </thead>
@@ -65,18 +74,16 @@
                         <td style="padding: 8px;">
                             {% if issue.is_overdue %}
                                 <span style="color: red;"> {{ issue.days_overdue }} days overdue</span>
-                            {% elif issue.days_remaining <= 3 %}
+                            {% elif issue.days_remaining <= 3 and issue.days_remaining > 0 %}
                                 <span style="color: #FF9800;"> {{ issue.days_remaining }} days left</span>
-                            {% else %}
+                            {% elif issue.days_remaining > 0 %}
                                 <span style="color: green;"> {{ issue.days_remaining }} days left</span>
+                            {% else %}
+                                <span style="color: #999;">-</span>
                             {% endif %}
                         </td>
-                        <td style="padding: 8px;">
-                            {% if issue.is_overdue %}
-                                ৳ {{ issue.days_overdue|default:0|add:"5" }}
-                            {% else %}
-                                0
-                            {% endif %}
+                        <td style="padding: 8px; font-weight: bold; {% if issue.current_fine > 0 %}color: red;{% endif %}">
+                            ৳ {{ issue.current_fine|default:"0" }}
                         </td>
                         <td style="padding: 8px;">
                             {% if issue.is_overdue %}
@@ -91,7 +98,8 @@
             </table>
         </div>
     {% else %}
-        <p style="text-align: center; padding: 40px; background: rgba(255,255,255,0.5); border-radius: 5px;"> No books currently issued
+        <p style="text-align: center; padding: 40px; background: rgba(255,255,255,0.5); border-radius: 5px;">
+            No books currently issued
         </p>
     {% endif %}
     
@@ -99,4 +107,15 @@
         <a href="{% url 'library_dashboard' %}" style="color: #666; text-decoration: none;">← Back to Dashboard</a>
     </div>
 </div>
+
+<style>
+    @media (max-width: 768px) {
+        table {
+            font-size: 12px;
+        }
+        th, td {
+            padding: 6px !important;
+        }
+    }
+</style>
 {% endblock %}
