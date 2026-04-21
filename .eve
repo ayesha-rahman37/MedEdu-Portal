@@ -1,0 +1,5 @@
+DB_NAME = railway
+DB_USER = root
+DB_PASSWORD = TGNUMwfDVLvnHjWCadohDlcyRiGqRUsC
+DB_HOST = roundhouse.proxy.rlwy.net
+DB_PORT = 49092

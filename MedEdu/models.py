@@ -44,7 +44,7 @@ class User(AbstractUser):
 
         prefix = prefix_map.get(self.role, "US")
 
-        # 🔥 ensure unique ID
+        # ensure unique ID
         while True:
             number = random.randint(1000, 9999)
             new_id = f"{prefix}-{number}"
@@ -147,22 +147,26 @@ class DoctorSchedule(models.Model):
 
     def __str__(self):
         return f"{self.doctor.mededu_id} - {self.duty_type}"
-    # ================= LIBRARY MANAGEMENT =================
+
+
+# ================= LIBRARY MANAGEMENT =================
 
 class Book(models.Model):
     """Book model for library management"""
+    CATEGORY_CHOICES = [
+        ('textbook', 'Textbook'),
+        ('reference', 'Reference'),
+        ('journal', 'Journal'),
+        ('general', 'General Reading'),
+    ]
+    
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
     isbn = models.CharField(max_length=13, unique=True, blank=True)
     publisher = models.CharField(max_length=100, blank=True)
     edition = models.CharField(max_length=50, blank=True)
     year = models.IntegerField(null=True, blank=True)
-    category = models.CharField(max_length=50, choices=[
-        ('textbook', 'Textbook'),
-        ('reference', 'Reference'),
-        ('journal', 'Journal'),
-        ('general', 'General Reading'),
-    ], default='textbook')
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='textbook')
     total_copies = models.IntegerField(default=1)
     available_copies = models.IntegerField(default=1)
     location = models.CharField(max_length=100, blank=True, help_text="Rack/Shelf location")
@@ -207,26 +211,50 @@ class BookIssue(models.Model):
         from django.utils import timezone
         if self.status == 'issued' and timezone.now().date() > self.due_date:
             days_overdue = (timezone.now().date() - self.due_date).days
-            # Fine rate: 5 taka per day
-            fine = days_overdue * 5
+            fine = days_overdue * 5  # 5 টাকা per day
             self.fine_amount = fine
             self.status = 'overdue'
-            self.save()
+            self.save(update_fields=['fine_amount', 'status'])
         return self.fine_amount
+    
+    def get_days_overdue(self):
+        """Get number of days overdue"""
+        from django.utils import timezone
+        if self.status in ['issued', 'overdue'] and timezone.now().date() > self.due_date:
+            return (timezone.now().date() - self.due_date).days
+        return 0
+    
+    def get_days_remaining(self):
+        """Get number of days remaining until due date"""
+        from django.utils import timezone
+        if self.status in ['issued', 'overdue'] and timezone.now().date() <= self.due_date:
+            return (self.due_date - timezone.now().date()).days
+        return 0
+    
+    def is_overdue(self):
+        """Check if book is overdue"""
+        from django.utils import timezone
+        return self.status in ['issued', 'overdue'] and timezone.now().date() > self.due_date
 
 
 class BookReservation(models.Model):
     """Book reservation system"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    reservation_date = models.DateTimeField(auto_now_add=True)
-    expiry_date = models.DateTimeField()
-    status = models.CharField(max_length=20, choices=[
+    RESERVATION_STATUS = [
         ('active', 'Active'),
         ('fulfilled', 'Fulfilled'),
         ('expired', 'Expired'),
         ('cancelled', 'Cancelled'),
-    ], default='active')
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reservations')
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='reservations')
+    reservation_date = models.DateTimeField(auto_now_add=True)
+    expiry_date = models.DateTimeField()
+    status = models.CharField(max_length=20, choices=RESERVATION_STATUS, default='active')
     
     def __str__(self):
         return f"{self.book.title} reserved by {self.user.username}"
+    
+    def is_expired(self):
+        from django.utils import timezone
+        return timezone.now() > self.expiry_date

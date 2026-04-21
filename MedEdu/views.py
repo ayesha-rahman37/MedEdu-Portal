@@ -245,12 +245,20 @@ def ward_dashboard(request):
 
 
 @login_required
+def admin_dashboard(request):
+    role = request.user.role.replace("_", " ").title()
+    return render(request, "dashboards/admin_dashboard.html", {"role": role})
+
+
+# ================= LIBRARY DASHBOARD =================
+@login_required
 def library_dashboard(request):
     """Library staff dashboard with statistics"""
     
-    # Check if user is library staff or admin
     if request.user.role not in ['library', 'admin']:
         return redirect('dashboard')
+    
+    today = timezone.now().date()
     
     # Statistics
     total_books = Book.objects.count()
@@ -258,28 +266,49 @@ def library_dashboard(request):
     total_issued = BookIssue.objects.filter(status='issued').count()
     total_overdue = BookIssue.objects.filter(status='overdue').count()
     
-    # Recently issued books
+    # Due date statistics
+    due_today = BookIssue.objects.filter(due_date=today, status='issued').count()
+    due_this_week = BookIssue.objects.filter(
+        due_date__gte=today,
+        due_date__lte=today + timedelta(days=7),
+        status='issued'
+    ).count()
+    
+    # Recently issued books with due date info
     recent_issues = BookIssue.objects.select_related('user', 'book').order_by('-issue_date')[:10]
+    
+    # Add due date info to each issue
+    for issue in recent_issues:
+        issue.days_overdue = issue.get_days_overdue()
+        issue.days_remaining = issue.get_days_remaining()
+        issue.is_overdue = issue.is_overdue()
     
     # Books with low stock
     low_stock_books = Book.objects.filter(available_copies__lte=2, available_copies__gt=0)
+    
+    # Overdue books list (for alert)
+    overdue_books = BookIssue.objects.filter(
+        status='overdue'
+    ).select_related('user', 'book')[:10]
+    
+    # Add days overdue to each overdue book
+    for issue in overdue_books:
+        issue.days_overdue = issue.get_days_overdue()
     
     context = {
         'total_books': total_books,
         'available_books': available_books,
         'total_issued': total_issued,
         'total_overdue': total_overdue,
+        'due_today': due_today,
+        'due_this_week': due_this_week,
         'recent_issues': recent_issues,
         'low_stock_books': low_stock_books,
+        'overdue_books': overdue_books,
+        'today': today,
     }
     
     return render(request, 'library/dashboard.html', context)
-
-
-@login_required
-def admin_dashboard(request):
-    role = request.user.role.replace("_", " ").title()
-    return render(request, "dashboards/admin_dashboard.html", {"role": role})
 
 
 # ================= SUBJECT =================
@@ -446,7 +475,6 @@ def subject_detail(request, slug):
             }
         ]
     
-
     return render(request, "subject_detail.html", {
         "subject": subject,
         "topics": topics,
@@ -635,6 +663,8 @@ def return_book(request):
     if request.user.role not in ['library', 'admin']:
         return redirect('dashboard')
     
+    today = date.today()
+    
     if request.method == 'POST':
         issue_id = request.POST.get('issue_id')
         
@@ -642,14 +672,11 @@ def return_book(request):
             issue = BookIssue.objects.get(id=issue_id, status__in=['issued', 'overdue'])
             
             # Calculate fine
-            if issue.due_date < date.today():
-                days_overdue = (date.today() - issue.due_date).days
-                fine = days_overdue * 5
-            else:
-                fine = 0
+            days_overdue = issue.get_days_overdue()
+            fine = days_overdue * 5
             
             # Process return
-            issue.return_date = date.today()
+            issue.return_date = today
             issue.status = 'returned'
             issue.fine_amount = fine
             issue.save()
@@ -659,7 +686,7 @@ def return_book(request):
             issue.book.save()
             
             if fine > 0:
-                messages.warning(request, f'Book returned with fine: ৳{fine}')
+                messages.warning(request, f'Book returned with fine: ৳{fine} (Overdue by {days_overdue} days)')
             else:
                 messages.success(request, f'Book "{issue.book.title}" returned successfully')
             
@@ -672,28 +699,39 @@ def return_book(request):
     # Show currently issued books for quick reference
     current_issues = BookIssue.objects.filter(status__in=['issued', 'overdue']).select_related('user', 'book')[:20]
     
+    # Add due date info to each issue
+    for issue in current_issues:
+        issue.days_overdue = issue.get_days_overdue()
+        issue.days_remaining = issue.get_days_remaining()
+        issue.is_overdue = issue.is_overdue()
+    
     return render(request, 'library/return_book.html', {
-        'current_issues': current_issues
+        'current_issues': current_issues,
+        'today': today
     })
 
 
 @login_required
 def my_issued_books(request):
-    """Students can see their issued books"""
+    """Students can see their issued books with due date info"""
     
     if request.user.role not in ['medical_student', 'dental_student']:
         return redirect('dashboard')
+    
+    today = date.today()
     
     issued_books = BookIssue.objects.filter(
         user=request.user,
         status__in=['issued', 'overdue']
     ).select_related('book')
     
-    # Calculate fines for overdue books
+    # Calculate due date info for each issue
     for issue in issued_books:
-        if issue.due_date < date.today() and issue.status == 'issued':
-            days_overdue = (date.today() - issue.due_date).days
-            issue.fine_amount = days_overdue * 5
+        issue.days_overdue = issue.get_days_overdue()
+        issue.days_remaining = issue.get_days_remaining()
+        issue.is_overdue = issue.is_overdue()
+        if issue.is_overdue:
+            issue.fine_amount = issue.days_overdue * 5
     
     history = BookIssue.objects.filter(
         user=request.user,
@@ -703,6 +741,7 @@ def my_issued_books(request):
     context = {
         'issued_books': issued_books,
         'history': history,
+        'today': today,
     }
     
     return render(request, 'library/my_books.html', context)

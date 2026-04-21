@@ -1,59 +1,129 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="padding: 30px; max-width: 1000px; margin: 0 auto;">
-    <h2>📖 My Issued Books</h2>
+<div style="padding: 30px; max-width: 1200px; margin: 0 auto;">
+    <h2 style="text-align: center; margin-bottom: 10px;">My Library Account</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 30px;">
+        Today's Date: {{ today|date:"d M Y" }}
+    </p>
     
-    <h3>Currently Issued</h3>
-    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-        <tr style="background: #d4b4b4;">
-            <th style="padding: 10px;">Book Title</th>
-            <th style="padding: 10px;">Issue Date</th>
-            <th style="padding: 10px;">Due Date</th>
-            <th style="padding: 10px;">Fine</th>
-            <th style="padding: 10px;">Status</th>
-        </tr>
-        {% for issue in issued_books %}
-        <tr>
-            <td style="padding: 8px;">{{ issue.book.title }}</td>
-            <td style="padding: 8px;">{{ issue.issue_date }}</td>
-            <td style="padding: 8px; color: {% if issue.due_date < now %}red{% endif %};">{{ issue.due_date }}</td>
-            <td style="padding: 8px;">{{ issue.fine_amount|default:"0" }} TK</td>
-            <td style="padding: 8px;">
-                {% if issue.status == 'overdue' %}
-                    <span style="color: red;">⚠️ Overdue</span>
-                {% else %}
-                    <span style="color: green;">✅ Issued</span>
+    <!-- Currently Issued Books -->
+    <div style="background: rgba(255,255,255,0.5); padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+        <h3>Currently Issued Books ({{ issued_books|length }})</h3>
+        
+        {% if issued_books %}
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <thead>
+                        <tr style="background: #d4b4b4;">
+                            <th style="padding: 12px;">Book Title</th>
+                            <th style="padding: 12px;">Issue Date</th>
+                            <th style="padding: 12px;">Due Date</th>
+                            <th style="padding: 12px;">Days Left/Overdue</th>
+                            <th style="padding: 12px;">Fine</th>
+                            <th style="padding: 12px;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for issue in issued_books %}
+                        <tr style="{% if issue.is_overdue %}background: rgba(244,67,54,0.15);{% endif %}">
+                            <td style="padding: 10px;">{{ issue.book.title }}</td>
+                            <td style="padding: 10px;">{{ issue.issue_date|date:"d M Y" }}</td>
+                            <td style="padding: 10px; {% if issue.is_overdue %}color: red; font-weight: bold;{% endif %}">
+                                {{ issue.due_date|date:"d M Y" }}
+                            </td>
+                            <td style="padding: 10px;">
+                                {% if issue.is_overdue %}
+                                    <span style="color: red;">{{ issue.days_overdue }} days overdue</span>
+                                {% elif issue.days_remaining <= 3 %}
+                                    <span style="color: #FF9800;">{{ issue.days_remaining }} days left</span>
+                                {% else %}
+                                    <span style="color: green;">{{ issue.days_remaining }} days left</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 10px;">
+                                {% if issue.is_overdue %}
+                                {{ issue.days_overdue|default:0|add:"5" }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </td>
+                            <td style="padding: 10px;">
+                                {% if issue.is_overdue %}
+                                    <span style="background: #f44336; color: white; padding: 3px 8px; border-radius: 3px;">Overdue</span>
+                                {% else %}
+                                    <span style="background: #4CAF50; color: white; padding: 3px 8px; border-radius: 3px;">Issued</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Warning for overdue books -->
+            {% for issue in issued_books %}
+                {% if issue.is_overdue %}
+                <div style="margin-top: 15px; padding: 10px; background: rgba(244,67,54,0.2); border-radius: 5px; border-left: 4px solid #f44336;">
+                    <p style="margin: 0; color: #d32f2f;">
+                    Please return "{{ issue.book.title }}" immediately to avoid additional fines!
+                    </p>
+                </div>
                 {% endif %}
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5" style="text-align: center; padding: 20px;">No books issued</td>
-        </tr>
-        {% endfor %}
-    </table>
+            {% endfor %}
+            
+        {% else %}
+            <p style="text-align: center; padding: 40px;"> No books currently issued</p>
+        {% endif %}
+    </div>
     
-    <h3 style="margin-top: 30px;">Return History</h3>
-    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-        <tr style="background: #d4b4b4;">
-            <th style="padding: 10px;">Book Title</th>
-            <th style="padding: 10px;">Issue Date</th>
-            <th style="padding: 10px;">Return Date</th>
-            <th style="padding: 10px;">Fine Paid</th>
-        </tr>
-        {% for issue in history %}
-        <tr>
-            <td style="padding: 8px;">{{ issue.book.title }}</td>
-            <td style="padding: 8px;">{{ issue.issue_date }}</td>
-            <td style="padding: 8px;">{{ issue.return_date }}</td>
-            <td style="padding: 8px;">{{ issue.fine_amount }} TK</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4" style="text-align: center; padding: 20px;">No history found</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <!-- Return History -->
+    <div style="background: rgba(255,255,255,0.5); padding: 20px; border-radius: 10px;">
+        <h3>📜 Return History</h3>
+        
+        {% if history %}
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <thead>
+                        <tr style="background: #d4b4b4;">
+                            <th style="padding: 12px;">Book Title</th>
+                            <th style="padding: 12px;">Issue Date</th>
+                            <th style="padding: 12px;">Due Date</th>
+                            <th style="padding: 12px;">Return Date</th>
+                            <th style="padding: 12px;">Fine Paid</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for issue in history %}
+                        <tr>
+                            <td style="padding: 10px;">{{ issue.book.title }}</td>
+                            <td style="padding: 10px;">{{ issue.issue_date|date:"d M Y" }}</td>
+                            <td style="padding: 10px;">{{ issue.due_date|date:"d M Y" }}</td>
+                            <td style="padding: 10px;">{{ issue.return_date|date:"d M Y" }}</td>
+                            <td style="padding: 10px;">৳ {{ issue.fine_amount|default:"0" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p style="text-align: center; padding: 40px;">📭 No return history found</p>
+        {% endif %}
+    </div>
+    
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="{% url 'student_dashboard' %}" class="secondary-btn">← Back to Dashboard</a>
+    </div>
 </div>
+
+<style>
+    @media (max-width: 768px) {
+        table {
+            font-size: 12px;
+        }
+        th, td {
+            padding: 6px !important;
+        }
+    }
+</style>
 {% endblock %}

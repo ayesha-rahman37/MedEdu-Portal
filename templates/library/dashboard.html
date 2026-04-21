@@ -4,27 +4,47 @@
 {% block content %}
 <div class="dashboard-container" style="display: block; padding: 30px;">
     <div class="welcome-box" style="margin-bottom: 30px;">
-        <h2>📚 Library Management Dashboard</h2>
+        <h2> Library Management Dashboard</h2>
         <p>Welcome, {{ request.user.username }} ({{ request.user.mededu_id }})</p>
+        <p style="font-size: 14px; color: #666;">Today's Date: {{ today|date:"d M Y" }}</p>
     </div>
     
     <!-- Statistics Cards -->
     <div class="features" style="flex-wrap: wrap; padding: 0; gap: 20px;">
         <div class="card" style="width: 200px;">
-            <h3>📚 Total Books</h3>
+            <h3> Total Books</h3>
             <p style="font-size: 36px; font-weight: bold;">{{ total_books }}</p>
         </div>
         <div class="card" style="width: 200px;">
-            <h3>✅ Available</h3>
+            <h3> Available</h3>
             <p style="font-size: 36px; font-weight: bold;">{{ available_books }}</p>
         </div>
         <div class="card" style="width: 200px;">
-            <h3>📖 Issued</h3>
+            <h3> Issued</h3>
             <p style="font-size: 36px; font-weight: bold;">{{ total_issued }}</p>
         </div>
         <div class="card" style="width: 200px;">
-            <h3>⚠️ Overdue</h3>
+            <h3> Overdue</h3>
             <p style="font-size: 36px; font-weight: bold;">{{ total_overdue }}</p>
+        </div>
+    </div>
+    
+    <!-- Due Date Statistics -->
+    <div style="display: flex; justify-content: center; gap: 20px; margin: 30px 0; flex-wrap: wrap;">
+        <div style="background: rgba(33,150,243,0.2); padding: 15px 25px; border-radius: 10px; text-align: center; border-left: 4px solid #2196F3;">
+            <h4 style="margin: 0; color: #1976D2;"> Due Today</h4>
+            <p style="font-size: 28px; font-weight: bold; margin: 5px 0; color: #1976D2;">{{ due_today }}</p>
+            <p style="margin: 0; font-size: 12px; color: #666;">books to return today</p>
+        </div>
+        <div style="background: rgba(255,152,0,0.2); padding: 15px 25px; border-radius: 10px; text-align: center; border-left: 4px solid #FF9800;">
+            <h4 style="margin: 0; color: #F57C00;"> Due This Week</h4>
+            <p style="font-size: 28px; font-weight: bold; margin: 5px 0; color: #F57C00;">{{ due_this_week }}</p>
+            <p style="margin: 0; font-size: 12px; color: #666;">books due in next 7 days</p>
+        </div>
+        <div style="background: rgba(244,67,54,0.2); padding: 15px 25px; border-radius: 10px; text-align: center; border-left: 4px solid #f44336;">
+            <h4 style="margin: 0; color: #d32f2f;"> Overdue</h4>
+            <p style="font-size: 28px; font-weight: bold; margin: 5px 0; color: #d32f2f;">{{ total_overdue }}</p>
+            <p style="margin: 0; font-size: 12px; color: #666;">books past due date</p>
         </div>
     </div>
     
@@ -44,54 +64,86 @@
         </a>
     </div>
     
-    <!-- Messages -->
-    {% if messages %}
-        {% for message in messages %}
-        <div style="margin: 10px auto; max-width: 800px; padding: 10px; border-radius: 5px; background: {% if message.tags == 'error' %}rgba(244,67,54,0.2){% else %}rgba(76,175,80,0.2){% endif %}; border-left: 4px solid {% if message.tags == 'error' %}#f44336{% else %}#4CAF50{% endif %};">
-            <p style="margin: 0; color: {% if message.tags == 'error' %}#d32f2f{% else %}#388E3C{% endif %};">
-                {{ message }}
-            </p>
+    <!-- Overdue Books Alert -->
+    {% if overdue_books %}
+    <div style="margin: 20px auto; max-width: 100%; background: rgba(244,67,54,0.15); padding: 15px; border-radius: 10px; border-left: 4px solid #f44336;">
+        <h3 style="color: #d32f2f; margin: 0 0 10px 0;">⚠️ Overdue Books Alert</h3>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: rgba(244,67,54,0.3);">
+                        <th style="padding: 8px;">Book Title</th>
+                        <th style="padding: 8px;">Student</th>
+                        <th style="padding: 8px;">Due Date</th>
+                        <th style="padding: 8px;">Days Overdue</th>
+                        <th style="padding: 8px;">Fine</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for issue in overdue_books %}
+                    <tr>
+                        <td style="padding: 8px;">{{ issue.book.title }}</td>
+                        <td style="padding: 8px;">{{ issue.user.username }}</td>
+                        <td style="padding: 8px; color: red;">{{ issue.due_date|date:"d M Y" }}</td>
+                        <td style="padding: 8px;">{{ issue.days_overdue }} days</td>
+                        <td style="padding: 8px;">৳ {{ issue.days_overdue|default:0|add:"5" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-        {% endfor %}
+    </div>
     {% endif %}
     
     <!-- Low Stock Alert -->
     {% if low_stock_books %}
-    <div style="margin: 20px auto; max-width: 800px; background: rgba(255,200,200,0.3); padding: 15px; border-radius: 10px; border-left: 4px solid #f44336;">
-        <h3 style="color: #d9534f; margin: 0 0 10px 0;">⚠️ Low Stock Alert</h3>
+    <div style="margin: 20px auto; max-width: 100%; background: rgba(255,152,0,0.15); padding: 15px; border-radius: 10px; border-left: 4px solid #FF9800;">
+        <h3 style="color: #F57C00; margin: 0 0 10px 0;">⚠️ Low Stock Alert</h3>
         {% for book in low_stock_books %}
-        <p style="margin: 5px 0;">• {{ book.title }} - Only {{ book.available_copies }} copy(s) left</p>
+        <p>• {{ book.title }} - Only {{ book.available_copies }} copy(s) left</p>
         {% endfor %}
     </div>
     {% endif %}
     
-    <!-- Recently Issued Books -->
+    <!-- Recently Issued Books with Due Date -->
     <div style="margin-top: 30px;">
         <h3>📋 Recently Issued Books</h3>
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(255,255,255,0.5); border-radius: 10px;">
                 <thead>
                     <tr style="background: #d4b4b4;">
-                        <th style="padding: 12px; text-align: left;">Student ID</th>
-                        <th style="padding: 12px; text-align: left;">Student Name</th>
-                        <th style="padding: 12px; text-align: left;">Book Title</th>
-                        <th style="padding: 12px; text-align: left;">Issue Date</th>
-                        <th style="padding: 12px; text-align: left;">Due Date</th>
-                        <th style="padding: 12px; text-align: left;">Status</th>
+                        <th style="padding: 12px;">Student ID</th>
+                        <th style="padding: 12px;">Student Name</th>
+                        <th style="padding: 12px;">Book Title</th>
+                        <th style="padding: 12px;">Issue Date</th>
+                        <th style="padding: 12px;">Due Date</th>
+                        <th style="padding: 12px;">Days Left/Overdue</th>
+                        <th style="padding: 12px;">Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for issue in recent_issues %}
-                    <tr style="border-bottom: 1px solid #ddd; {% if issue.status == 'overdue' %}background: rgba(244,67,54,0.1);{% endif %}">
+                    <tr style="border-bottom: 1px solid #ddd; {% if issue.is_overdue %}background: rgba(244,67,54,0.1);{% endif %}">
                         <td style="padding: 10px;">{{ issue.user.mededu_id }}</td>
                         <td style="padding: 10px;">{{ issue.user.username }}</td>
                         <td style="padding: 10px;">{{ issue.book.title }}</td>
                         <td style="padding: 10px;">{{ issue.issue_date|date:"d M Y" }}</td>
-                        <td style="padding: 10px; {% if issue.status == 'overdue' %}color: red; font-weight: bold;{% endif %}">
+                        <td style="padding: 10px; {% if issue.is_overdue %}color: red; font-weight: bold;{% endif %}">
                             {{ issue.due_date|date:"d M Y" }}
                         </td>
                         <td style="padding: 10px;">
-                            {% if issue.status == 'overdue' %}
+                            {% if issue.is_overdue %}
+                                <span style="color: red;"> {{ issue.days_overdue }} days overdue</span>
+                            {% elif issue.days_remaining <= 3 and issue.days_remaining > 0 %}
+                                <span style="color: #FF9800;"> {{ issue.days_remaining }} days left</span>
+                            {% elif issue.days_remaining > 0 %}
+                                <span style="color: green;"> {{ issue.days_remaining }} days left</span>
+                            {% else %}
+                                <span style="color: #999;">-</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 10px;">
+                            {% if issue.is_overdue %}
                                 <span style="background: #f44336; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px;">⚠️ Overdue</span>
                             {% else %}
                                 <span style="background: #4CAF50; color: white; padding: 3px 8px; border-radius: 3px; font-size: 12px;">✅ Issued</span>
@@ -100,7 +152,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 40px; color: #666;">
+                        <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
                             📭 No recent issues
                         </td>
                     </tr>
@@ -113,11 +165,13 @@
     <!-- Footer Stats -->
     <div style="margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.3); border-radius: 10px; text-align: center;">
         <p style="margin: 0; color: #666;">
-            <strong>📊 Summary:</strong> 
+            <strong>Summary:</strong> 
             Total Books: {{ total_books }} | 
             Available: {{ available_books }} | 
             Issued: {{ total_issued }} | 
-            Overdue: {{ total_overdue }}
+            Overdue: {{ total_overdue }} |
+            Due Today: {{ due_today }} |
+            Due This Week: {{ due_this_week }}
         </p>
     </div>
 </div>
