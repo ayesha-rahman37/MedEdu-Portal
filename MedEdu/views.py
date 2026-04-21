@@ -6,10 +6,9 @@ from django.urls import reverse
 from django.conf import settings
 from django.db import models
 from django.contrib import messages
-from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, BookIssue, BookReservation
+from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, BookIssue, BookReservation, Ward, WardPosting, WardAttendance
 from datetime import date, timedelta
 from django.utils import timezone
-
 # ================= HOME =================
 def home(request):
     return render(request, "home.html")
@@ -812,3 +811,250 @@ def add_book(request):
         return redirect('book_detail', book_id=book.id)
     
     return render(request, 'library/add_book.html')
+# ================= WARD POSTING VIEWS =================
+
+@login_required
+def ward_posting_schedule(request):
+    """Display ward posting schedule"""
+    
+    today = date.today()
+    
+    if request.user.role in ['medical_student', 'dental_student', 'intern']:
+        # Student view - see their own postings
+        postings = WardPosting.objects.filter(
+            student=request.user
+        ).order_by('-start_date')
+        
+        active_postings = postings.filter(start_date__lte=today, end_date__gte=today, status='scheduled')
+        upcoming_postings = postings.filter(start_date__gt=today, status='scheduled')
+        completed_postings = postings.filter(end_date__lt=today, status='completed')
+        
+    elif request.user.role in ['doctor', 'faculty', 'ward', 'admin']:
+        # Staff view - see all postings
+        postings = WardPosting.objects.all().order_by('-start_date')
+        
+        active_postings = postings.filter(start_date__lte=today, end_date__gte=today, status='scheduled')
+        upcoming_postings = postings.filter(start_date__gt=today, status='scheduled')
+        completed_postings = postings.filter(end_date__lt=today)
+        
+    else:
+        return redirect('dashboard')
+    
+    # Add additional info to each posting
+    for posting in active_postings:
+        posting.duration_days = posting.get_duration_days()
+        posting.current_shift = posting.get_current_shift()
+    
+    context = {
+        'active_postings': active_postings,
+        'upcoming_postings': upcoming_postings,
+        'completed_postings': completed_postings,
+        'today': today,
+        'user_role': request.user.role,
+    }
+    
+    return render(request, 'ward/posting_schedule.html', context)
+
+
+@login_required
+def ward_posting_detail(request, posting_id):
+    """View details of a specific ward posting"""
+    
+    posting = get_object_or_404(WardPosting, id=posting_id)
+    
+    # Check permission
+    if request.user.role not in ['doctor', 'faculty', 'ward', 'admin'] and posting.student != request.user:
+        messages.error(request, 'You do not have permission to view this posting')
+        return redirect('ward_posting_schedule')
+    
+    # Get attendance records
+    attendances = WardAttendance.objects.filter(posting=posting).order_by('date')
+    
+    # Calculate statistics
+    total_days = posting.get_duration_days()
+    present_days = attendances.filter(status='present').count()
+    absent_days = attendances.filter(status='absent').count()
+    late_days = attendances.filter(status='late').count()
+    leave_days = attendances.filter(status='leave').count()
+    
+    context = {
+        'posting': posting,
+        'attendances': attendances,
+        'total_days': total_days,
+        'present_days': present_days,
+        'absent_days': absent_days,
+        'late_days': late_days,
+        'leave_days': leave_days,
+        'attendance_percentage': (present_days / total_days * 100) if total_days > 0 else 0,
+    }
+    
+    return render(request, 'ward/posting_detail.html', context)
+
+
+@login_required
+def ward_list(request):
+    """Display all wards"""
+    
+    if request.user.role not in ['doctor', 'faculty', 'ward', 'admin']:
+        return redirect('dashboard')
+    
+    wards = Ward.objects.all().order_by('department', 'name')
+    
+    # Add statistics for each ward
+    for ward in wards:
+        ward.active_postings = WardPosting.objects.filter(ward=ward, status='scheduled', end_date__gte=date.today()).count()
+        ward.total_students = WardPosting.objects.filter(ward=ward).values('student').distinct().count()
+    
+    context = {
+        'wards': wards,
+    }
+    
+    return render(request, 'ward/ward_list.html', context)
+
+
+@login_required
+def create_ward_posting(request):
+    """Create new ward posting (Staff only)"""
+    
+    if request.user.role not in ['doctor', 'faculty', 'ward', 'admin']:
+        messages.error(request, 'You do not have permission to create postings')
+        return redirect('dashboard')
+    
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        ward_id = request.POST.get('ward_id')
+        supervisor_id = request.POST.get('supervisor_id')
+        posting_type = request.POST.get('posting_type')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        remarks = request.POST.get('remarks', '')
+        
+        try:
+            student = User.objects.get(mededu_id=student_id, role__in=['medical_student', 'dental_student', 'intern'])
+            ward = Ward.objects.get(id=ward_id)
+            supervisor = User.objects.get(id=supervisor_id) if supervisor_id else None
+            
+            posting = WardPosting.objects.create(
+                student=student,
+                ward=ward,
+                supervisor=supervisor,
+                posting_type=posting_type,
+                start_date=start_date,
+                end_date=end_date,
+                remarks=remarks,
+                status='scheduled'
+            )
+            
+            messages.success(request, f'Ward posting created successfully for {student.username}')
+            return redirect('ward_posting_detail', posting_id=posting.id)
+            
+        except User.DoesNotExist:
+            messages.error(request, 'Student not found')
+        except Exception as e:
+            messages.error(request, f'Error: {str(e)}')
+    
+    # Get data for form
+    students = User.objects.filter(role__in=['medical_student', 'dental_student', 'intern'], is_verified=True)
+    wards = Ward.objects.all()
+    supervisors = User.objects.filter(role__in=['doctor', 'faculty'])
+    
+    context = {
+        'students': students,
+        'wards': wards,
+        'supervisors': supervisors,
+    }
+    
+    return render(request, 'ward/create_posting.html', context)
+
+
+@login_required
+def mark_attendance(request, posting_id):
+    """Mark attendance for ward posting"""
+    
+    posting = get_object_or_404(WardPosting, id=posting_id)
+    
+    # Check permission
+    if request.user.role not in ['doctor', 'faculty', 'ward', 'admin']:
+        messages.error(request, 'You do not have permission to mark attendance')
+        return redirect('ward_posting_detail', posting_id=posting_id)
+    
+    if request.method == 'POST':
+        date_str = request.POST.get('date')
+        status = request.POST.get('status')
+        check_in = request.POST.get('check_in_time')
+        check_out = request.POST.get('check_out_time')
+        remarks = request.POST.get('remarks', '')
+        
+        try:
+            attendance_date = date.fromisoformat(date_str)
+            
+            attendance, created = WardAttendance.objects.get_or_create(
+                posting=posting,
+                date=attendance_date,
+                defaults={
+                    'status': status,
+                    'check_in_time': check_in,
+                    'check_out_time': check_out,
+                    'remarks': remarks,
+                    'marked_by': request.user,
+                }
+            )
+            
+            if not created:
+                # Update existing attendance
+                attendance.status = status
+                attendance.check_in_time = check_in
+                attendance.check_out_time = check_out
+                attendance.remarks = remarks
+                attendance.marked_by = request.user
+                attendance.save()
+                messages.success(request, f'Attendance updated for {attendance_date}')
+            else:
+                messages.success(request, f'Attendance marked for {attendance_date}')
+            
+        except Exception as e:
+            messages.error(request, f'Error: {str(e)}')
+        
+        return redirect('ward_posting_detail', posting_id=posting_id)
+    
+    context = {
+        'posting': posting,
+    }
+    
+    return render(request, 'ward/mark_attendance.html', context)
+
+
+@login_required
+def my_ward_postings(request):
+    """Student view - My ward postings"""
+    
+    if request.user.role not in ['medical_student', 'dental_student', 'intern']:
+        return redirect('dashboard')
+    
+    postings = WardPosting.objects.filter(student=request.user).order_by('-start_date')
+    
+    context = {
+        'postings': postings,
+        'today': date.today(),
+    }
+    
+    return render(request, 'ward/my_postings.html', context)
+
+
+@login_required
+def update_posting_status(request, posting_id):
+    """Update posting status (Staff only)"""
+    
+    if request.user.role not in ['doctor', 'faculty', 'ward', 'admin']:
+        messages.error(request, 'You do not have permission')
+        return redirect('ward_posting_detail', posting_id=posting_id)
+    
+    posting = get_object_or_404(WardPosting, id=posting_id)
+    
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        posting.status = new_status
+        posting.save()
+        messages.success(request, f'Posting status updated to {new_status}')
+    
+    return redirect('ward_posting_detail', posting_id=posting_id)

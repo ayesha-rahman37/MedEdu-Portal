@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card" style="width: 500px;">
+        <h2>Create Ward Posting</h2>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: {% if 'error' in message.tags %}red{% else %}green{% endif %}; text-align: center;">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Student (MedEdu ID):</label>
+                <select name="student_id" required style="width: 100%; padding: 8px;">
+                    <option value="">Select Student</option>
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.username }} - {{ student.mededu_id }} ({{ student.role }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Ward:</label>
+                <select name="ward_id" required style="width: 100%; padding: 8px;">
+                    <option value="">Select Ward</option>
+                    {% for ward in wards %}
+                    <option value="{{ ward.id }}">{{ ward.name }} ({{ ward.code }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Supervisor (Optional):</label>
+                <select name="supervisor_id" style="width: 100%; padding: 8px;">
+                    <option value="">Select Supervisor</option>
+                    {% for supervisor in supervisors %}
+                    <option value="{{ supervisor.id }}">{{ supervisor.username }} - {{ supervisor.mededu_id }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Posting Type:</label>
+                <select name="posting_type" required style="width: 100%; padding: 8px;">
+                    <option value="morning">Morning Shift (8 AM - 2 PM)</option>
+                    <option value="evening">Evening Shift (2 PM - 8 PM)</option>
+                    <option value="night">Night Shift (8 PM - 8 AM)</option>
+                    <option value="full_day">Full Day (8 AM - 8 PM)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Start Date:</label>
+                <input type="date" name="start_date" required style="width: 100%; padding: 8px;">
+            </div>
+            
+            <div class="form-group">
+                <label>End Date:</label>
+                <input type="date" name="end_date" required style="width: 100%; padding: 8px;">
+            </div>
+            
+            <div class="form-group">
+                <label>Remarks (Optional):</label>
+                <textarea name="remarks" rows="3" style="width: 100%; padding: 8px;"></textarea>
+            </div>
+            
+            <button type="submit" class="auth-btn">Create Posting</button>
+        </form>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="{% url 'ward_posting_schedule' %}" class="secondary-btn">Back to Schedule</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

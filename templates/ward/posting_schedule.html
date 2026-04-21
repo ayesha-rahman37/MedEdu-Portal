@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="padding: 30px; max-width: 1200px; margin: 0 auto;">
+    <h2 style="text-align: center; margin-bottom: 10px;"> Ward Posting Schedule</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 30px;">
+        Today's Date: {{ today|date:"d M Y" }}
+    </p>
+    
+    <!-- Active Postings -->
+    <div style="background: rgba(76,175,80,0.1); padding: 20px; border-radius: 10px; margin-bottom: 30px; border-left: 4px solid #4CAF50;">
+        <h3 style="color: #388E3C; margin: 0 0 15px 0;"> Active Postings</h3>
+        
+        {% if active_postings %}
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #d4b4b4;">
+                            <th style="padding: 10px;">Ward</th>
+                            <th style="padding: 10px;">Student</th>
+                            <th style="padding: 10px;">Shift</th>
+                            <th style="padding: 10px;">Start Date</th>
+                            <th style="padding: 10px;">End Date</th>
+                            <th style="padding: 10px;">Duration</th>
+                            <th style="padding: 10px;">Status</th>
+                            <th style="padding: 10px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for posting in active_postings %}
+                        <tr style="background: rgba(76,175,80,0.05);">
+                            <td style="padding: 8px;">{{ posting.ward.name }} ({{ posting.ward.code }})</td>
+                            <td style="padding: 8px;">{{ posting.student.username }}<br><small>{{ posting.student.mededu_id }}</small></td>
+                            <td style="padding: 8px;">{{ posting.get_posting_type_display }}</td>
+                            <td style="padding: 8px;">{{ posting.start_date|date:"d M Y" }}</td>
+                            <td style="padding: 8px;">{{ posting.end_date|date:"d M Y" }}</td>
+                            <td style="padding: 8px;">{{ posting.duration_days }} days</td>
+                            <td style="padding: 8px;">
+                                <span style="background: #4CAF50; color: white; padding: 3px 8px; border-radius: 3px;">Active</span>
+                            </td>
+                            <td style="padding: 8px;">
+                                <a href="{% url 'ward_posting_detail' posting.id %}" style="color: #2196F3;">View Details</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p style="text-align: center; padding: 20px;">No active postings</p>
+        {% endif %}
+    </div>
+    
+    <!-- Upcoming Postings -->
+    <div style="background: rgba(33,150,243,0.1); padding: 20px; border-radius: 10px; margin-bottom: 30px; border-left: 4px solid #2196F3;">
+        <h3 style="color: #1976D2; margin: 0 0 15px 0;"> Upcoming Postings</h3>
+        
+        {% if upcoming_postings %}
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #d4b4b4;">
+                            <th style="padding: 10px;">Ward</th>
+                            <th style="padding: 10px;">Student</th>
+                            <th style="padding: 10px;">Shift</th>
+                            <th style="padding: 10px;">Start Date</th>
+                            <th style="padding: 10px;">End Date</th>
+                            <th style="padding: 10px;">Days to Start</th>
+                            <th style="padding: 10px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for posting in upcoming_postings %}
+                        <tr>
+                            <td style="padding: 8px;">{{ posting.ward.name }} ({{ posting.ward.code }})</td>
+                            <td style="padding: 8px;">{{ posting.student.username }}</td>
+                            <td style="padding: 8px;">{{ posting.get_posting_type_display }}</td>
+                            <td style="padding: 8px;">{{ posting.start_date|date:"d M Y" }}</td>
+                            <td style="padding: 8px;">{{ posting.end_date|date:"d M Y" }}</td>
+                            <td style="padding: 8px;">{{ posting.start_date|timeuntil }}</td>
+                            <td style="padding: 8px;">
+                                <a href="{% url 'ward_posting_detail' posting.id %}" style="color: #2196F3;">View Details</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p style="text-align: center; padding: 20px;">No upcoming postings</p>
+        {% endif %}
+    </div>
+    
+    <!-- Create Posting Button (for staff) -->
+    {% if user_role in 'doctor,faculty,ward,admin' %}
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'create_ward_posting' %}" class="auth-btn" style="background: #4CAF50; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; display: inline-block;">
+            + Create New Ward Posting
+        </a>
+        <a href="{% url 'ward_list' %}" class="auth-btn" style="background: #2196F3; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; display: inline-block; margin-left: 10px;">
+            View All Wards
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

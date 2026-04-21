@@ -50,4 +50,13 @@ urlpatterns = [
     path('library/my-books/', views.my_issued_books, name="my_issued_books"),
     path('library/reserve/<int:book_id>/', views.reserve_book, name="reserve_book"),
     path('library/add-book/', views.add_book, name="add_book"),
+    
+        # ================= WARD POSTING URLS =================
+    path('ward/schedule/', views.ward_posting_schedule, name="ward_posting_schedule"),
+    path('ward/posting/<int:posting_id>/', views.ward_posting_detail, name="ward_posting_detail"),
+    path('ward/list/', views.ward_list, name="ward_list"),
+    path('ward/create/', views.create_ward_posting, name="create_ward_posting"),
+    path('ward/attendance/<int:posting_id>/', views.mark_attendance, name="mark_attendance"),
+    path('ward/my-postings/', views.my_ward_postings, name="my_ward_postings"),
+    path('ward/update-status/<int:posting_id>/', views.update_posting_status, name="update_posting_status"),
 ]
