@@ -1,37 +1,56 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
 {% block content %}
 
-<h2>Issue Book</h2>
+<div class="container mt-5">
 
-<form method="POST">
-    {% csrf_token %}
+    <div class="card shadow-lg p-4 rounded-4">
 
-    <label>Student:</label>
-    <select name="student">
-        {% for user in users %}
-        <option value="{{ user.id }}">{{ user.username }}</option>
-        {% endfor %}
-    </select>
+        <h3 class="text-center mb-4 fw-bold">📚 Issue Book</h3>
 
-    <br><br>
+        <form method="POST">
+            {% csrf_token %}
 
-    <label>Book:</label>
-    <select name="book">
-        {% for book in books %}
-        <option value="{{ book.id }}">{{ book.title }}</option>
-        {% endfor %}
-    </select>
+            <!-- Student -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Select Student</label>
+                <select name="student" class="form-select">
+                    {% for user in users %}
+                        <option value="{{ user.id }}">
+                            {{ user.username }} ({{ user.mededu_id }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-    <br><br>
+            <!-- Book -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Select Book</label>
+                <select name="book" class="form-select">
+                    {% for book in books %}
+                        <option value="{{ book.id }}">
+                            {{ book.title }} (Available: {{ book.available_copies }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-    <label>Due Date:</label>
-    <input type="date" name="due_date">
+            <!-- Due Date -->
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Due Date</label>
+                <input type="date" name="due_date" class="form-control" required>
+            </div>
 
-    <br><br>
+            <!-- Button -->
+            <div class="text-center">
+                <button class="btn btn-primary px-4 py-2 rounded-3">
+                    Issue Book
+                </button>
+            </div>
 
-    <button type="submit">Issue Book</button>
+        </form>
 
-</form>
+    </div>
+
+</div>
 
 {% endblock %}
