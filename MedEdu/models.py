@@ -161,8 +161,10 @@ class Issue(models.Model):
 
     issue_date = models.DateField(auto_now_add=True)
     due_date = models.DateField()
-
+    
     returned = models.BooleanField(default=False)
-
+    
+    fine = models.IntegerField(default=0)
+    
     def __str__(self):
         return f"{self.student} - {self.book}"

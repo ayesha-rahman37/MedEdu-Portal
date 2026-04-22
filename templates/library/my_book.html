@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-container">
+    <div class="page-box">
+
+        <h2>📚 My Books</h2>
+
+        <table class="table-custom">
+            <tr>
+                <th>Book</th>
+                <th>Issue</th>
+                <th>Due</th>
+                <th>Status</th>
+            </tr>
+
+            {% for i in issues %}
+            <tr>
+                <td>{{ i.book.title }}</td>
+                <td>{{ i.issue_date }}</td>
+                <td>{{ i.due_date }}</td>
+                <td>
+                    {% if i.returned %}
+                        Returned
+                    {% else %}
+                        Borrowed
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No books found</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+    </div>
+</div>
+
+{% endblock %}
