@@ -8,6 +8,7 @@ from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, 
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
+
 # ================= HOME =================
 def home(request):
     return render(request, "home.html")
@@ -623,4 +624,36 @@ def history(request):
 
     return render(request, 'library/history.html', {
         'history': history
+    })
+    
+# ================= FINE CALCULATION =================
+@login_required
+def calculate_fine(issue):
+    if issue.returned:
+        return 0
+
+    today = date.today()
+    if today > issue.due_date:
+        days = (today - issue.due_date).days
+        return days * 2   # 2 taka per day
+    return 0
+
+# ================= RENEW BOOK =================
+def renew_book(request, issue_id):
+    issue = Issue.objects.get(id=issue_id)
+
+    issue.due_date = issue.due_date + timedelta(days=7)
+    issue.save()
+
+    return redirect('my_books')
+
+# ================= STUDENT LIBRARY VIEW =================
+@login_required
+def student_library(request):
+    user = request.user
+
+    issues = Issue.objects.filter(student=user)
+
+    return render(request, 'library/my_books.html', {
+        'issues': issues
     })

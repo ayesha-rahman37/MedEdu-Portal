@@ -47,5 +47,7 @@ urlpatterns = [
     path('library/return/', views.return_book, name='return_book'),
     path('library/records/', views.records, name='records'),
     path('library/history/', views.history, name='history'),
+    path('library/renew/<int:issue_id>/', views.renew_book, name='renew_book'),
     path('library/return-action/<int:issue_id>/', views.return_book_action, name='return_book_action'),
+    path('library/my-books/', views.student_library, name='student_library'),
 ]
