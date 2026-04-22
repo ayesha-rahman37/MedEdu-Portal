@@ -1,48 +1,42 @@
 /* ================= RESET ================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+
 /* ================= BODY ================= */
+
 body {
     font-family: "Times New Roman", Georgia, serif;
     color: #2b2b2b;
     min-height: 100vh;
-
-    background: linear-gradient(
-        120deg,
-        #b7adb5,
-        #d4b4b4,
-        #e3b7b7,
-        #d9bfb2,
-        #e8dccf
-    );
-
+    background: linear-gradient( 120deg, #b7adb5, #d4b4b4, #e3b7b7, #d9bfb2, #e8dccf);
     background-attachment: fixed;
 }
 
+
 /* ================= HEADER ================= */
+
 .header {
     position: fixed;
     top: 0;
     left: 0;
-
     width: 100%;
     height: 60px;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
-    background: rgba(255,255,255,0.6);
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(12px);
-
     z-index: 9999;
 }
 
+
 /* ================= NAVBAR ================= */
+
 .navbar {
     display: flex;
     gap: 15px;
@@ -54,13 +48,10 @@ body {
 .navbar a {
     text-decoration: none;
     color: #3a2f2f;
-
     padding: 8px 14px;
     border-radius: 8px;
-
     font-size: 15px;
     font-weight: 600;
-
     transition: 0.3s;
 }
 
@@ -69,20 +60,22 @@ body {
     color: white;
 }
 
+
 /* ================= DROPDOWN ================= */
+
 .nav-select {
     position: relative;
     display: inline-flex;
 }
 
+
 /* button */
+
 .select-box {
     padding: 8px 14px;
     border-radius: 8px;
-
     color: #3a2f2f;
     font-weight: 600;
-
     cursor: pointer;
     transition: 0.3s;
 }
@@ -92,33 +85,33 @@ body {
     color: white;
 }
 
+
 /* dropdown box */
+
 .select-options {
     position: absolute;
-
-    top: 100%;   /* 🔥 FIX */
+    top: 100%;
+    /* 🔥 FIX */
     left: 0;
-
     width: 200px;
-
     background: white;
-
     border-radius: 12px;
     padding: 6px 0;
-
-    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
     display: none;
-
     z-index: 9999;
 }
 
+
 /* 🔥 hover show */
+
 .nav-select:hover .select-options {
     display: block;
 }
 
+
 /* dropdown items */
+
 .select-options div {
     padding: 10px 16px;
     color: #333;
@@ -130,7 +123,9 @@ body {
     color: white;
 }
 
+
 /* ================= PHASE ================= */
+
 .phase {
     position: relative;
     padding: 10px 16px;
@@ -143,42 +138,45 @@ body {
     color: white;
 }
 
+
 /* ================= SUBMENU (FINAL FIX) ================= */
+
 .submenu {
     display: none;
     position: absolute;
-
-    left: 98%;   /* 🔥 gap fix */
+    left: 98%;
+    /* 🔥 gap fix */
     top: 0;
-
     width: 200px;
-
     background: white;
     border-radius: 10px;
-
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     z-index: 9999;
 }
 
+
 /* 🔥 MAIN FIX */
+
 .phase:hover .submenu,
 .submenu:hover {
     display: block;
 }
 
+
 /* 🔥 hover bridge */
+
 .phase::after {
     content: "";
     position: absolute;
     right: -10px;
     top: 0;
-
     width: 15px;
     height: 100%;
 }
 
+
 /* submenu links */
+
 .submenu a {
     display: block;
     padding: 10px;
@@ -191,21 +189,22 @@ body {
     color: white;
 }
 
+
 /* ================= MAIN CONTENT ================= */
+
 .main-content {
     padding-top: 70px;
 }
 
+
 /* ================= HERO ================= */
+
 .hero {
     height: 100vh;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     text-align: center;
-
     background-image: url("/static/images/medical-pattern.png");
     background-size: 260px;
 }
@@ -220,20 +219,18 @@ body {
     color: #4a3a3a;
 }
 
+
 /* ================= BUTTON ================= */
+
 .btn {
     margin-top: 20px;
     padding: 12px 30px;
-
     font-size: 16px;
-
     border: none;
     border-radius: 10px;
-
     background: #c79a9a;
     color: white;
     font-weight: bold;
-
     cursor: pointer;
     transition: 0.3s;
 }
@@ -242,7 +239,9 @@ body {
     background: #b88c8c;
 }
 
+
 /* ================= FEATURES ================= */
+
 .features {
     display: flex;
     justify-content: center;
@@ -251,7 +250,7 @@ body {
 }
 
 .card {
-    background: rgba(255,255,255,0.5);
+    background: rgba(255, 255, 255, 0.5);
     padding: 30px;
     width: 260px;
     border-radius: 12px;
@@ -259,7 +258,9 @@ body {
     backdrop-filter: blur(10px);
 }
 
+
 /* ================= FOOTER ================= */
+
 .footer {
     padding-top: 40px;
     background: #e8dccf;
@@ -279,7 +280,9 @@ body {
     margin-top: 30px;
 }
 
+
 /* ================= AUTH ================= */
+
 .auth-container {
     min-height: 85vh;
     display: flex;
@@ -289,11 +292,11 @@ body {
 
 .auth-card {
     width: 420px;
-    background: rgba(255,255,255,0.6);
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(15px);
     padding: 45px;
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .form-group {
@@ -325,7 +328,9 @@ body {
     background: #c79a9a;
 }
 
+
 /* ================= PROFILE ================= */
+
 .profile-info p {
     margin: 10px 0;
 }
@@ -352,7 +357,9 @@ body {
     color: white;
 }
 
+
 /* ================= DASHBOARD ================= */
+
 .dashboard-content {
     text-align: center;
     margin-top: 40px;
@@ -360,7 +367,9 @@ body {
     font-weight: bold;
 }
 
+
 /* CENTER BOX */
+
 .dashboard-container {
     height: 90vh;
     display: flex;
@@ -368,43 +377,56 @@ body {
     align-items: center;
 }
 
+
 /* CARD */
+
 .welcome-box {
     text-align: center;
     padding: 40px 60px;
-
-    background: rgba(255,255,255,0.6);
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(10px);
-
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
+
 
 /* TEXT (NORMAL STYLE) */
+
 .welcome-text {
-    font-family: "Times New Roman", Georgia, serif; /* আগের font */
-    font-size: 26px; /* normal size */
+    font-family: "Times New Roman", Georgia, serif;
+    /* আগের font */
+    font-size: 26px;
+    /* normal size */
     font-weight: 600;
-    color: #222; /* normal black */
+    color: #222;
+    /* normal black */
 }
+
 
 /* ROLE (NO COLOR CHANGE) */
+
 .role {
-    color: #222;   /* same color */
+    color: #222;
+    /* same color */
     font-weight: 600;
 }
 
+
 /* USER NAME */
+
 .welcome-user {
     margin-top: 10px;
     font-size: 18px;
     color: #333;
 }
 
+
 /* ================= PAGE CONTAINER ================= */
+
 .page-container {
     margin-top: 100px;
     text-align: center;
+    padding: 40px;
 }
 
 .page-title {
@@ -416,51 +438,56 @@ body {
     width: 60%;
     margin: auto;
     padding: 30px;
-
-    background: rgba(255,255,255,0.6);
+    background: rgba(255, 255, 255, 0.6);
     border-radius: 12px;
-
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
+
 /* ================= EXTRA PDF SECTION ================= */
+
 .extra-pdf-list {
     margin-top: 20px;
 }
 
+
 /* BUTTON STYLE (THEME MATCHED) */
+
 .pdf-btn {
     display: inline-block;
     margin: 10px 10px 0 0;
     padding: 10px 18px;
-
-    background: rgba(255,255,255,0.6);   /* glass effect */
+    background: rgba(255, 255, 255, 0.6);
+    /* glass effect */
     backdrop-filter: blur(8px);
-
-    color: #3a2f2f;   /* navbar color match */
+    color: #3a2f2f;
+    /* navbar color match */
     border-radius: 10px;
-
     text-decoration: none;
     font-weight: 600;
-
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
     transition: 0.3s;
 }
 
+
 /* HOVER (your pink tone) */
+
 .pdf-btn:hover {
     background: #e3b7b7;
     color: white;
 }
 
+
 /* ===== WRAPPER ===== */
+
 .pdf-wrapper {
     width: 85%;
     margin: 30px auto;
 }
 
+
 /* ===== TITLE ===== */
+
 .pdf-title {
     text-align: center;
     margin-bottom: 20px;
@@ -468,15 +495,19 @@ body {
     color: #333;
 }
 
+
 /* ===== PDF BOX ===== */
+
 .pdf-container {
     background: #fff;
     padding: 15px;
     border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
+
 /* ===== PDF FRAME ===== */
+
 .pdf-frame {
     width: 100%;
     height: 600px;
@@ -484,13 +515,17 @@ body {
     border-radius: 8px;
 }
 
+
 /* ===== NO PDF ===== */
+
 .no-pdf {
     text-align: center;
     color: #777;
 }
 
+
 /* ===== EXTRA MATERIALS ===== */
+
 .extra-pdf-list {
     margin-top: 20px;
 }
@@ -499,17 +534,23 @@ body {
     margin-bottom: 10px;
 }
 
+
 /* 🔥 NEW ADD */
+
 .extra-pdf-list .pdf-btn {
     margin-bottom: 15px;
 }
 
+
 /* 🔥 IMPORTANT — PDF viewer below watch */
+
 .pdf-container iframe {
     margin-top: 20px;
 }
 
+
 /* ===== BUTTON ===== */
+
 .pdf-btn {
     display: inline-block;
     margin: 10px 10px 0 0;
@@ -525,12 +566,13 @@ body {
     background: #222;
 }
 
+
 /* ===== RESPONSIVE ===== */
+
 @media (max-width: 768px) {
     .pdf-wrapper {
         width: 95%;
     }
-
     .pdf-frame {
         height: 500px;
     }
@@ -539,12 +581,15 @@ body {
 .profile-img {
     width: 150px;
     height: 150px;
-    object-fit: cover;   /* 🔥 main thing */
-    border-radius: 50%;  /* circle */
+    object-fit: cover;
+    /* 🔥 main thing */
+    border-radius: 50%;
+    /* circle */
     border: 3px solid #caeebb;
     display: block;
     margin: auto;
 }
+
 
 /* ================= DOCTOR SCHEDULE ================= */
 
@@ -554,99 +599,175 @@ body {
     padding: 10px 20px;
 }
 
+
 /* SECTION TITLE */
+
 .schedule-section h3 {
     margin-bottom: 12px;
     color: #3a2f2f;
     font-weight: 700;
 }
 
-/* CARD */
-.schedule-card {
-    background: rgba(255, 255, 255, 0.55);  /* 🔥 match bg */
-    backdrop-filter: blur(10px);
 
+/* CARD */
+
+.schedule-card {
+    background: rgba(255, 255, 255, 0.55);
+    /* 🔥 match bg */
+    backdrop-filter: blur(10px);
     padding: 16px 18px;
     border-radius: 14px;
-
     margin-bottom: 12px;
-
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     transition: 0.3s;
 }
 
+
 /* HOVER */
+
 .schedule-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 22px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.15);
 }
 
+
 /* LEFT SIDE */
+
 .schedule-info {
     display: flex;
     flex-direction: column;
     gap: 3px;
 }
 
+
 /* TITLE */
+
 .schedule-title {
     font-size: 15px;
     font-weight: 700;
     color: #2b2b2b;
 }
 
+
 /* DATE */
+
 .schedule-date {
     font-size: 13px;
     color: #6b5b5b;
 }
 
+
 /* LOCATION */
+
 .schedule-location {
     font-size: 13px;
     color: #7a6a6a;
 }
 
-/* TIME BADGE */
-.schedule-time {
-    background: #d4b4b4;   /* 🔥 theme color */
-    color: white;
 
+/* TIME BADGE */
+
+.schedule-time {
+    background: #d4b4b4;
+    /* 🔥 theme color */
+    color: white;
     padding: 7px 12px;
     border-radius: 10px;
-
     font-size: 13px;
     font-weight: 600;
-
     min-width: 120px;
     text-align: center;
 }
 
+
 /* TODAY HIGHLIGHT */
+
 .today-highlight {
     border-left: 4px solid #d4b4b4;
 }
 
+
 /* EMPTY TEXT */
+
 .no-duty {
     color: #5a4a4a;
     font-size: 14px;
 }
 
+
 /* RESPONSIVE */
+
 @media (max-width: 768px) {
     .schedule-card {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
     }
-
     .schedule-time {
         width: 100%;
     }
+}
+
+
+/* Card matches your dashboard tone */
+
+.card-box {
+    background: #f4e6e6;
+    /* soft pink tone */
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Heading same soft dark tone */
+
+h2 {
+    margin-bottom: 20px;
+    color: #5a4a4a;
+}
+
+
+/* Table styling */
+
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table-custom th,
+.table-custom td {
+    padding: 12px;
+    border-bottom: 1px solid #e6dcdc;
+    text-align: center;
+}
+
+
+/* Header matches theme */
+
+.table-custom th {
+    background-color: #e8d3d3;
+    color: #4a3f3f;
+}
+
+
+/* Button matching navbar tone */
+
+.btn-custom {
+    background: #c89f9c;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-custom:hover {
+    background: #b88a86;
 }

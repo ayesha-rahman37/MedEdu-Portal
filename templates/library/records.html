@@ -1,27 +1,38 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
 {% block content %}
 
-<h2>All Books</h2>
+<div class="page-container">
 
-<table border="1">
+    <div class="card-box">
+        <h2>Library Records</h2>
 
-    <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Total</th>
-        <th>Available</th>
-    </tr>
+        <table class="table-custom">
+            <tr>
+                <th>Student</th>
+                <th>Book</th>
+                <th>Status</th>
+                <th>Due Date</th>
+            </tr>
 
-    {% for book in books %}
-    <tr>
-        <td>{{ book.title }}</td>
-        <td>{{ book.author }}</td>
-        <td>{{ book.total_copies }}</td>
-        <td>{{ book.available_copies }}</td>
-    </tr>
-    {% endfor %}
+            {% for issue in issues %}
+            <tr>
+                <td>{{ issue.student.username }}</td>
+                <td>{{ issue.book.title }}</td>
+                <td>
+                    {% if issue.returned %}
+                        Returned
+                    {% else %}
+                        Issued
+                    {% endif %}
+                </td>
+                <td>{{ issue.due_date }}</td>
+            </tr>
+            {% endfor %}
 
-</table>
+        </table>
+
+    </div>
+
+</div>
 
 {% endblock %}
