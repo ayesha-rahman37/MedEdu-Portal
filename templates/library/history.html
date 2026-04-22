@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Issue History</h2>
+
+<table border="1">
+
+    <tr>
+        <th>Student</th>
+        <th>Book</th>
+        <th>Issue Date</th>
+        <th>Due Date</th>
+        <th>Status</th>
+    </tr>
+
+    {% for i in history %}
+    <tr>
+        <td>{{ i.student.username }}</td>
+        <td>{{ i.book.title }}</td>
+        <td>{{ i.issue_date }}</td>
+        <td>{{ i.due_date }}</td>
+
+        <td>
+            {% if i.returned %}
+                Returned
+            {% else %}
+                Issued
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

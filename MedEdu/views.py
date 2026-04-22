@@ -1,14 +1,12 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from django.db import models
-from django.contrib import messages
-from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, BookIssue, BookReservation
+from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue
+from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
-from django.utils import timezone
 
 # ================= HOME =================
 def home(request):
@@ -217,69 +215,64 @@ def dashboard_redirect(request):
 @login_required
 def student_dashboard(request):
     role = request.user.role.replace("_", " ").title()
-    return render(request, "dashboards/student_dashboard.html", {"role": role})
+
+    return render(request, "dashboards/student_dashboard.html", {
+        "role": role
+    })
 
 
 @login_required
 def faculty_dashboard(request):
     role = request.user.role.replace("_", " ").title()
-    return render(request, "dashboards/faculty_dashboard.html", {"role": role})
+
+    return render(request, "dashboards/faculty_dashboard.html", {
+        "role": role
+    })
 
 
 @login_required
 def intern_dashboard(request):
     role = request.user.role.replace("_", " ").title()
-    return render(request, "dashboards/intern_dashboard.html", {"role": role})
+
+    return render(request, "dashboards/intern_dashboard.html", {
+        "role": role
+    })
 
 
 @login_required
 def doctor_dashboard(request):
     role = request.user.role.replace("_", " ").title()
-    return render(request, "dashboards/doctor_dashboard.html", {"role": role})
+
+    return render(request, "dashboards/doctor_dashboard.html", {
+        "role": role
+    })
 
 
 @login_required
 def ward_dashboard(request):
     role = request.user.role.replace("_", " ").title()
-    return render(request, "dashboards/ward_dashboard.html", {"role": role})
+
+    return render(request, "dashboards/ward_dashboard.html", {
+        "role": role
+    })
 
 
 @login_required
 def library_dashboard(request):
-    """Library staff dashboard with statistics"""
-    
-    # Check if user is library staff or admin
-    if request.user.role not in ['library', 'admin']:
-        return redirect('dashboard')
-    
-    # Statistics
-    total_books = Book.objects.count()
-    available_books = Book.objects.aggregate(total=models.Sum('available_copies'))['total'] or 0
-    total_issued = BookIssue.objects.filter(status='issued').count()
-    total_overdue = BookIssue.objects.filter(status='overdue').count()
-    
-    # Recently issued books
-    recent_issues = BookIssue.objects.select_related('user', 'book').order_by('-issue_date')[:10]
-    
-    # Books with low stock
-    low_stock_books = Book.objects.filter(available_copies__lte=2, available_copies__gt=0)
-    
-    context = {
-        'total_books': total_books,
-        'available_books': available_books,
-        'total_issued': total_issued,
-        'total_overdue': total_overdue,
-        'recent_issues': recent_issues,
-        'low_stock_books': low_stock_books,
-    }
-    
-    return render(request, 'library/dashboard.html', context)
+    role = request.user.role.replace("_", " ").title()
+
+    return render(request, "dashboards/library_dashboard.html", {
+        "role": role
+    })
 
 
 @login_required
 def admin_dashboard(request):
     role = request.user.role.replace("_", " ").title()
-    return render(request, "dashboards/admin_dashboard.html", {"role": role})
+
+    return render(request, "dashboards/admin_dashboard.html", {
+        "role": role
+    })
 
 
 # ================= SUBJECT =================
@@ -304,7 +297,7 @@ def subject_list(request):
 
 @login_required
 def subject_detail(request, slug):
-    # ONLY STUDENTS CAN ACCESS
+    # 🔥 ONLY STUDENTS CAN ACCESS
     if request.user.role not in ["medical_student", "dental_student"]:
         return redirect("dashboard")
 
@@ -313,13 +306,13 @@ def subject_detail(request, slug):
 
     user = request.user
     course = None
-    # course detect (IMPORTANT - uppercase folder match)
+    # 🔥 course detect (IMPORTANT - uppercase folder match)
     if user.role == "medical_student":
         course = "MBBS"
     elif user.role == "dental_student":
         course = "BDS"
 
-    # EXACT PDF PATH (your real files)
+    # 🔥 EXACT PDF PATH (your real files)
     pdf_map = {
 
         # medical subjects
@@ -378,8 +371,17 @@ def subject_detail(request, slug):
         "prosthodontics": f"/static/pdfs/{course}/Phase 4/Prosthodontics.pdf",
         "orthodontics-dentofacial-orthopedics": f"/static/pdfs/{course}/Phase 4/Orthodontics & Dentofacial Orthopedics.pdf",
         "pedodontics-dental-public-health": f"/static/pdfs/{course}/Phase 4/Pedodontics & Dental Public Health.pdf",
+
+        # # ===== EXTRA FILE =====
+        # "internship": f"/static/pdfs/{course}/Internship.pdf",
+        # "extras": [
+        #     f"/static/pdfs/{course}/Phase 1/Anatomy Card.pdf",
+        #     f"/static/pdfs/{course}/Internship.pdf",
+        # ]
         
     }
+
+    
 
     data = pdf_map.get(slug)
 
@@ -403,7 +405,7 @@ def subject_detail(request, slug):
     if slug in phase4_subjects:
         extra_pdfs = pdf_map.get("extras", [])
     
-    # Additional Resources (IT + Internship)
+    # 🔥 Additional Resources (IT + Internship)
 
     if course == "MBBS":
         additional_resources = [
@@ -456,10 +458,11 @@ def subject_detail(request, slug):
     })
 
 
+
 @login_required
 def exam_page(request):
 
-    # optional: filter based on student type
+    # 🔥 optional: filter based on student type
     if request.user.role == "medical_student":
         exams = ExamSchedule.objects.filter(subject__course_type="medical")
 
@@ -475,301 +478,149 @@ def exam_page(request):
         "exams": exams
     })
 
-
 @login_required
 def result_page(request):
 
-    # ONLY own result
+    # 🔥 ONLY own result
     results = Result.objects.filter(user=request.user)
 
     return render(request, "result.html", {
         "results": results
     })
 
-
 # ================= DOCTOR SCHEDULE =================
 
 @login_required
 def doctor_schedule(request):
 
-    # doctor না হলে block
+    # DEBUG (optional)
+    print(DoctorSchedule.objects.all())
+
+    # ❌ doctor না হলে block
     if request.user.role != "doctor":
         return render(request, "access_denied.html")
 
-    # today's date
+    # ✅ today's date
     today = date.today()
 
-    # today's schedules
+    # ✅ today's schedules
     today_schedules = DoctorSchedule.objects.filter(
         doctor=request.user,
         date=today
     ).order_by("start_time")
 
-    # all schedules
+    # ✅ all schedules
     schedules = DoctorSchedule.objects.filter(
         doctor=request.user
     ).order_by("date", "start_time")
 
-    # FINAL RETURN
+    # ✅ FINAL RETURN (IMPORTANT)
     return render(request, "doctor_schedule.html", {
         "today_schedules": today_schedules,
         "schedules": schedules
     })
 
 
-# ================= LIBRARY VIEWS =================
+# ================= LIBRARY =================
 
 @login_required
-def book_list(request):
-    """Display all books with search and filter"""
-    
-    books = Book.objects.all()
-    
-    # Search functionality
-    search_query = request.GET.get('search', '')
-    if search_query:
-        books = books.filter(
-            models.Q(title__icontains=search_query) |
-            models.Q(author__icontains=search_query) |
-            models.Q(isbn__icontains=search_query)
-        )
-    
-    # Filter by category
-    category = request.GET.get('category', '')
-    if category:
-        books = books.filter(category=category)
-    
-    # Filter by availability
-    availability = request.GET.get('availability', '')
-    if availability == 'available':
-        books = books.filter(available_copies__gt=0)
-    elif availability == 'unavailable':
-        books = books.filter(available_copies=0)
-    
-    context = {
+def library_dashboard(request):
+
+    books = Book.objects.count()
+    available = Book.objects.filter(available_copies__gt=0).count()
+    issued = Issue.objects.filter(returned=False).count()
+    overdue = Issue.objects.filter(returned=False, due_date__lt=date.today()).count()
+
+    recent = Issue.objects.order_by('-issue_date')[:5]
+
+    return render(request, 'dashboards/library_dashboard.html', {
         'books': books,
-        'search_query': search_query,
-        'selected_category': category,
-        'selected_availability': availability,
-    }
-    
-    return render(request, 'library/book_list.html', context)
-
-
-@login_required
-def book_detail(request, book_id):
-    """Display book details and issue history"""
-    
-    book = get_object_or_404(Book, id=book_id)
-    
-    # Get issue history for this book
-    issue_history = BookIssue.objects.filter(book=book).select_related('user').order_by('-issue_date')[:20]
-    
-    # Get current reservations
-    reservations = BookReservation.objects.filter(book=book, status='active')
-    
-    context = {
-        'book': book,
-        'issue_history': issue_history,
-        'reservations': reservations,
-    }
-    
-    return render(request, 'library/book_detail.html', context)
-
-
-@login_required
-def issue_book(request):
-    """Issue a book to a user"""
-    
-    if request.user.role not in ['library', 'admin']:
-        return redirect('dashboard')
-    
-    if request.method == 'POST':
-        mededu_id = request.POST.get('mededu_id')
-        book_title = request.POST.get('book_title')
-        due_date_str = request.POST.get('due_date')
-        
-        try:
-            user = User.objects.get(mededu_id=mededu_id)
-            book = Book.objects.filter(title__icontains=book_title).first()
-            
-            if not book:
-                messages.error(request, 'Book not found')
-                return redirect('issue_book')
-            
-            if book.available_copies < 1:
-                messages.error(request, 'No copies available for this book')
-                return redirect('issue_book')
-            
-            due_date = date.fromisoformat(due_date_str)
-            
-            # Create issue record
-            issue = BookIssue.objects.create(
-                user=user,
-                book=book,
-                due_date=due_date,
-                status='issued'
-            )
-            
-            # Update available copies
-            book.available_copies -= 1
-            book.save()
-            
-            messages.success(request, f'Book "{book.title}" issued to {user.username}')
-            return redirect('library_dashboard')
-            
-        except User.DoesNotExist:
-            messages.error(request, 'User not found with this MedEdu ID')
-            return redirect('issue_book')
-        except Exception as e:
-            messages.error(request, f'Error: {str(e)}')
-            return redirect('issue_book')
-    
-    return render(request, 'library/issue_book.html')
-
-
-@login_required
-def return_book(request):
-    """Return a book and calculate fine if any"""
-    
-    if request.user.role not in ['library', 'admin']:
-        return redirect('dashboard')
-    
-    if request.method == 'POST':
-        issue_id = request.POST.get('issue_id')
-        
-        try:
-            issue = BookIssue.objects.get(id=issue_id, status__in=['issued', 'overdue'])
-            
-            # Calculate fine
-            if issue.due_date < date.today():
-                days_overdue = (date.today() - issue.due_date).days
-                fine = days_overdue * 5
-            else:
-                fine = 0
-            
-            # Process return
-            issue.return_date = date.today()
-            issue.status = 'returned'
-            issue.fine_amount = fine
-            issue.save()
-            
-            # Update available copies
-            issue.book.available_copies += 1
-            issue.book.save()
-            
-            if fine > 0:
-                messages.warning(request, f'Book returned with fine: ৳{fine}')
-            else:
-                messages.success(request, f'Book "{issue.book.title}" returned successfully')
-            
-            return redirect('library_dashboard')
-            
-        except BookIssue.DoesNotExist:
-            messages.error(request, 'Invalid issue ID or book already returned')
-            return redirect('return_book')
-    
-    # Show currently issued books for quick reference
-    current_issues = BookIssue.objects.filter(status__in=['issued', 'overdue']).select_related('user', 'book')[:20]
-    
-    return render(request, 'library/return_book.html', {
-        'current_issues': current_issues
+        'available': available,
+        'issued': issued,
+        'overdue': overdue,
+        'recent': recent
     })
 
 
+# ================= ISSUE BOOK =================
 @login_required
-def my_issued_books(request):
-    """Students can see their issued books"""
-    
-    if request.user.role not in ['medical_student', 'dental_student']:
-        return redirect('dashboard')
-    
-    issued_books = BookIssue.objects.filter(
-        user=request.user,
-        status__in=['issued', 'overdue']
-    ).select_related('book')
-    
-    # Calculate fines for overdue books
-    for issue in issued_books:
-        if issue.due_date < date.today() and issue.status == 'issued':
-            days_overdue = (date.today() - issue.due_date).days
-            issue.fine_amount = days_overdue * 5
-    
-    history = BookIssue.objects.filter(
-        user=request.user,
-        status='returned'
-    ).select_related('book').order_by('-return_date')[:10]
-    
-    context = {
-        'issued_books': issued_books,
-        'history': history,
-    }
-    
-    return render(request, 'library/my_books.html', context)
+def issue_book(request):
 
+    users = User.objects.all()
+    books = Book.objects.all()
 
-@login_required
-def reserve_book(request, book_id):
-    """Reserve a book if not available"""
-    
-    book = get_object_or_404(Book, id=book_id)
-    
-    if request.user.role not in ['medical_student', 'dental_student']:
-        messages.error(request, 'Only students can reserve books')
-        return redirect('book_detail', book_id=book_id)
-    
-    # Check if already reserved
-    existing_reservation = BookReservation.objects.filter(
-        user=request.user,
-        book=book,
-        status='active'
-    ).exists()
-    
-    if existing_reservation:
-        messages.warning(request, 'You already have an active reservation for this book')
-    else:
-        # Create reservation (expires in 3 days)
-        expiry = timezone.now() + timedelta(days=3)
-        BookReservation.objects.create(
-            user=request.user,
-            book=book,
-            expiry_date=expiry,
-            status='active'
-        )
-        messages.success(request, f'Book "{book.title}" reserved successfully. Pickup within 3 days.')
-    
-    return redirect('book_detail', book_id=book_id)
-
-
-@login_required
-def add_book(request):
-    """Add new book to library (Library staff only)"""
-    
-    if request.user.role not in ['library', 'admin']:
-        return redirect('dashboard')
-    
     if request.method == 'POST':
-        title = request.POST.get('title')
-        author = request.POST.get('author')
-        category = request.POST.get('category')
-        total_copies = int(request.POST.get('total_copies', 1))
-        isbn = request.POST.get('isbn', '')
-        publisher = request.POST.get('publisher', '')
-        year = request.POST.get('year', '')
-        location = request.POST.get('location', '')
-        
-        book = Book.objects.create(
-            title=title,
-            author=author,
-            category=category,
-            total_copies=total_copies,
-            available_copies=total_copies,
-            isbn=isbn,
-            publisher=publisher,
-            year=int(year) if year else None,
-            location=location
-        )
-        messages.success(request, f'Book "{book.title}" added successfully')
-        return redirect('book_detail', book_id=book.id)
-    
-    return render(request, 'library/add_book.html')
+
+        student_id = request.POST.get('student')
+        book_id = request.POST.get('book')
+        due_date = request.POST.get('due_date')
+
+        student = User.objects.get(id=student_id)
+        book = Book.objects.get(id=book_id)
+
+        if book.available_copies > 0:
+            Issue.objects.create(
+                student=student,
+                book=book,
+                due_date=due_date
+            )
+
+            book.available_copies -= 1
+            book.save()
+
+        return redirect('library_dashboard')
+
+    return render(request, 'library/issue_book.html', {
+        'users': users,
+        'books': books
+    })
+
+
+# ================= RETURN PAGE =================
+@login_required
+def return_book(request):
+
+    issued_books = Issue.objects.filter(returned=False)
+
+    return render(request, 'library/return_book.html', {
+        'issued_books': issued_books
+    })
+
+
+# ================= RETURN ACTION =================
+@login_required
+def return_book_action(request, issue_id):
+
+    issue = Issue.objects.get(id=issue_id)
+
+    if not issue.returned:
+        issue.returned = True
+        issue.save()
+
+        book = issue.book
+        book.available_copies += 1
+        book.save()
+
+    return redirect('return_book')
+
+
+# ================= RECORDS =================
+@login_required
+def records(request):
+
+    books = Book.objects.all()
+
+    return render(request, 'library/records.html', {
+        'books': books
+    })
+
+
+# ================= HISTORY =================
+@login_required
+def history(request):
+
+    history = Issue.objects.all().order_by('-issue_date')
+
+    return render(request, 'library/history.html', {
+        'history': history
+    })

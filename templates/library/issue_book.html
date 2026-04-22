@@ -1,40 +1,37 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="auth-container">
-    <div class="auth-card">
-        <h2>📖 Issue Book</h2>
-        
-        {% if messages %}
-            {% for message in messages %}
-                <p style="color: green; text-align: center;">{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-        
-        <form method="POST">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label>Student/User MedEdu ID</label>
-                <input type="text" name="mededu_id" placeholder="e.g., MS-1001" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Book Title or ISBN</label>
-                <input type="text" name="book_title" placeholder="Enter book title or ISBN" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Due Date</label>
-                <input type="date" name="due_date" required>
-            </div>
-            
-            <button type="submit" class="auth-btn">Issue Book</button>
-        </form>
-        
-        <div style="margin-top: 20px; text-align: center;">
-            <a href="{% url 'library_dashboard' %}" class="secondary-btn">Back to Dashboard</a>
-        </div>
-    </div>
-</div>
+
+<h2>Issue Book</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Student:</label>
+    <select name="student">
+        {% for user in users %}
+        <option value="{{ user.id }}">{{ user.username }}</option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label>Book:</label>
+    <select name="book">
+        {% for book in books %}
+        <option value="{{ book.id }}">{{ book.title }}</option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label>Due Date:</label>
+    <input type="date" name="due_date">
+
+    <br><br>
+
+    <button type="submit">Issue Book</button>
+
+</form>
+
 {% endblock %}

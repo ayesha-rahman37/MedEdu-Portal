@@ -192,10 +192,10 @@
         {% elif user.role == "library" %}
 
         <a href="{% url 'library_dashboard' %}">Home</a>
-        <a href="#">Book Issue</a>
-        <a href="#">Return</a>
-        <a href="#">Records</a>
-        <a href="#">History</a>
+        <a href="{% url 'issue_book' %}">Book Issue</a>
+        <a href="{% url 'return_book' %}">Return</a>
+        <a href="{% url 'records' %}">Records</a>
+        <a href="{% url 'history' %}">History</a>
         <a href="#">Notifications</a>
         <a href="{% url 'profile' %}">Profile</a>
         <a href="{% url 'logout' %}">Logout</a>

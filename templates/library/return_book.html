@@ -1,52 +1,26 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="auth-container">
-    <div class="auth-card" style="width: 600px;">
-        <h2>🔄 Return Book</h2>
-        
-        {% if messages %}
-            {% for message in messages %}
-                <p style="color: {% if 'error' in message.tags %}red{% else %}green{% endif %}; text-align: center;">
-                    {{ message }}
-                </p>
-            {% endfor %}
-        {% endif %}
-        
-        <form method="POST">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label>Issue ID</label>
-                <input type="number" name="issue_id" placeholder="Enter Issue ID" required>
-            </div>
-            
-            <button type="submit" class="auth-btn">Return Book</button>
-        </form>
-        
-        <h3 style="margin-top: 30px;">Currently Issued Books</h3>
-        <table border="1" style="width: 100%; margin-top: 10px; border-collapse: collapse;">
-            <tr style="background: #d4b4b4;">
-                <th style="padding: 8px;">Issue ID</th>
-                <th style="padding: 8px;">Book</th>
-                <th style="padding: 8px;">Student</th>
-                <th style="padding: 8px;">Due Date</th>
-            </tr>
-            {% for issue in current_issues %}
-            <tr>
-                <td style="padding: 8px;">{{ issue.id }}</td>
-                <td style="padding: 8px;">{{ issue.book.title }}</td>
-                <td style="padding: 8px;">{{ issue.user.username }}</td>
-                <td style="padding: 8px; color: {% if issue.status == 'overdue' %}red{% endif %};">
-                    {{ issue.due_date }}
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4" style="text-align: center; padding: 20px;">No books currently issued</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-</div>
+
+<h2>Return Book</h2>
+
+<table border="1">
+    <tr>
+        <th>Student</th>
+        <th>Book</th>
+        <th>Action</th>
+    </tr>
+
+    {% for i in issued_books %}
+    <tr>
+        <td>{{ i.student.username }}</td>
+        <td>{{ i.book.title }}</td>
+        <td>
+            <a href="{% url 'return_book_action' i.id %}">Return</a>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
 {% endblock %}

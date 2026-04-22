@@ -43,11 +43,9 @@ urlpatterns = [
     path("doctor/schedule/", views.doctor_schedule, name="doctor_schedule"),
     
     # ================= LIBRARY URLS =================
-    path('library/books/', views.book_list, name="book_list"),
-    path('library/book/<int:book_id>/', views.book_detail, name="book_detail"),
-    path('library/issue/', views.issue_book, name="issue_book"),
-    path('library/return/', views.return_book, name="return_book"),
-    path('library/my-books/', views.my_issued_books, name="my_issued_books"),
-    path('library/reserve/<int:book_id>/', views.reserve_book, name="reserve_book"),
-    path('library/add-book/', views.add_book, name="add_book"),
+    path('library/issue/', views.issue_book, name='issue_book'),
+    path('library/return/', views.return_book, name='return_book'),
+    path('library/records/', views.records, name='records'),
+    path('library/history/', views.history, name='history'),
+    path('library/return-action/<int:issue_id>/', views.return_book_action, name='return_book_action'),
 ]
