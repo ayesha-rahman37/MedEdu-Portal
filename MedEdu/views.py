@@ -361,8 +361,8 @@ def subject_detail(request, slug):
         "pathology-microbiology": f"/static/pdfs/{course}/Phase 2/Pathology & Microbiology.pdf",
 
         # phase 3
-        "medicine": f"/static/pdfs/{course}/Phase 3/Medicine.pdf",
-        "surgery": f"/static/pdfs/{course}/Phase 3/Surgery.pdf",
+        "medicine-bds": f"/static/pdfs/{course}/Phase 3/Medicine.pdf",
+        "surgery-bds": f"/static/pdfs/{course}/Phase 3/Surgery.pdf",
         "periodontology-oral-pathology": f"/static/pdfs/{course}/Phase 3/Periodontology & Oral Pathology.pdf",
 
         # phase 4
@@ -697,3 +697,49 @@ def result_by_phase(request, exam_type, phase):
     }
 
     return render(request, 'result/result_list.html', context)
+
+# =====================PDF LISTING (MANUAL CONTROL)=============
+
+def item_pdf_list(request, phase):
+
+    user = request.user
+
+    # course detect
+    if user.role == "medical_student":
+        course = "MBBS"
+    elif user.role == "dental_student":
+        course = "BDS"
+    else:
+        course = "MBBS"
+
+    # 🔥 MANUAL CONTROL (MAIN PART)
+    pdf_data = {
+
+        "MBBS": {
+            1: ["Anatomy Card.pdf", "Biochemistry Card.pdf", "Physiology Card.pdf"],
+            2: ["Forensic Medicine & Toxicology Card.pdf", "Pharmacology & Therapeutics Card.pdf"],
+            3: ["Microbiology.pdf", "Pathology.pdf"],
+            4: ["Opthalmology Card.pdf", "Otorhinolaryngology & Head-Neck Surgery Card.pdf", "Psychiatry Card.pdf", "Skin & VD Card.pdf", "Surgery Card.pdf"],
+        },
+
+        "BDS": {
+            1: ["Anatomy Card.pdf", "Physiology & Biochemistry Card.pdf", "Science of Dental Materials Card.pdf"],
+            2: ["General Pharmacology & Dental Therapeutics Card.pdf", "Pathology & Microbiology Card.pdf"],
+            3: [
+                "Medicine Card.pdf",
+                "Periodontology & Oral Pathology Card.pdf"
+            ],
+            4: ["Conservative Dentistry & Endodontics Card.pdf", "Pedodontics & Dental Public Health Card.pdf", "Pedodontics Card.pdf"],
+        }
+
+    }
+
+    files = pdf_data.get(course, {}).get(phase, [])
+
+    context = {
+        'files': files,
+        'phase': phase,
+        'course': course,
+    }
+
+    return render(request, 'pdf_list.html', context)

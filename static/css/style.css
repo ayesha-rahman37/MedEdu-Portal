@@ -1052,3 +1052,92 @@ h2 {
     color: red;
     font-weight: bold;
 }
+
+.pdf-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.pdf-btn {
+    background: #e6bdb4;
+    padding: 12px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.pdf-btn:hover {
+    background: #d9a9a0;
+    transform: scale(1.05);
+}
+
+/* container */
+.pdf-container {
+    padding: 30px;
+}
+
+/* title */
+.pdf-title {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #5a4a4a;
+}
+
+/* grid layout */
+.pdf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* card */
+.pdf-card {
+    background: #f8ebe7;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.pdf-card:hover {
+    transform: translateY(-5px);
+}
+
+/* icon */
+.pdf-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+/* file name */
+.pdf-name {
+    font-size: 14px;
+    margin-bottom: 15px;
+    word-break: break-word;
+}
+
+/* button */
+.pdf-open-btn {
+    display: inline-block;
+    padding: 8px 14px;
+    background: #c89f9c;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.pdf-open-btn:hover {
+    background: #b88a86;
+}
+
+/* no pdf */
+.no-pdf {
+    text-align: center;
+    color: #888;
+}

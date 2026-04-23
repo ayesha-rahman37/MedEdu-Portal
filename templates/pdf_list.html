@@ -1,20 +1,38 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<h2>Phase {{ phase }} PDFs</h2>
+<div class="pdf-container">
 
-<div style="padding:20px;">
+    <h2 class="pdf-title">
+        {{ course }} - Phase {{ phase }}
+    </h2>
 
-    {% for file in files %}
-        <div style="margin:10px 0;">
-            <a href="/static/pdf/MBBS/phase{{ phase }}/{{ file }}" target="_blank">
-                📄 {{ file }}
+    <div class="pdf-grid">
+
+        {% for file in files %}
+        <div class="pdf-card">
+
+            <div class="pdf-icon">📄</div>
+
+            <div class="pdf-name">
+                {{ file }}
+            </div>
+
+            <a class="pdf-open-btn"
+               href="{% static 'pdfs/' %}{{ course }}/Phase {{ phase }}/{{ file }}"
+               target="_blank">
+
+                Open PDF
             </a>
+
         </div>
-    {% empty %}
-        <p>No PDF found</p>
-    {% endfor %}
+        {% empty %}
+            <p class="no-pdf">No PDF available</p>
+        {% endfor %}
+
+    </div>
 
 </div>
 
