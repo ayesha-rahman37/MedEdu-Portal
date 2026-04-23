@@ -1,33 +1,67 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
 <div class="container">
 
-    <h2>Result - {{ exam_type|title }} (Phase {{ phase }})</h2>
+    <div class="result-box">
 
-    <table class="result-table">
-        <tr>
-            <th>Subject</th>
-            <th>Marks</th>
-            <th>Status</th>
-            <th>Date</th>
-        </tr>
+        <h2 class="result-title">
+            Result - {{ exam_type|title }} (Phase {{ phase }})
+        </h2>
 
-        {% for r in results %}
-        <tr>
-            <td>{{ r.topic.title }}</td>
-            <td>{{ r.marks }}</td>
-            <td>{{ r.status }}</td>
-            <td>{{ r.date }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">No results found</td>
-        </tr>
-        {% endfor %}
+        <table class="result-table">
 
-    </table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+
+                    {% if exam_type == "item" %}
+                        <th>Topic Name</th>
+                    {% elif exam_type == "card" %}
+                        <th>Card Name</th>
+                    {% endif %}
+
+                    <th>Marks</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for r in results %}
+                <tr>
+
+                    <td>{{ r.topic.subject.name }}</td>
+
+                    {% if exam_type == "item" %}
+                        <td>{{ r.topic.title }}</td>
+                    {% elif exam_type == "card" %}
+                        <td>{{ r.topic.title }}</td>
+                    {% endif %}
+
+                    <td>{{ r.marks }}</td>
+
+                    <td class="{% if r.status == 'clear' %}status-pass{% else %}status-fail{% endif %}">
+                        {{ r.status }}
+                    </td>
+
+                    <td>{{ r.date }}</td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align:center; padding:20px;">
+                        No results found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
 
 </div>
 

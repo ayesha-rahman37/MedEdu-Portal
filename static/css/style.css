@@ -1004,3 +1004,51 @@ h2 {
     background: #f3d8d2;
     transition: 0.3s;
 }
+
+.result-box {
+    background: #f8ebe7;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.result-title {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.result-table th {
+    background: #e6bdb4;
+    padding: 12px;
+}
+
+.result-table td {
+    padding: 12px;
+    text-align: center;
+}
+
+.result-table tr:nth-child(even) {
+    background: #f3d8d2;
+}
+
+.result-table tr:hover {
+    background: #edd0c8;
+}
+
+/* Status colors */
+.status-pass {
+    color: green;
+    font-weight: bold;
+}
+
+.status-fail {
+    color: red;
+    font-weight: bold;
+}
