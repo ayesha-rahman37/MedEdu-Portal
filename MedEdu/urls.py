@@ -39,6 +39,7 @@ urlpatterns = [
     path("exam/", views.exam_page, name="exam"),
     path("result/", views.result_page, name="result"),
     path('pdfs/<int:phase>/', views.phase_pdfs, name='phase_pdfs'),
+    path('exam/item/<int:phase>/', views.item_pdf_list, name='item_pdf'),
 
     # ================= EXAM RESULTS BY PHASE =================
     path('result/<str:exam_type>/<int:phase>/', views.result_by_phase, name='result_phase'),
