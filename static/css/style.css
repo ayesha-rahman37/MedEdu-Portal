@@ -889,3 +889,118 @@ h2 {
     font-weight: bold;
     color: #2b2b2b;
 }
+
+/* MAIN DROPDOWN */
+.nav-select {
+    position: relative;
+}
+
+.nav-select a {
+    padding: 10px 15px;
+    display: inline-block;
+}
+
+/* FIRST LEVEL */
+.dropdown {
+    display: none;
+    position: absolute;
+
+    top: calc(100% + 10px);  /* 👈 BEST way */
+    left: 0;
+
+    background: #f3d8d2;
+    border-radius: 12px;
+    padding: 12px;
+    min-width: 180px;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+
+/* SHOW MAIN DROPDOWN */
+.nav-select:hover .dropdown {
+    display: block;
+}
+
+/* ITEM / CARD / TERM */
+.dropdown-item {
+    position: relative;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.dropdown-item:hover {
+    background: #e6bdb4;
+}
+
+/* SECOND LEVEL (PHASE) */
+.sub-dropdown {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background: #f8ebe7;
+    border-radius: 12px;
+    padding: 10px;
+    min-width: 150px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* SHOW SUB DROPDOWN */
+.dropdown-item:hover .sub-dropdown {
+    display: block;
+}
+
+/* PHASE LINKS */
+.sub-dropdown a {
+    display: block;
+    padding: 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+}
+
+.sub-dropdown a:hover {
+    background: #eac2bb;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    margin-top: 10px;
+}
+
+.nav-select::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 15px;
+}
+
+/* ================= RESULT PAGE ================= */
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #f8ebe7;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.result-table th,
+.result-table td {
+    padding: 12px;
+    text-align: center;
+}
+
+.result-table th {
+    background: #e6bdb4;
+}
+
+.result-table tr:hover {
+    background: #f3d8d2;
+    transition: 0.3s;
+}

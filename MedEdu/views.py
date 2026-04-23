@@ -8,7 +8,6 @@ from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, 
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
-
 # ================= HOME =================
 def home(request):
     return render(request, "home.html")
@@ -657,3 +656,44 @@ def student_library(request):
     return render(request, 'library/my_books.html', {
         'issues': issues
     })
+
+# ================= PDF LISTING =================
+
+def phase_pdfs(request, phase):
+    import os
+
+    base_path = f"static/pdf/MBBS/phase{phase}"
+    files = []
+
+    if os.path.exists(base_path):
+        for f in os.listdir(base_path):
+            if f.endswith(".pdf"):
+                files.append(f)
+
+    return render(request, 'pdf_list.html', {
+        'files': files,
+        'phase': phase
+    })
+
+# ================= RESULT BY PHASE =================
+def result_by_phase(request, exam_type, phase):
+
+    # logged in user
+    user = request.user
+
+    # filter topics by phase
+    topics = Topic.objects.filter(subject__phase=phase)
+
+    # filter results
+    results = Result.objects.filter(
+        user=user,
+        topic__in=topics
+    )
+
+    context = {
+        'results': results,
+        'exam_type': exam_type,
+        'phase': phase,
+    }
+
+    return render(request, 'result/result_list.html', context)
