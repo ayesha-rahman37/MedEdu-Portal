@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Phase {{ phase }} PDFs</h2>
+
+<div style="padding:20px;">
+
+    {% for file in files %}
+        <div style="margin:10px 0;">
+            <a href="/static/pdf/MBBS/phase{{ phase }}/{{ file }}" target="_blank">
+                📄 {{ file }}
+            </a>
+        </div>
+    {% empty %}
+        <p>No PDF found</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

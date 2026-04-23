@@ -15,210 +15,263 @@
 
         {% if user.is_authenticated %}
 
-        <!-- ================= STUDENT ================= -->
-        {% if user.role == "medical_student" or user.role == "dental_student" %}
+            <!-- ================= STUDENT ================= -->
+            {% if user.role == "medical_student" or user.role == "dental_student" %}
 
-        <a href="{% url 'student_dashboard' %}">Home</a>
-        <a href="#">Class Schedule</a>
+                <a href="{% url 'student_dashboard' %}">Home</a>
+                <a href="#">Class Schedule</a>
 
-        <!-- COURSE -->
-        <div class="nav-select">
-            <a href="{% url 'subjects' %}">Course & Syllabus</a>
+                <!-- COURSE -->
+                <div class="nav-select">
+                    <a href="{% url 'subjects' %}">Course & Syllabus</a>
 
-            <div class="select-options">
+                    <div class="select-options">
 
-                {% if user.role == "medical_student" %}
+                        {% if user.role == "medical_student" %}
 
-                <div class="phase">
-                    Phase 1 ▸
-                    <div class="submenu">
-                        <a href="{% url 'subject_detail' 'anatomy' %}">Anatomy</a>
-                        <a href="{% url 'subject_detail' 'physiology' %}">Physiology</a>
-                        <a href="{% url 'subject_detail' 'biochemistry' %}">Biochemistry</a>
+                            <div class="phase">
+                                Phase 1 ▸
+                                <div class="submenu">
+                                    <a href="{% url 'subject_detail' 'anatomy' %}">Anatomy</a>
+                                    <a href="{% url 'subject_detail' 'physiology' %}">Physiology</a>
+                                    <a href="{% url 'subject_detail' 'biochemistry' %}">Biochemistry</a>
+                                </div>
+                            </div>
+
+                            <div class="phase">
+                                Phase 2 ▸
+                                <div class="submenu">
+                                    <a href="{% url 'subject_detail' 'pharmacology-therapeutics' %}">Pharmacology & Therapeutics</a>
+                                    <a href="{% url 'subject_detail' 'forensic-medicine-toxicology' %}">Forensic Medicine & Toxicology</a>
+                                    <a href="{% url 'subject_detail' 'general-pathology-basic' %}">General Pathology (Basic)</a>
+                                    <a href="{% url 'subject_detail' 'general-microbiology-basic' %}">General Microbiology (Basic)</a>
+                                    <a href="{% url 'subject_detail' 'medicine-intro' %}">Medicine (Intro)</a>
+                                    <a href="{% url 'subject_detail' 'surgery-intro' %}">Surgery (Intro)</a>
+                                </div>
+                            </div>
+
+                            <div class="phase">
+                                Phase 3 ▸
+                                <div class="submenu">
+                                    <a href="{% url 'subject_detail' 'community-medicine-public-health' %}">Community Medicine & Public Health</a>
+                                    <a href="{% url 'subject_detail' 'pathology' %}">Pathology</a>
+                                    <a href="{% url 'subject_detail' 'microbiology' %}">Microbiology</a>
+                                    <a href="{% url 'subject_detail' 'medicine-clinical' %}">Medicine (Clinical)</a>
+                                    <a href="{% url 'subject_detail' 'surgery-clinical' %}">Surgery (Clinical)</a>
+                                    <a href="{% url 'subject_detail' 'obstetrics-gynaecology-intro' %}">Obstetrics & Gynaecology (Intro)</a>
+                                </div>
+                            </div>
+
+                            <div class="phase">
+                                Phase 4 ▸
+                                <div class="submenu">
+                                    <a href="{% url 'subject_detail' 'medicine' %}">Medicine & Allied Subjects</a>
+                                    <a href="{% url 'subject_detail' 'surgery' %}">Surgery & Allied Subjects</a>
+                                    <a href="{% url 'subject_detail' 'obstetrics-gynaecology' %}">Obstetrics & Gynaecology</a>
+                                </div>
+                            </div>
+
+                        {% elif user.role == "dental_student" %}
+
+                            <div class="phase">
+                                Phase 1 ▸
+                                <div class="submenu">
+                                    <a href="{% url 'subject_detail' 'general-anatomy' %}">Anatomy (Paper - I)</a>
+                                    <a href="{% url 'subject_detail' 'dental-anatomy' %}">Dental Anatomy (Paper - II)</a>
+                                    <a href="{% url 'subject_detail' 'physiology-biochemistry' %}">Physiology & Biochemistry</a>
+                                    <a href="{% url 'subject_detail' 'science-of-dental-materials' %}">Science of Dental Materials</a>
+                                </div>
+                            </div>
+
+                            <div class="phase">
+                                Phase 2 ▸
+                                <div class="submenu">
+                                    <a href="{% url 'subject_detail' 'general-pharmacology-dental-therapeutics' %}">General Pharmacology & Dental Therapeutics</a>
+                                    <a href="{% url 'subject_detail' 'pathology-microbiology' %}">Pathology & Microbiology</a>
+                                </div>
+                            </div>
+
+                            <div class="phase">
+                                Phase 3 ▸
+                                <div class="submenu">
+                                    <a href="{% url 'subject_detail' 'medicine-bds' %}">Medicine</a>
+                                    <a href="{% url 'subject_detail' 'surgery-bds' %}">Surgery</a>
+                                    <a href="{% url 'subject_detail' 'periodontology-oral-pathology' %}">Periodontology & Oral Pathology</a>
+                                </div>
+                            </div>
+
+                            <div class="phase">
+                                Phase 4 ▸
+                                <div class="submenu">
+                                    <a href="{% url 'subject_detail' 'oral-maxillofacial-surgery' %}">Oral & Maxillofacial Surgery</a>
+                                    <a href="{% url 'subject_detail' 'conservative-dentistry-endodontics' %}">Conservative Dentistry & Endodontics</a>
+                                    <a href="{% url 'subject_detail' 'prosthodontics' %}">Prosthodontics</a>
+                                    <a href="{% url 'subject_detail' 'orthodontics-dentofacial-orthopedics' %}">Orthodontics & Dentofacial Orthopedics</a>
+                                    <a href="{% url 'subject_detail' 'pedodontics-dental-public-health' %}">Pedodontics & Dental Public Health</a>
+                                </div>
+                            </div>
+
+                        {% endif %}
+
                     </div>
                 </div>
 
-                <div class="phase">
-                    Phase 2 ▸
-                    <div class="submenu">
-                        <a href="{% url 'subject_detail' 'pharmacology-therapeutics' %}">Pharmacology & Therapeutics</a>
-                        <a href="{% url 'subject_detail' 'forensic-medicine-toxicology' %}">Forensic Medicine & Toxicology</a>
-                        <a href="{% url 'subject_detail' 'general-pathology-basic' %}">General Pathology (Basic)</a>
-                        <a href="{% url 'subject_detail' 'general-microbiology-basic' %}">General Microbiology (Basic)</a>
-                        <a href="{% url 'subject_detail' 'medicine-intro' %}">Medicine (Intro)</a>
-                        <a href="{% url 'subject_detail' 'surgery-intro' %}">Surgery (Intro)</a>
+                <!-- EXAM -->
+                <div class="nav-select">
+                    <a href="#">Exam</a>
+
+                    <div class="dropdown">
+
+                        <div class="dropdown-item">
+                            Item
+                            <div class="sub-dropdown">
+                                <a href="{% url 'phase_pdfs' 1 %}">Phase 1</a>
+                                <a href="{% url 'phase_pdfs' 2 %}">Phase 2</a>
+                                <a href="{% url 'phase_pdfs' 3 %}">Phase 3</a>
+                                <a href="{% url 'phase_pdfs' 4 %}">Phase 4</a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-item">
+                            Card
+                            <div class="sub-dropdown">
+                                <a href="{% url 'phase_pdfs' 1 %}">Phase 1</a>
+                                <a href="{% url 'phase_pdfs' 2 %}">Phase 2</a>
+                                <a href="{% url 'phase_pdfs' 3 %}">Phase 3</a>
+                                <a href="{% url 'phase_pdfs' 4 %}">Phase 4</a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-item">
+                            Term
+                            <div class="sub-dropdown">
+                                <a href="{% url 'phase_pdfs' 1 %}">Phase 1</a>
+                                <a href="{% url 'phase_pdfs' 2 %}">Phase 2</a>
+                                <a href="{% url 'phase_pdfs' 3 %}">Phase 3</a>
+                                <a href="{% url 'phase_pdfs' 4 %}">Phase 4</a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                <div class="phase">
-                    Phase 3 ▸
-                    <div class="submenu">
-                        <a href="{% url 'subject_detail' 'community-medicine-public-health' %}">Community Medicine & Public Health</a>
-                        <a href="{% url 'subject_detail' 'pathology' %}">Pathology</a>
-                        <a href="{% url 'subject_detail' 'microbiology' %}">Microbiology</a>
-                        <a href="{% url 'subject_detail' 'medicine-clinical' %}">Medicine (Clinical)</a>
-                        <a href="{% url 'subject_detail' 'surgery-clinical' %}">Surgery (Clinical)</a>
-                        <a href="{% url 'subject_detail' 'obstetrics-gynaecology-intro' %}">Obstetrics & Gynaecology (Intro)</a>
+                <!-- RESULT -->
+                <div class="nav-select">
+                    <a href="#">Result</a>
+
+                    <div class="dropdown">
+
+                        <div class="dropdown-item">
+                            Item
+                            <div class="sub-dropdown">
+                                <a href="{% url 'result_phase' 'item' 1 %}">Phase 1</a>
+                                <a href="{% url 'result_phase' 'item' 2 %}">Phase 2</a>
+                                <a href="{% url 'result_phase' 'item' 3 %}">Phase 3</a>
+                                <a href="{% url 'result_phase' 'item' 4 %}">Phase 4</a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-item">
+                            Card
+                            <div class="sub-dropdown">
+                                <a href="{% url 'result_phase' 'card' 1 %}">Phase 1</a>
+                                <a href="{% url 'result_phase' 'card' 2 %}">Phase 2</a>
+                                <a href="{% url 'result_phase' 'card' 3 %}">Phase 3</a>
+                                <a href="{% url 'result_phase' 'card' 4 %}">Phase 4</a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-item">
+                            Term
+                            <div class="sub-dropdown">
+                                <a href="{% url 'result_phase' 'term' 1 %}">Phase 1</a>
+                                <a href="{% url 'result_phase' 'term' 2 %}">Phase 2</a>
+                                <a href="{% url 'result_phase' 'term' 3 %}">Phase 3</a>
+                                <a href="{% url 'result_phase' 'term' 4 %}">Phase 4</a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                <div class="phase">
-                    Phase 4 ▸
-                    <div class="submenu">
-                        <a href="{% url 'subject_detail' 'medicine' %}">Medicine & Allied Subjects</a>
-                        <a href="{% url 'subject_detail' 'surgery' %}">Surgery & Allied Subjects</a>
-                        <a href="{% url 'subject_detail' 'obstetrics-gynaecology' %}">Obstetrics & Gynaecology</a>
-                    </div>
-                </div>
+                <a href="#">Payment</a>
+                <a href="{% url 'student_library' %}">Library</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-                {% elif user.role == "dental_student" %}
+            {% elif user.role == "faculty" %}
 
-                <div class="phase">
-                    Phase 1 ▸
-                    <div class="submenu">
-                        <a href="{% url 'subject_detail' 'general-anatomy' %}">Anatomy (Paper - I)</a>
-                        <a href="{% url 'subject_detail' 'dental-anatomy' %}">Dental Anatomy (Paper - II)</a>
-                        <a href="{% url 'subject_detail' 'physiology-biochemistry' %}">Physiology & Biochemistry</a>
-                        <a href="{% url 'subject_detail' 'science-of-dental-materials' %}">Science of Dental Materials</a>
-                    </div>
-                </div>
+                <a href="{% url 'faculty_dashboard' %}">Home</a>
+                <a href="#">Class Schedule</a>
+                <a href="#">Upload Marks</a>
+                <a href="#">Edit Marks</a>
+                <a href="#">Exam Results</a>
+                <a href="#">Attendance</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-                <div class="phase">
-                    Phase 2 ▸
-                    <div class="submenu">
-                        <a href="{% url 'subject_detail' 'general-pharmacology-dental-therapeutics' %}">General Pharmacology & Dental Therapeutics</a>
-                        <a href="{% url 'subject_detail' 'pathology-microbiology' %}">Pathology & Microbiology</a>
-                    </div>
-                </div>
+            {% elif user.role == "intern" %}
 
-                <div class="phase">
-                    Phase 3 ▸
-                    <div class="submenu">
-                        <a href="{% url 'subject_detail' 'medicine-bds' %}">Medicine</a>
-                        <a href="{% url 'subject_detail' 'surgery-bds' %}">Surgery</a>
-                        <a href="{% url 'subject_detail' 'periodontology-oral-pathology' %}">Periodontology & Oral Pathology</a>
-                    </div>
-                </div>
+                <a href="{% url 'intern_dashboard' %}">Home</a>
+                <a href="#">Duty Schedule</a>
+                <a href="#">Clinical Case</a>
+                <a href="#">Payment</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-                <div class="phase">
-                    Phase 4 ▸
-                    <div class="submenu">
-                        <a href="{% url 'subject_detail' 'oral-maxillofacial-surgery' %}">Oral & Maxillofacial Surgery</a>
-                        <a href="{% url 'subject_detail' 'conservative-dentistry-endodontics' %}">Conservative Dentistry & Endodontics</a>
-                        <a href="{% url 'subject_detail' 'prosthodontics' %}">Prosthodontics</a>
-                        <a href="{% url 'subject_detail' 'orthodontics-dentofacial-orthopedics' %}">Orthodontics & Dentofacial Orthopedics</a>
-                        <a href="{% url 'subject_detail' 'pedodontics-dental-public-health' %}">Pedodontics & Dental Public Health</a>
-                    </div>
-                </div>
+            {% elif user.role == "doctor" %}
 
-                {% endif %}
-            </div>
-        </div>
+                <a href="{% url 'doctor_dashboard' %}">Home</a>
+                <a href="{% url 'doctor_schedule' %}">Schedule</a>
+                <a href="#">Case Review</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-        <!-- EXAM -->
-        <div class="nav-select">
-            <a href="{% url 'exam' %}">Exam</a>
-            <div class="select-options">
-                <div>Item</div>
-                <div>Card</div>
-                <div>Term</div>
-            </div>
-        </div>
+            {% elif user.role == "ward" %}
 
-        <!-- RESULT -->
-        <div class="nav-select">
-            <a href="{% url 'result' %}">Result</a>
-            <div class="select-options">
-                <div>Item Result</div>
-                <div>Card Result</div>
-                <div>Term Result</div>
-            </div>
-        </div>
+                <a href="{% url 'ward_dashboard' %}">Home</a>
+                <a href="#">Attendance</a>
+                <a href="#">Duty List</a>
+                <a href="#">Reports</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-        <a href="#">Payment</a>
-        <a href="{% url 'student_library' %}">Library</a>
-        <a href="#">Notifications</a>
+            {% elif user.role == "library" %}
 
-        <a href="{% url 'profile' %}">Profile</a>
-        <a href="{% url 'logout' %}">Logout</a>
+                <a href="{% url 'library_dashboard' %}">Home</a>
+                <a href="{% url 'issue_book' %}">Book Issue</a>
+                <a href="{% url 'return_book' %}">Return</a>
+                <a href="{% url 'records' %}">Records</a>
+                <a href="{% url 'history' %}">History</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
+            {% elif user.role == "admin" %}
 
-        <!-- ================= FACULTY ================= -->
-        {% elif user.role == "faculty" %}
+                <a href="{% url 'admin_dashboard' %}">Home</a>
+                <a href="#">Student Records</a>
+                <a href="#">Payments</a>
+                <a href="#">Academic</a>
+                <a href="#">Eligibility</a>
+                <a href="#">Reports</a>
+                <a href="#">Notifications</a>
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
 
-        <a href="{% url 'faculty_dashboard' %}">Home</a>
-        <a href="#">Class Schedule</a>
-        <a href="#">Upload Marks</a>
-        <a href="#">Edit Marks</a>
-        <a href="#">Exam Results</a>
-        <a href="#">Attendance</a>
-        <a href="#">Notifications</a>
-        <a href="{% url 'profile' %}">Profile</a>
-        <a href="{% url 'logout' %}">Logout</a>
-
-        <!-- ================= INTERN ================= -->
-        {% elif user.role == "intern" %}
-
-        <a href="{% url 'intern_dashboard' %}">Home</a>
-        <a href="#">Duty Schedule</a>
-        <a href="#">Clinical Case</a>
-        <a href="#">Payment</a>
-        <a href="#">Notifications</a>
-        <a href="{% url 'profile' %}">Profile</a>
-        <a href="{% url 'logout' %}">Logout</a>
-
-        <!-- ================= DOCTOR ================= -->
-        {% elif user.role == "doctor" %}
-
-        <a href="{% url 'doctor_dashboard' %}">Home</a>
-        <a href="{% url 'doctor_schedule' %}">Schedule</a>
-        <a href="#">Case Review</a>
-        <a href="#">Notifications</a>
-        <a href="{% url 'profile' %}">Profile</a>
-        <a href="{% url 'logout' %}">Logout</a>
-
-        <!-- ================= WARD ================= -->
-        {% elif user.role == "ward" %}
-
-        <a href="{% url 'ward_dashboard' %}">Home</a>
-        <a href="#">Attendance</a>
-        <a href="#">Duty List</a>
-        <a href="#">Reports</a>
-        <a href="#">Notifications</a>
-        <a href="{% url 'profile' %}">Profile</a>
-        <a href="{% url 'logout' %}">Logout</a>
-
-        <!-- ================= LIBRARY ================= -->
-        {% elif user.role == "library" %}
-
-        <a href="{% url 'library_dashboard' %}">Home</a>
-        <a href="{% url 'issue_book' %}">Book Issue</a>
-        <a href="{% url 'return_book' %}">Return</a>
-        <a href="{% url 'records' %}">Records</a>
-        <a href="{% url 'history' %}">History</a>
-        <a href="#">Notifications</a>
-        <a href="{% url 'profile' %}">Profile</a>
-        <a href="{% url 'logout' %}">Logout</a>
-
-        <!-- ================= ADMIN ================= -->
-        {% elif user.role == "admin" %}
-
-        <a href="{% url 'admin_dashboard' %}">Home</a>
-        <a href="#">Student Records</a>
-        <a href="#">Payments</a>
-        <a href="#">Academic</a>
-        <a href="#">Eligibility</a>
-        <a href="#">Reports</a>
-        <a href="#">Notifications</a>
-        <a href="{% url 'profile' %}">Profile</a>
-        <a href="{% url 'logout' %}">Logout</a>
-
-        {% endif %}
+            {% endif %}
 
         {% else %}
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'signup' %}">Signup</a>
+
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'signup' %}">Signup</a>
+
         {% endif %}
 
     </nav>

@@ -38,6 +38,10 @@ urlpatterns = [
     path("subject/<slug:slug>/", views.subject_detail, name="subject_detail"),
     path("exam/", views.exam_page, name="exam"),
     path("result/", views.result_page, name="result"),
+    path('pdfs/<int:phase>/', views.phase_pdfs, name='phase_pdfs'),
+
+    # ================= EXAM RESULTS BY PHASE =================
+    path('result/<str:exam_type>/<int:phase>/', views.result_by_phase, name='result_phase'),
 
     # ================= DOCTOR SCHEDULE =================
     path("doctor/schedule/", views.doctor_schedule, name="doctor_schedule"),
