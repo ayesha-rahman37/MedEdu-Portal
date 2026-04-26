@@ -1154,3 +1154,20 @@ h2 {
     border-radius: 15px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
+
+/* ================== notice title =================== */
+.form-box {
+    width: 400px;
+    margin: 40px auto;
+    background: #f8ebe7;
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.form-box input,
+.form-box select,
+.form-box textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+}

@@ -46,6 +46,7 @@ urlpatterns = [
 
     # ================= EXAM NOTICES =================
     path('exam/<str:exam_type>/<int:phase>/', views.exam_notice, name='exam_notice'),
+    path('admin/add-notice/', views.add_exam_notice, name='add_notice'),
 
     # ================= DOCTOR SCHEDULE =================
     path("doctor/schedule/", views.doctor_schedule, name="doctor_schedule"),

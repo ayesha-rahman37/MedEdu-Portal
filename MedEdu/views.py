@@ -751,19 +751,40 @@ def exam_notice(request, exam_type, phase):
 
     if user.role == "medical_student":
         course = "MBBS"
-    elif user.role == "dental_student":
-        course = "BDS"
     else:
-        course = "MBBS"
+        course = "BDS"
 
     notices = ExamNotice.objects.filter(
         exam_type=exam_type,
         phase=phase,
         course=course
-    ).order_by('-id')
+    )
 
-    return render(request, 'exam_notice.html', {
-        'notices': notices,
-        'exam_type': exam_type,
-        'phase': phase
-    })
+    return render(request, 'exam_notice.html', {'notices': notices})
+
+# ================= ADD EXAM NOTICE (ADMIN) =================
+def add_exam_notice(request):
+
+    if request.user.role != "admin":
+        return redirect('home')
+
+    if request.method == "POST":
+        exam_type = request.POST.get('exam_type')
+        course = request.POST.get('course')
+        phase = request.POST.get('phase')
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        date = request.POST.get('date')
+
+        ExamNotice.objects.create(
+            exam_type=exam_type,
+            course=course,
+            phase=phase,
+            title=title,
+            description=description,
+            date=date
+        )
+
+        return redirect('add_notice')
+
+    return render(request, 'add_notice.html')

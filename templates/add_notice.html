@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="form-box">
+
+    <h2>Add Exam Notice</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Exam Type</label>
+        <select name="exam_type">
+            <option value="card">Card</option>
+            <option value="term">Term</option>
+        </select>
+
+        <label>Course</label>
+        <select name="course">
+            <option value="MBBS">MBBS</option>
+            <option value="BDS">BDS</option>
+        </select>
+
+        <label>Phase</label>
+        <select name="phase">
+            <option value="1">Phase 1</option>
+            <option value="2">Phase 2</option>
+            <option value="3">Phase 3</option>
+            <option value="4">Phase 4</option>
+        </select>
+
+        <label>Title</label>
+        <input type="text" name="title">
+
+        <label>Description</label>
+        <textarea name="description"></textarea>
+
+        <label>Date</label>
+        <input type="date" name="date">
+
+        <button type="submit">Add Notice</button>
+
+    </form>
+
+</div>
+
+{% endblock %}
