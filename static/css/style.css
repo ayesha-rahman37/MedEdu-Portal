@@ -1141,3 +1141,16 @@ h2 {
     text-align: center;
     color: #888;
 }
+
+/* ================= EXAM NOTICE PAGE ================= */
+.notice-container {
+    padding: 30px;
+}
+
+.notice-card {
+    background: #f8ebe7;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}

@@ -8,14 +8,14 @@ BASE_URL = "http://127.0.0.1:8000"
 
 # ===== USERS (FIXED) =====
 USERS = [
-    {"username": "DR-6287", "password": "NiLa40", "role": "non-student"},
-    {"username": "LB-5543", "password": "ShIhAb40", "role": "non-student"},
-    {"username": "I-1006", "password": "PrInCe40", "role": "non-student"},
-    {"username": "F-1008", "password": "TaMaNnA40", "role": "non-student"},
-    {"username": "WA-2384", "password": "LiThI40", "role": "non-student"},
-    {"username": "A-1010", "password": "MaHa40", "role": "non-student"},
-    {"username": "DS-1012", "password": "AzMiNe40", "role": "student"},
-    {"username": "MS-1013", "password": "JaFrIn40", "role": "student"},
+    {"username": "D-1005", "password": "mededu40", "role": "non-student"},
+    {"username": "L-1003", "password": "mededu40", "role": "non-student"},
+    {"username": "I-1006", "password": "mededu40", "role": "non-student"},
+    {"username": "F-1008", "password": "mededu40", "role": "non-student"},
+    {"username": "W-1007", "password": "mededu40", "role": "non-student"},
+    {"username": "A-1009", "password": "mededu40", "role": "non-student"},
+    {"username": "DS-1004", "password": "mededu40", "role": "student"},
+    {"username": "MS-1002", "password": "mededu40", "role": "student"},
 ]
 
 # ================= DRIVER =================

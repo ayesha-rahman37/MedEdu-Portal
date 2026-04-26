@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue
+from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
@@ -743,3 +743,27 @@ def item_pdf_list(request, phase):
     }
 
     return render(request, 'pdf_list.html', context)
+
+# ================= EXAM NOTICE =================
+def exam_notice(request, exam_type, phase):
+
+    user = request.user
+
+    if user.role == "medical_student":
+        course = "MBBS"
+    elif user.role == "dental_student":
+        course = "BDS"
+    else:
+        course = "MBBS"
+
+    notices = ExamNotice.objects.filter(
+        exam_type=exam_type,
+        phase=phase,
+        course=course
+    ).order_by('-id')
+
+    return render(request, 'exam_notice.html', {
+        'notices': notices,
+        'exam_type': exam_type,
+        'phase': phase
+    })

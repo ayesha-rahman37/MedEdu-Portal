@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="notice-container">
+
+    <h2>{{ exam_type|title }} Exam - Phase {{ phase }}</h2>
+
+    {% for n in notices %}
+    <div class="notice-card">
+
+        <h3>{{ n.title }}</h3>
+
+        <p>{{ n.description }}</p>
+
+        {% if n.date %}
+            <p><strong>Date:</strong> {{ n.date }}</p>
+        {% endif %}
+
+    </div>
+    {% empty %}
+        <p>No notice available</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

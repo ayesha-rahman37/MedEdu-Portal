@@ -44,6 +44,8 @@ urlpatterns = [
     # ================= EXAM RESULTS BY PHASE =================
     path('result/<str:exam_type>/<int:phase>/', views.result_by_phase, name='result_phase'),
 
+    # ================= EXAM NOTICES =================
+    path('exam/<str:exam_type>/<int:phase>/', views.exam_notice, name='exam_notice'),
 
     # ================= DOCTOR SCHEDULE =================
     path("doctor/schedule/", views.doctor_schedule, name="doctor_schedule"),

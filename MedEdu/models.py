@@ -168,3 +168,28 @@ class Issue(models.Model):
     
     def __str__(self):
         return f"{self.student} - {self.book}"
+    
+# ================= EXAM NOTICE =================
+class ExamNotice(models.Model):
+
+    EXAM_TYPE = (
+        ("card", "Card"),
+        ("term", "Term"),
+    )
+
+    COURSE_TYPE = (
+        ("MBBS", "MBBS"),
+        ("BDS", "BDS"),
+    )
+
+    exam_type = models.CharField(max_length=10, choices=EXAM_TYPE)
+    course = models.CharField(max_length=10, choices=COURSE_TYPE)
+    phase = models.IntegerField()
+
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+
+    date = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.exam_type} - Phase {self.phase}"
