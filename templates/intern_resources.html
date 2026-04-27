@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="intern-container">
+
+    {% for item in resources %}
+        <a href="{{ item.file }}" target="_blank" class="intern-card">
+            <div class="icon">📄</div>
+            <div class="title">{{ item.name }}</div>
+        </a>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

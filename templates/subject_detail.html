@@ -4,12 +4,12 @@
 
 <div class="pdf-wrapper">
 
-    <!-- 🔥 SUBJECT TITLE -->
+    <!-- SUBJECT TITLE -->
     <h2 class="pdf-title">
         {{ subject.name }} Syllabus
     </h2>
 
-    <!-- 🔥 EXTRA MATERIALS -->
+    <!-- EXTRA MATERIALS -->
     {% if extra_pdfs %}
     <div class="extra-pdf-list">
         <h3>Extra Materials</h3>
@@ -22,20 +22,32 @@
     </div>
     {% endif %}
 
-    <!-- 🔥 ADDITIONAL RESOURCES (IT, Internship etc.) -->
+    <!-- ADDITIONAL RESOURCES -->
     {% if additional_resources %}
     <div class="extra-pdf-list">
         <h3>Additional Resources</h3>
 
         {% for item in additional_resources %}
-            <a href="{{ item.file }}" target="_blank" class="pdf-btn">
-                {{ item.name }}
-            </a>
+
+            {% if item.name == "Internship" or item.name == "Prescription" %}
+                
+                {% if request.user.role == "intern" %}
+                    <a href="{{ item.file }}" target="_blank" class="pdf-btn">
+                        {{ item.name }}
+                    </a>
+                {% endif %}
+
+            {% else %}
+                <a href="{{ item.file }}" target="_blank" class="pdf-btn">
+                    {{ item.name }}
+                </a>
+            {% endif %}
+
         {% endfor %}
     </div>
     {% endif %}
 
-    <!-- 🔥 MAIN PDF -->
+    <!-- MAIN PDF -->
     {% if pdf_path %}
         <div class="pdf-container">
             <iframe src="{{ pdf_path }}" class="pdf-frame"></iframe>

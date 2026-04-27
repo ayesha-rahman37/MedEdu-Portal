@@ -297,7 +297,8 @@ def subject_list(request):
 
 @login_required
 def subject_detail(request, slug):
-    # 🔥 ONLY STUDENTS CAN ACCESS
+
+    # only students allowed
     if request.user.role not in ["medical_student", "dental_student"]:
         return redirect("dashboard")
 
@@ -305,42 +306,39 @@ def subject_detail(request, slug):
     topics = Topic.objects.filter(subject=subject)
 
     user = request.user
-    course = None
-    # 🔥 course detect (IMPORTANT - uppercase folder match)
+
+    # course detect
     if user.role == "medical_student":
         course = "MBBS"
     elif user.role == "dental_student":
         course = "BDS"
+    else:
+        course = "MBBS"
 
-    # 🔥 EXACT PDF PATH (your real files)
+    # PDF map (unchanged)
     pdf_map = {
 
-        # medical subjects
-        # phase 1
+        # MBBS (phase 1)
         "anatomy": f"/static/pdfs/{course}/Phase 1/Anatomy.pdf",
         "physiology": f"/static/pdfs/{course}/Phase 1/Physiology.pdf",
         "biochemistry": f"/static/pdfs/{course}/Phase 1/Biochemistry.pdf",
 
-        # phase 2
+        # MBBS (phase 2)
         "pharmacology-therapeutics": f"/static/pdfs/{course}/Phase 2/Pharmacology & Therapeutics.pdf",
         "forensic-medicine-toxicology": f"/static/pdfs/{course}/Phase 2/Forensic Medicine & Toxicology.pdf",
+
+        # MBBS (phase 3)
         "general-pathology-basic": f"/static/pdfs/{course}/Phase 3/Pathology.pdf",
         "general-microbiology-basic": f"/static/pdfs/{course}/Phase 3/Microbiology.pdf",
+        "community-medicine-public-health": f"/static/pdfs/{course}/Phase 3/Community Medicine & Public Health.pdf",
+
+        # MBBS (phase 4)
         "medicine-intro": f"/static/pdfs/{course}/Phase 4/Medicine.pdf",
         "surgery-intro": f"/static/pdfs/{course}/Phase 4/Surgery & Allied Subjects.pdf",
-
-        # phase 3
-        "community-medicine-public-health": f"/static/pdfs/{course}/Phase 3/Community Medicine & Public Health.pdf",
-        "pathology": f"/static/pdfs/{course}/Phase 3/Pathology.pdf",
-        "microbiology": f"/static/pdfs/{course}/Phase 3/Microbiology.pdf",
-        "medicine-clinical": f"/static/pdfs/{course}/Phase 4/Medicine.pdf",
-        "surgery-clinical": f"/static/pdfs/{course}/Phase 4/Surgery & Allied Subjects.pdf",
-        "obstetrics-gynaecology-intro": f"/static/pdfs/{course}/Phase 4/Obstetrics & Gynaecology.pdf",
-
-        # phase 4
         "medicine": f"/static/pdfs/{course}/Phase 4/Medicine.pdf",
         "surgery": f"/static/pdfs/{course}/Phase 4/Surgery & Allied Subjects.pdf",
         "obstetrics-gynaecology": f"/static/pdfs/{course}/Phase 4/Obstetrics & Gynaecology.pdf",
+
         "extras": [
             f"/static/pdfs/{course}/Phase 4/Ophthalmology.pdf",
             f"/static/pdfs/{course}/Phase 4/Otorhinolaryngology & Head-Neck Surgery.pdf",
@@ -349,105 +347,63 @@ def subject_detail(request, slug):
             f"/static/pdfs/{course}/Phase 4/Skin & VD.pdf",
         ],
 
-        # dental subjects
-        # phase 1
+        # BDS (phase 1)
         "general-anatomy": f"/static/pdfs/{course}/Phase 1/Anatomy (Paper - I).pdf",
         "dental-anatomy": f"/static/pdfs/{course}/Phase 1/Dental Anatomy (Paper - II).pdf",
         "physiology-biochemistry": f"/static/pdfs/{course}/Phase 1/Physiology & Biochemistry.pdf",
         "science-of-dental-materials": f"/static/pdfs/{course}/Phase 1/Science of Dental Materials.pdf",
 
-        # phase 2
+        # BDS (phase 2)
         "general-pharmacology-dental-therapeutics": f"/static/pdfs/{course}/Phase 2/General Pharmacology & Dental Therapeutics.pdf",
         "pathology-microbiology": f"/static/pdfs/{course}/Phase 2/Pathology & Microbiology.pdf",
 
-        # phase 3
+        # BDS (phase 3)
         "medicine-bds": f"/static/pdfs/{course}/Phase 3/Medicine.pdf",
         "surgery-bds": f"/static/pdfs/{course}/Phase 3/Surgery.pdf",
         "periodontology-oral-pathology": f"/static/pdfs/{course}/Phase 3/Periodontology & Oral Pathology.pdf",
 
-        # phase 4
+        # BDS (phase 4)
         "oral-maxillofacial-surgery": f"/static/pdfs/{course}/Phase 4/Oral & Maxillofacial Surgery.pdf",
         "conservative-dentistry-endodontics": f"/static/pdfs/{course}/Phase 4/Conservative Dentistry & Endodontics.pdf",
         "prosthodontics": f"/static/pdfs/{course}/Phase 4/Prosthodontics.pdf",
         "orthodontics-dentofacial-orthopedics": f"/static/pdfs/{course}/Phase 4/Orthodontics & Dentofacial Orthopedics.pdf",
         "pedodontics-dental-public-health": f"/static/pdfs/{course}/Phase 4/Pedodontics & Dental Public Health.pdf",
-
-        # # ===== EXTRA FILE =====
-        # "internship": f"/static/pdfs/{course}/Internship.pdf",
-        # "extras": [
-        #     f"/static/pdfs/{course}/Phase 1/Anatomy Card.pdf",
-        #     f"/static/pdfs/{course}/Internship.pdf",
-        # ]
-        
     }
 
-    
-
+    # main pdf
     data = pdf_map.get(slug)
+    pdf_path = data if isinstance(data, str) else None
 
-    if isinstance(data, str):
-        pdf_path = data
-    
-    elif isinstance(data, dict):
-        pdf_path = data.get("main")
-    
-    else:
-        pdf_path = None
-    
+    # extra pdf (phase 4 subjects)
     extra_pdfs = []
-
-    phase4_subjects = [
-        "medicine",
-        "surgery",
-        "obstetrics-gynaecology",
-    ]
-
-    if slug in phase4_subjects:
+    if slug in ["medicine", "surgery", "obstetrics-gynaecology"]:
         extra_pdfs = pdf_map.get("extras", [])
-    
-    # 🔥 Additional Resources (IT + Internship)
 
-    if course == "MBBS":
-        additional_resources = [
-            {
-                "name": "IT (Phase 1)",
-                "file": f"/static/pdfs/{course}/Phase 1/IT Phase 1.pdf"
-            },
-            {
-                "name": "IT (Phase 2)",
-                "file": f"/static/pdfs/{course}/Phase 2/IT Phase 2.pdf"
-            },
-            {
-                "name": "IT (Phase 3)",
-                "file": f"/static/pdfs/{course}/Phase 3/IT Phase 3.pdf"
-            },
-            {
-                "name": "IT (Phase 4)",
-                "file": f"/static/pdfs/{course}/Phase 4/IT Phase 4.pdf"
-            },
-            {
-                "name": "Internship",
-                "file": f"/static/pdfs/{course}/Internship.pdf"
-            },
-            {
-                "name": "Prescription",
-                "file": f"/static/pdfs/{course}/Prescription.pdf"
-            }
-        ]
-    
+    # =========================
+    # 🔥 FIXED ADDITIONAL RESOURCES
+    # =========================
 
-    elif course == "BDS":
-        additional_resources = [
-            {
-                "name": "IT (Phase 1)",
-                "file": f"/static/pdfs/{course}/Phase 1/IT Phase 1.pdf"
-            },
-            {
-                "name": "Prescription",
-                "file": f"/static/pdfs/{course}/Prescription.pdf"
-            }
-        ]
-    
+    additional_resources = []
+
+    # only current phase IT
+    additional_resources.append({
+        "name": f"IT (Phase {subject.phase})",
+        "file": f"/static/pdfs/{course}/Phase {subject.phase}/IT Phase {subject.phase}.pdf"
+    })
+
+    # internship only phase 4
+    if subject.phase == 4:
+        additional_resources.append({
+            "name": "Internship",
+            "file": f"/static/pdfs/{course}/Internship.pdf"
+        })
+
+    # prescription only intern role
+    if hasattr(request.user, "role") and request.user.role == "intern":
+        additional_resources.append({
+            "name": "Prescription",
+            "file": f"/static/pdfs/{course}/Prescription.pdf"
+        })
 
     return render(request, "subject_detail.html", {
         "subject": subject,
@@ -458,7 +414,7 @@ def subject_detail(request, slug):
     })
 
 
-
+# ================= EXAM PAGE =================
 @login_required
 def exam_page(request):
 
@@ -658,7 +614,7 @@ def student_library(request):
     })
 
 # ================= PDF LISTING =================
-
+@login_required
 def phase_pdfs(request, phase):
     import os
 
@@ -676,6 +632,7 @@ def phase_pdfs(request, phase):
     })
 
 # ================= RESULT BY PHASE =================
+@login_required
 def result_by_phase(request, exam_type, phase):
 
     # logged in user
@@ -698,11 +655,38 @@ def result_by_phase(request, exam_type, phase):
 
     return render(request, 'result/result_list.html', context)
 
-# =====================PDF LISTING (MANUAL CONTROL)=============
 
+#================= INTERN RESOURCES =================
+@login_required
+def intern_resources(request):
+
+    if request.user.role != "intern":
+        return redirect("dashboard")
+
+    resources = [
+        {
+            "name": "Internship",
+            "file": "/static/pdfs/MBBS/Internship.pdf"
+        },
+        {
+            "name": "Prescription",
+            "file": "/static/pdfs/MBBS/Prescription.pdf"
+        }
+    ]
+
+    return render(request, "intern_resources.html", {
+        "resources": resources
+    })
+
+
+@login_required
 def item_pdf_list(request, phase):
 
     user = request.user
+
+    # Safety guard (prevents crash)
+    if not hasattr(user, "role"):
+        return redirect('login')
 
     # course detect
     if user.role == "medical_student":
@@ -712,7 +696,7 @@ def item_pdf_list(request, phase):
     else:
         course = "MBBS"
 
-    # 🔥 MANUAL CONTROL (MAIN PART)
+    # MANUAL CONTROL (UNCHANGED)
     pdf_data = {
 
         "MBBS": {
@@ -734,7 +718,7 @@ def item_pdf_list(request, phase):
 
     }
 
-    files = pdf_data.get(course, {}).get(phase, [])
+    files = pdf_data.get(course, {}).get(int(phase), [])
 
     context = {
         'files': files,
@@ -745,6 +729,7 @@ def item_pdf_list(request, phase):
     return render(request, 'pdf_list.html', context)
 
 # ================= EXAM NOTICE =================
+@login_required
 def exam_notice(request, exam_type, phase):
 
     user = request.user
@@ -763,6 +748,7 @@ def exam_notice(request, exam_type, phase):
     return render(request, 'exam_notice.html', {'notices': notices})
 
 # ================= ADD EXAM NOTICE (ADMIN) =================
+@login_required
 def add_exam_notice(request):
 
     if request.user.role != "admin":

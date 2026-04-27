@@ -59,4 +59,7 @@ urlpatterns = [
     path('library/renew/<int:issue_id>/', views.renew_book, name='renew_book'),
     path('library/return-action/<int:issue_id>/', views.return_book_action, name='return_book_action'),
     path('library/my-books/', views.student_library, name='student_library'),
+
+    # ================= INTERN URLS =================
+    path('intern/resources/', views.intern_resources, name='intern_resources'),
 ]
