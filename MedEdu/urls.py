@@ -62,4 +62,7 @@ urlpatterns = [
 
     # ================= INTERN URLS =================
     path('intern/resources/', views.intern_resources, name='intern_resources'),
+    
+    # ================= PAYMENT URLS =================
+    path('payment/', views.payment_page, name='payment'),
 ]

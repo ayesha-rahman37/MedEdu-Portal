@@ -193,3 +193,34 @@ class ExamNotice(models.Model):
 
     def __str__(self):
         return f"{self.exam_type} - Phase {self.phase}"
+    
+    
+# ================= PAYMENT =================
+class Payment(models.Model):
+
+    PAYMENT_METHODS = (
+        ('cash', 'Cash'),
+        ('bkash', 'bKash'),
+        ('nagad', 'Nagad'),
+        ('bank', 'Bank'),
+    )
+
+    PURPOSE_CHOICES = (
+        ('item', 'Item Exam'),
+        ('card', 'Card Exam'),
+        ('term', 'Term Exam'),
+        ('fee', 'General Fee'),
+    )
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    amount = models.IntegerField()
+    method = models.CharField(max_length=10, choices=PAYMENT_METHODS)
+    purpose = models.CharField(max_length=10, choices=PURPOSE_CHOICES)
+
+    date = models.DateField(auto_now_add=True)
+
+    note = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.amount} ({self.method})"
