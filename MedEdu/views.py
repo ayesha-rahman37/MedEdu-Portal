@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice
+from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
@@ -774,3 +774,34 @@ def add_exam_notice(request):
         return redirect('add_notice')
 
     return render(request, 'add_notice.html')
+
+
+# ================= PAYMENT PAGE =================
+@login_required
+def payment_page(request):
+    user = request.user
+
+    if request.method == "POST":
+        amount = request.POST.get("amount")
+        method = request.POST.get("method")
+        purpose = request.POST.get("purpose")
+        note = request.POST.get("note")
+
+        # basic validation
+        if amount and method and purpose:
+            Payment.objects.create(
+                user=user,
+                amount=int(amount),
+                method=method,
+                purpose=purpose,
+                note=note
+            )
+        return redirect('payment')
+
+    payments = Payment.objects.filter(user=user).order_by('-date')
+    total = sum(p.amount for p in payments)
+
+    return render(request, "payment.html", {
+        "payments": payments,
+        "total": total
+    })

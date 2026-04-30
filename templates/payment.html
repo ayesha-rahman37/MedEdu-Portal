@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="payment-container">
+
+    <!-- FORM -->
+    <div class="payment-form">
+        <form method="POST">
+            {% csrf_token %}
+
+            <input type="number" name="amount" placeholder="Amount (Tk)" required>
+
+            <select name="method" required>
+                <option value="">Select Method</option>
+                <option value="cash">Cash</option>
+                <option value="bkash">bKash</option>
+                <option value="nagad">Nagad</option>
+                <option value="bank">Bank</option>
+            </select>
+
+            <select name="purpose" required>
+                <option value="">Select Purpose</option>
+                <option value="item">Item</option>
+                <option value="card">Card</option>
+                <option value="term">Term</option>
+                <option value="fee">General Fee</option>
+            </select>
+
+            <input type="text" name="note" placeholder="Note (optional)">
+
+            <button type="submit">Submit Payment</button>
+        </form>
+    </div>
+
+    <!-- TOTAL -->
+    <div class="payment-total">
+        <h3>Total Paid: {{ total }} Tk</h3>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="payment-history">
+        {% for p in payments %}
+            <div class="payment-card">
+                <div><b>{{ p.amount }} Tk</b></div>
+                <div>{{ p.get_method_display }}</div>
+                <div>{{ p.get_purpose_display }}</div>
+                <div>{{ p.date }}</div>
+                {% if p.note %}
+                    <div>{{ p.note }}</div>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>No payment yet</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
