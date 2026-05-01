@@ -114,10 +114,6 @@ class Result(models.Model):
     status = models.CharField(max_length=10, choices=STATUS)
     date = models.DateField(null=True, blank=True)
 
-    def __str__(self):
-        return f"{self.user} - {self.topic}"
-
-
 # ================= DOCTOR SCHEDULE =================
 class DoctorSchedule(models.Model):
 

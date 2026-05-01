@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="marks-container">
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <select name="student" required>
+            <option value="">Select Student</option>
+            {% for s in students %}
+                <option value="{{ s.id }}">{{ s.mededu_id }} - {{ s.username }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="topic" required>
+            <option value="">Select Topic</option>
+            {% for t in topics %}
+                <option value="{{ t.id }}">{{ t.title }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="number" name="marks" placeholder="Marks" required>
+
+        <button type="submit">Upload</button>
+
+    </form>
+
+</div>
+
+{% endblock %}

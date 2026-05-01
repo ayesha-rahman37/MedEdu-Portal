@@ -1474,3 +1474,36 @@ h2 {
     width: 90%;
     margin: 40px auto;
 }
+
+
+/* ===== Mark Upload ===== */
+
+.marks-container {
+    width: 40%;
+    margin: 40px auto;
+    background: #f8ebe7;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.marks-container select,
+.marks-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.marks-container button {
+    width: 100%;
+    padding: 10px;
+    background: #e6bdb4;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.marks-container button:hover {
+    background: #d9a79c;
+}
