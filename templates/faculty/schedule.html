@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="schedule-container">
+
+    <table class="modern-table">
+
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Year</th>
+                <th>Subject</th>
+                <th>Room</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for s in schedules %}
+            <tr>
+                <td>{{ s.date }}</td>
+                <td>{{ s.year }}</td>
+                <td>{{ s.subject }}</td>
+                <td>{{ s.room }}</td>
+                <td>{{ s.start_time }} - {{ s.end_time }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No class scheduled</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

@@ -71,4 +71,7 @@ urlpatterns = [
     path('admin/eligibility/', views.eligibility_view, name='eligibility'),
     path('student/status/', views.student_status_view, name='student_status'),
     
+    # ================= FACULTY SCHEDULE =================
+    path('faculty/schedule/', views.faculty_schedule, name='faculty_schedule'),
+    
 ]
