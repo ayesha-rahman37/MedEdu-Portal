@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="edit-marks-container">
+
+    <table>
+        <tr>
+            <th>Student</th>
+            <th>Topic</th>
+            <th>Marks</th>
+            <th>Status</th>
+            <th>Update</th>
+        </tr>
+
+        {% for r in results %}
+        <tr>
+            <form method="POST">
+                {% csrf_token %}
+                <td>{{ r.user.mededu_id }}</td>
+                <td>{{ r.topic.title }}</td>
+
+                <td>
+                    <input type="number" name="marks" value="{{ r.marks }}">
+                </td>
+
+                <td>{{ r.status }}</td>
+
+                <td>
+                    <input type="hidden" name="result_id" value="{{ r.id }}">
+                    <button type="submit">Save</button>
+                </td>
+            </form>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}

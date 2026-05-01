@@ -74,4 +74,5 @@ urlpatterns = [
     # ================= FACULTY SCHEDULE =================
     path('faculty/schedule/', views.faculty_schedule, name='faculty_schedule'),
     path("faculty/upload-marks/", views.upload_marks, name="upload_marks"),
+    path("faculty/edit-marks/", views.edit_marks, name="edit_marks"),
 ]

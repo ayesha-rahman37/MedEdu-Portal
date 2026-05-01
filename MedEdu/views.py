@@ -942,3 +942,34 @@ def upload_marks(request):
         "students": students,
         "topics": topics
     })
+
+
+# ================= EDIT MARKS =================
+@login_required
+def edit_marks(request):
+
+    if request.user.role != "faculty":
+        return redirect("dashboard")
+
+    results = Result.objects.select_related("user", "topic").all()
+
+    if request.method == "POST":
+        result_id = request.POST.get("result_id")
+        new_marks = int(request.POST.get("marks"))
+
+        result = Result.objects.get(id=result_id)
+
+        # pass/fail update
+        if new_marks >= (result.topic.full_marks * 0.6):
+            result.status = "clear"
+        else:
+            result.status = "pending"
+
+        result.marks = new_marks
+        result.save()
+
+        return redirect("edit_marks")
+
+    return render(request, "faculty/edit_marks.html", {
+        "results": results
+    })
