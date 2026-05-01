@@ -8,6 +8,7 @@ from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, 
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
+
 # ================= HOME =================
 def home(request):
     return render(request, "home.html")
@@ -898,4 +899,46 @@ def faculty_schedule(request):
 
     return render(request, "faculty/schedule.html", {
         "schedules": schedules
+    })
+    
+
+# ================= UPLOAD MARKS =================
+@login_required
+def upload_marks(request):
+
+    if request.user.role != "faculty":
+        return redirect("dashboard")
+
+    students = User.objects.filter(role__in=["medical_student", "dental_student"])
+    topics = Topic.objects.all()
+
+    if request.method == "POST":
+        student_id = request.POST.get("student")
+        topic_id = request.POST.get("topic")
+        marks = int(request.POST.get("marks"))
+
+        student = User.objects.get(id=student_id)
+        topic = Topic.objects.get(id=topic_id)
+
+        # PASS/FAIL LOGIC (60%)
+        if marks >= (topic.full_marks * 0.6):
+            status = "clear"
+        else:
+            status = "pending"
+
+        Result.objects.update_or_create(
+            user=student,
+            topic=topic,
+            defaults={
+                "marks": marks,
+                "status": status,
+                "date": date.today()
+            }
+        )
+
+        return redirect("upload_marks")
+
+    return render(request, "faculty/upload_marks.html", {
+        "students": students,
+        "topics": topics
     })
