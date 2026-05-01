@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="table-wrapper">
+
+    <table class="modern-table">
+
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for d in data %}
+            <tr>
+                <td>{{ d.user.username }}</td>
+                <td class="status">{{ d.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

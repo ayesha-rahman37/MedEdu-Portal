@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, Attendance, Eligibility, Result
+from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
@@ -817,85 +817,71 @@ def payment_dashboard(request):
             "salaries": salaries
         })
 
+# ================ STUDENT ELIGIBILITY CHECK =================
+def check_eligibility(record):
 
-# ================= ADMIN STUDENT LIST =================
+    if record.attendance < 75:
+        return "Not Eligible (Low Attendance)"
+
+    if not record.item_pass:
+        return "Not Eligible for Card"
+
+    if record.item_pass and not record.card_pass:
+        return "Eligible for Card"
+
+    if record.card_pass and not record.term_pass:
+        return "Eligible for Term"
+
+    if record.term_pass:
+        return "Eligible for Professional Exam"
+
+    return "Not Eligible"
+
+# ================= STUDENT RECORD VIEW (ADMIN) =================
 @login_required
-def student_records(request):
+def student_record_view(request):
+
     if request.user.role != "admin":
-        return redirect('home')
+        return redirect("dashboard")
 
-    students = User.objects.filter(role__in=['medical_student', 'dental_student'])
+    records = StudentRecord.objects.select_related("user")
 
-    return render(request, "admin/student_records.html", {
-        "students": students
+    return render(request, "admin/student_record.html", {
+        "records": records
     })
 
 
-# ================= ADMIN CHECK =================
 @login_required
-def admin_check_student(request, user_id):
+def eligibility_view(request):
+
     if request.user.role != "admin":
-        return redirect('home')
+        return redirect("dashboard")
 
-    student = get_object_or_404(User, id=user_id)
-    attendance = Attendance.objects.filter(user=student).first()
+    records = StudentRecord.objects.all()
 
-    exam_type = request.GET.get("exam")  # card / term / prof
+    data = []
+    for r in records:
+        status = check_eligibility(r)
+        data.append({
+            "user": r.user,
+            "status": status
+        })
 
-    eligible = True
-    reason = ""
-
-    # 🔥 Attendance check
-    if not attendance or not attendance.is_eligible():
-        eligible = False
-        reason += "Low attendance. "
-
-    # 🔥 Result check
-    results = Result.objects.filter(user=student)
-
-    # Item → Card
-    if exam_type == "card":
-        if results.filter(marks__lt=6).exists():
-            eligible = False
-            reason += "Item not cleared."
-
-    # Card → Term
-    if exam_type == "term":
-        if results.filter(marks__lt=6).exists():
-            eligible = False
-            reason += "Card not cleared."
-
-    # Term → Prof
-    if exam_type == "prof":
-        if results.filter(marks__lt=6).exists():
-            eligible = False
-            reason += "Term not cleared."
-
-    # SAVE
-    Eligibility.objects.update_or_create(
-        user=student,
-        exam_type=exam_type,
-        defaults={
-            "eligible": eligible,
-            "note": reason
-        }
-    )
-
-    return render(request, "admin/admin_check.html", {
-        "student": student,
-        "eligible": eligible,
-        "reason": reason,
-        "exam_type": exam_type
+    return render(request, "admin/eligibility.html", {
+        "data": data
     })
 
-
-# ================= STUDENT VIEW =================
+# ================= STUDENT STATUS VIEW (STUDENT) =================
 @login_required
-def student_academic_status(request):
-    attendance = Attendance.objects.filter(user=request.user).first()
-    eligibility = Eligibility.objects.filter(user=request.user)
+def student_status_view(request):
 
-    return render(request, "student/student_status.html", {
-        "attendance": attendance,
-        "eligibility": eligibility
+    record = StudentRecord.objects.filter(user=request.user).first()
+
+    if not record:
+        return render(request, "student/status.html", {"status": "No Data"})
+
+    status = check_eligibility(record)
+
+    return render(request, "student/status.html", {
+        "status": status
     })

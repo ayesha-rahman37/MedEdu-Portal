@@ -66,10 +66,9 @@ urlpatterns = [
     # ================= PAYMENT URLS =================
     path('payment/', views.payment_dashboard, name='payment'),
 
-
-    # ================= ACADEMIC STATUS CHECK ========
-    path('students/', views.student_records, name='student_records'),
-    path('admin/check/<int:user_id>/', views.admin_check_student, name='admin_check'),
-    path('student/status/', views.student_academic_status, name='student_status'),
+    # ================= ELIGIBILITY URLS =================
+    path('admin/student-record/', views.student_record_view, name='student_record'),
+    path('admin/eligibility/', views.eligibility_view, name='eligibility'),
+    path('student/status/', views.student_status_view, name='student_status'),
     
 ]

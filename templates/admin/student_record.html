@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="table-wrapper">
+
+    <table class="modern-table">
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Attendance</th>
+                <th>Item</th>
+                <th>Card</th>
+                <th>Term</th>
+                <th>Payment</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for r in records %}
+            <tr>
+                <td>{{ r.user.username }}</td>
+                <td>{{ r.attendance }}%</td>
+                <td>{{ r.item_pass }}</td>
+                <td>{{ r.card_pass }}</td>
+                <td>{{ r.term_pass }}</td>
+                <td>{{ r.payment_clear }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

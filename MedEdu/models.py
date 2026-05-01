@@ -243,38 +243,18 @@ class Salary(models.Model):
         return f"{self.user} - {self.month}"
     
 
-# ================= ATTENDANCE =================
-class Attendance(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+# ================= STUDENT ACADEMIC RECORD =================
+class StudentRecord(models.Model):
 
-    class_attendance = models.FloatField(default=0)
-    ward_attendance = models.FloatField(default=0)
-    duty_attendance = models.FloatField(default=0)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
-    def is_eligible(self):
-        return (
-            self.class_attendance >= 75 and
-            self.ward_attendance >= 75 and
-            self.duty_attendance >= 75
-        )
+    attendance = models.IntegerField(default=0)
 
-    def _str_(self):
-        return f"{self.user} Attendance"
+    item_pass = models.BooleanField(default=False)
+    card_pass = models.BooleanField(default=False)
+    term_pass = models.BooleanField(default=False)
 
+    payment_clear = models.BooleanField(default=False)
 
-# ================= ELIGIBILITY =================
-class Eligibility(models.Model):
-    EXAM_CHOICES = (
-        ("card", "Card"),
-        ("term", "Term"),
-        ("prof", "Prof"),
-    )
-
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    exam_type = models.CharField(max_length=10, choices=EXAM_CHOICES)
-
-    eligible = models.BooleanField(default=False)
-    note = models.TextField(blank=True)
-
-    def _str_(self):
-        return f"{self.user} - {self.exam_type}"
+    def __str__(self):
+        return self.user.username

@@ -194,9 +194,9 @@
                     </div>
                 </div>
 
-                <a href="{% url 'student_status' %}">Academic Status</a>
-                <a href="{% url 'payment' %}">Payment</a>
+                <a href="{% url 'student_status' %}">Status</a>
                 <a href="{% url 'student_library' %}">Library</a>
+                <a href="{% url 'payment' %}">Payment</a>
                 <a href="#">Notifications</a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
@@ -259,10 +259,10 @@
             {% elif user.role == "admin" %}
 
                 <a href="{% url 'admin_dashboard' %}">Home</a>
-                <a href="{% url 'student_records' %}">Student Records</a>
-                <a href="{% url 'payment' %}">Payments</a>
+                <a href="{% url 'student_record' %}">Student Record</a>
+                <a href="{% url 'eligibility' %}">Eligibility</a>
                 <a href="{% url 'add_notice' %}">Academic Notice</a>
-                <a href="{% url 'student_records' %}">Eligibility</a>
+                <a href="{% url 'payment' %}">Payments</a>
                 <a href="#">Reports</a>
                 <a href="#">Notifications</a>
                 <a href="{% url 'profile' %}">Profile</a>
