@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="attendance-container">
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <select name="student" required>
+            <option value="">Select Student</option>
+            {% for s in students %}
+                <option value="{{ s.id }}">{{ s.mededu_id }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="subject" required>
+            <option value="">Select Subject</option>
+            {% for sub in subjects %}
+                <option value="{{ sub.id }}">{{ sub.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="status" required>
+            <option value="present">Present</option>
+            <option value="absent">Absent</option>
+        </select>
+
+        <button type="submit">Submit</button>
+
+    </form>
+
+</div>
+
+{% endblock %}
