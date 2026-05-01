@@ -1507,3 +1507,43 @@ h2 {
 .marks-container button:hover {
     background: #d9a79c;
 }
+
+
+/* ===== Edit Marks===== */
+
+.edit-marks-container {
+    width: 80%;
+    margin: 40px auto;
+}
+
+.edit-marks-container table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #f8ebe7;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.edit-marks-container th,
+.edit-marks-container td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.edit-marks-container input {
+    width: 70px;
+    padding: 5px;
+}
+
+.edit-marks-container button {
+    padding: 6px 12px;
+    background: #e6bdb4;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.edit-marks-container button:hover {
+    background: #d9a79c;
+}
