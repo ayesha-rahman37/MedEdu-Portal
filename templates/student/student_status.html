@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="status-container">
+
+    <!-- ATTENDANCE -->
+    <div class="status-card">
+
+        <div class="status-header">Attendance</div>
+
+        {% if attendance %}
+
+            <p>Class Attendance: {{ attendance.class_attendance }}%</p>
+            <p>Ward Attendance: {{ attendance.ward_attendance }}%</p>
+            <p>Duty Attendance: {{ attendance.duty_attendance }}%</p>
+
+            {% if attendance.class_attendance >= 75 and attendance.ward_attendance >= 75 and attendance.duty_attendance >= 75 %}
+                <p class="success">✓ Eligible by attendance</p>
+            {% else %}
+                <p class="danger">✕ Not eligible (Below 75%)</p>
+            {% endif %}
+
+        {% else %}
+            <p>No attendance data</p>
+        {% endif %}
+
+    </div>
+
+    <!-- ELIGIBILITY -->
+    <div class="status-card">
+
+        <div class="status-header">Exam Eligibility</div>
+
+        {% if eligibility %}
+
+            {% for e in eligibility %}
+                <p>
+                    {{ e.exam_type|title }} :
+                    {% if e.eligible %}
+                        <span class="success">Eligible ✓</span>
+                    {% else %}
+                        <span class="danger">Not Eligible ✕</span>
+                    {% endif %}
+                </p>
+
+                {% if e.note %}
+                    <small>{{ e.note }}</small>
+                {% endif %}
+
+            {% endfor %}
+
+        {% else %}
+            <p>No eligibility data</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

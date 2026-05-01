@@ -1,0 +1,29 @@
+<table class="modern-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Eligibility</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for s in students %}
+        <tr>
+            <td>{{ s.username }}</td>
+            <td>{{ s.mededu_id }}</td>
+
+            <td class="action-links">
+                <a href="/admin/check/{{ s.id }}/?exam=card">Card</a>
+                <a href="/admin/check/{{ s.id }}/?exam=term">Term</a>
+                <a href="/admin/check/{{ s.id }}/?exam=prof">Prof</a>
+            </td>
+
+            <td>
+                <a href="{% url 'student_full_record' s.id %}">View</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

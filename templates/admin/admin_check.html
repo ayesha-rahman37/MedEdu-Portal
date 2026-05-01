@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="status-container">
+
+    <div class="status-card">
+
+        <div class="status-header">
+            {{ student.username }} • {{ exam_type|title }}
+        </div>
+
+        {% if eligible %}
+            <div class="status-badge success">
+                Eligible ✓
+            </div>
+        {% else %}
+            <div class="status-badge danger">
+                Not Eligible ✕
+            </div>
+
+            <div class="status-reason">
+                {{ reason }}
+            </div>
+        {% endif %}
+
+        <a href="{% url 'student_records' %}" class="back-btn">
+            ← Back
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

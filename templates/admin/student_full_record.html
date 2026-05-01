@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="status-container">
+
+    <!-- HEADER -->
+    <div class="status-card">
+        <div class="status-header">{{ student.username }} • Full Record</div>
+    </div>
+
+    <!-- ATTENDANCE -->
+    <div class="status-card">
+        <div class="status-header">Attendance</div>
+
+        {% if attendance %}
+            <p>Class: {{ attendance.class_attendance }}%</p>
+            <p>Ward: {{ attendance.ward_attendance }}%</p>
+            <p>Duty: {{ attendance.duty_attendance }}%</p>
+        {% else %}
+            <p>No data</p>
+        {% endif %}
+    </div>
+
+    <!-- RESULT -->
+    <div class="status-card">
+        <div class="status-header">Exam Performance</div>
+
+        {% for r in results %}
+            <p>{{ r.topic }} - {{ r.marks }}</p>
+        {% empty %}
+            <p>No result</p>
+        {% endfor %}
+    </div>
+
+    <!-- FAILED ALERT -->
+    <div class="status-card">
+        <div class="status-header">Academic Risk</div>
+
+        {% if failed %}
+            <p style="color:red;">⚠ Failed in {{ failed.count }} exam(s)</p>
+        {% else %}
+            <p style="color:green;">All exams cleared ✓</p>
+        {% endif %}
+    </div>
+
+    <!-- PAYMENT -->
+    <div class="status-card">
+        <div class="status-header">Payment</div>
+
+        <p>Total Paid: {{ total_paid }} Tk</p>
+
+        {% for p in payments %}
+            <p>{{ p.amount }} Tk - {{ p.method }} - {{ p.date }}</p>
+        {% empty %}
+            <p>No payment</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
