@@ -1574,3 +1574,47 @@ h2 {
     border-radius: 8px;
     cursor: pointer;
 }
+
+
+/* ================= RESULT TABLE ================= */
+
+.result-container {
+    width: 85%;
+    margin: 40px auto;
+}
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.result-table th {
+    background: #f4f4f4;
+    padding: 12px;
+    text-align: left;
+}
+
+.result-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.result-table tr:hover {
+    background: #fafafa;
+}
+
+
+/* STATUS COLORS */
+
+.pass {
+    color: green;
+    font-weight: bold;
+}
+
+.fail {
+    color: red;
+    font-weight: bold;
+}

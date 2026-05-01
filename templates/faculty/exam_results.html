@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="result-container">
+
+    <table class="result-table">
+        <tr>
+            <th>Student</th>
+            <th>Topic</th>
+            <th>Marks</th>
+            <th>%</th>
+            <th>Status</th>
+        </tr>
+
+        {% for r in data %}
+        <tr>
+            <td>{{ r.student }}</td>
+            <td>{{ r.topic }}</td>
+            <td>{{ r.marks }}</td>
+            <td>{{ r.percent }}%</td>
+
+            {% if r.status == "Pass" %}
+                <td class="pass">Pass</td>
+            {% elif r.status == "Fail" %}
+                <td class="fail">Fail</td>
+            {% else %}
+                <td>Pending</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}
