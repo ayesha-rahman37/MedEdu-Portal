@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="payment-layout">
+
+    <!-- ONLY TABLE (NO SIDE FORM) -->
+    <div class="payment-table-box" style="width:100%;">
+
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Amount</th>
+                    <th>Bank</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for s in salaries %}
+                <tr>
+                    <td>{{ s.month }}</td>
+                    <td>{{ s.amount }} Tk</td>
+                    <td>{{ s.bank_name }}</td>
+                    <td>{{ s.date }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align:center;">No salary data</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

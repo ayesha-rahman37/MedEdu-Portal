@@ -198,29 +198,46 @@ class ExamNotice(models.Model):
 # ================= PAYMENT =================
 class Payment(models.Model):
 
-    PAYMENT_METHODS = (
-        ('cash', 'Cash'),
+    METHOD_CHOICES = (
         ('bkash', 'bKash'),
         ('nagad', 'Nagad'),
         ('bank', 'Bank'),
     )
 
-    PURPOSE_CHOICES = (
-        ('item', 'Item Exam'),
-        ('card', 'Card Exam'),
-        ('term', 'Term Exam'),
-        ('fee', 'General Fee'),
-    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    amount = models.IntegerField()
+    method = models.CharField(max_length=10, choices=METHOD_CHOICES)
+
+    bank_name = models.CharField(max_length=100, blank=True, null=True)
+
+    purpose = models.CharField(max_length=200)  # 🔥 user লিখবে
+
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.amount}"
+
+
+# ================= STUDENT DUE =================
+class StudentDue(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    total_due = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.user} - Due: {self.total_due}"
+
+
+# ================= SALARY =================
+class Salary(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     amount = models.IntegerField()
-    method = models.CharField(max_length=10, choices=PAYMENT_METHODS)
-    purpose = models.CharField(max_length=10, choices=PURPOSE_CHOICES)
+    month = models.CharField(max_length=20)
 
-    date = models.DateField(auto_now_add=True)
-
-    note = models.TextField(blank=True, null=True)
+    bank_name = models.CharField(max_length=100)
+    date = models.DateField()
 
     def __str__(self):
-        return f"{self.user} - {self.amount} ({self.method})"
+        return f"{self.user} - {self.month}"

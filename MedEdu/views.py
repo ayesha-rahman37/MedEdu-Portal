@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment
+from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
@@ -776,32 +776,43 @@ def add_exam_notice(request):
     return render(request, 'add_notice.html')
 
 
-# ================= PAYMENT PAGE =================
+# ================= PAYMENT DASHBOARD =================
 @login_required
-def payment_page(request):
+def payment_dashboard(request):
+
     user = request.user
 
-    if request.method == "POST":
-        amount = request.POST.get("amount")
-        method = request.POST.get("method")
-        purpose = request.POST.get("purpose")
-        note = request.POST.get("note")
+    # STUDENT
+    if user.role in ["medical_student", "dental_student"]:
 
-        # basic validation
-        if amount and method and purpose:
-            Payment.objects.create(
-                user=user,
-                amount=int(amount),
-                method=method,
-                purpose=purpose,
-                note=note
-            )
-        return redirect('payment')
+        if request.method == "POST":
+            amount = request.POST.get("amount")
+            method = request.POST.get("method")
+            purpose = request.POST.get("purpose")
+            bank = request.POST.get("bank")
 
-    payments = Payment.objects.filter(user=user).order_by('-date')
-    total = sum(p.amount for p in payments)
+            if amount and method and purpose:
+                Payment.objects.create(
+                    user=user,
+                    amount=int(amount),
+                    method=method,
+                    purpose=purpose,
+                    bank_name=bank
+                )
 
-    return render(request, "payment.html", {
-        "payments": payments,
-        "total": total
-    })
+        payments = Payment.objects.filter(user=user).order_by('-date')
+        total_paid = sum(p.amount for p in payments)
+
+        return render(request, "payment/student_payment.html", {
+            "payments": payments,
+            "total_paid": total_paid,
+        })
+
+    # DOCTOR / INTERN
+    elif user.role in ["doctor", "intern"]:
+
+        salaries = Salary.objects.filter(user=user)
+
+        return render(request, "payment/salary.html", {
+            "salaries": salaries
+        })

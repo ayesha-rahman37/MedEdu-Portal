@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="payment-layout">
+
+    <!-- LEFT: TABLE -->
+    <div class="payment-table-box">
+
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Method</th>
+                    <th>Bank</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for p in payments %}
+                <tr>
+                    <td>{{ p.date }}</td>
+                    <td>{{ p.amount }} Tk</td>
+                    <td>{{ p.method|title }}</td>
+                    <td>{{ p.bank_name|default:"—" }}</td>
+                    <td>{{ p.purpose }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <!-- RIGHT: CARD -->
+    <div class="payment-side-box">
+
+        <div class="summary">
+            <div>Total Paid: <b>{{ total_paid }} Tk</b></div>
+            <div class="due">Due: {{ total_due }} Tk</div>
+        </div>
+
+        <form method="POST" class="payment-form">
+            {% csrf_token %}
+
+            <input type="number" name="amount" placeholder="Amount">
+
+            <select name="method">
+                <option value="bkash">bKash</option>
+                <option value="nagad">Nagad</option>
+                <option value="bank">Bank</option>
+            </select>
+
+            <input type="text" name="bank" placeholder="Bank name (only if bank)">
+
+            <input type="text" name="purpose" placeholder="Purpose">
+
+            <button type="submit">Submit</button>
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
