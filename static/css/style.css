@@ -1547,3 +1547,30 @@ h2 {
 .edit-marks-container button:hover {
     background: #d9a79c;
 }
+
+
+/* ===== Attendance ===== */
+
+.attendance-container {
+    width: 40%;
+    margin: 40px auto;
+    background: #f8ebe7;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.attendance-container select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+}
+
+.attendance-container button {
+    width: 100%;
+    padding: 10px;
+    background: #e6bdb4;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}

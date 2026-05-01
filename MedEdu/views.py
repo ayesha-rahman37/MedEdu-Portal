@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule
+from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule,  Attendance
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
@@ -942,7 +942,7 @@ def upload_marks(request):
         "students": students,
         "topics": topics
     })
-
+    
 
 # ================= EDIT MARKS =================
 @login_required
@@ -972,4 +972,38 @@ def edit_marks(request):
 
     return render(request, "faculty/edit_marks.html", {
         "results": results
+    })
+    
+    
+
+# ================= MARK ATTENDANCE =================
+@login_required
+def mark_attendance(request):
+
+    if request.user.role != "faculty":
+        return redirect("dashboard")
+
+    students = User.objects.filter(role__in=["medical_student", "dental_student"])
+    subjects = Subject.objects.all()
+
+    if request.method == "POST":
+        student_id = request.POST.get("student")
+        subject_id = request.POST.get("subject")
+        status = request.POST.get("status")
+
+        student = User.objects.get(id=student_id)
+        subject = Subject.objects.get(id=subject_id)
+
+        Attendance.objects.create(
+            student=student,
+            subject=subject,
+            date=date.today(),
+            status=status
+        )
+
+        return redirect("mark_attendance")
+
+    return render(request, "faculty/attendance.html", {
+        "students": students,
+        "subjects": subjects
     })

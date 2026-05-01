@@ -273,3 +273,19 @@ class ClassSchedule(models.Model):
 
     def __str__(self):
         return f"{self.faculty} - {self.subject} ({self.date})"
+    
+class Attendance(models.Model):
+    
+    STATUS = (
+        ("present", "Present"),
+        ("absent", "Absent"),
+    )
+
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+
+    date = models.DateField()
+    status = models.CharField(max_length=10, choices=STATUS)
+
+    def __str__(self):
+        return f"{self.student} - {self.status}"
