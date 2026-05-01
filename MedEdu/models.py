@@ -241,3 +241,40 @@ class Salary(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.month}"
+    
+
+# ================= ATTENDANCE =================
+class Attendance(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class_attendance = models.FloatField(default=0)
+    ward_attendance = models.FloatField(default=0)
+    duty_attendance = models.FloatField(default=0)
+
+    def is_eligible(self):
+        return (
+            self.class_attendance >= 75 and
+            self.ward_attendance >= 75 and
+            self.duty_attendance >= 75
+        )
+
+    def _str_(self):
+        return f"{self.user} Attendance"
+
+
+# ================= ELIGIBILITY =================
+class Eligibility(models.Model):
+    EXAM_CHOICES = (
+        ("card", "Card"),
+        ("term", "Term"),
+        ("prof", "Prof"),
+    )
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    exam_type = models.CharField(max_length=10, choices=EXAM_CHOICES)
+
+    eligible = models.BooleanField(default=False)
+    note = models.TextField(blank=True)
+
+    def _str_(self):
+        return f"{self.user} - {self.exam_type}"

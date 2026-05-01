@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Attendance</h3>
+
+{% if attendance %}
+    <p>Class: {{ attendance.class_attendance }}%</p>
+    <p>Ward: {{ attendance.ward_attendance }}%</p>
+    <p>Duty: {{ attendance.duty_attendance }}%</p>
+{% else %}
+    <p>No attendance data</p>
+{% endif %}
+
+<hr>
+
+<h3>Eligibility</h3>
+
+{% for e in eligibility %}
+    <p>
+        {{ e.exam_type|title }} :
+        {% if e.eligible %}
+            <span style="color:green;">Eligible</span>
+        {% else %}
+            <span style="color:red;">Not Eligible</span>
+            ({{ e.note }})
+        {% endif %}
+    </p>
+{% empty %}
+    <p>No status yet</p>
+{% endfor %}
+
+{% endblock %}
