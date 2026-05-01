@@ -258,3 +258,22 @@ class StudentRecord(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+# ================= FACULTY CLASS SCHEDULE =================
+class ClassSchedule(models.Model):
+
+    faculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    year = models.CharField(max_length=50)   # e.g. 1st Year
+    subject = models.CharField(max_length=100)
+
+    room = models.CharField(max_length=100)
+
+    date = models.DateField()
+
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    def __str__(self):
+        return f"{self.faculty} - {self.subject} ({self.date})"

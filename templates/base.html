@@ -204,7 +204,7 @@
             {% elif user.role == "faculty" %}
 
                 <a href="{% url 'faculty_dashboard' %}">Home</a>
-                <a href="#">Class Schedule</a>
+                <a href="{% url 'faculty_schedule' %}">Class Schedule</a>
                 <a href="#">Upload Marks</a>
                 <a href="#">Edit Marks</a>
                 <a href="#">Exam Results</a>

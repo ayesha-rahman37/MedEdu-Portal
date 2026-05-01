@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord
+from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
@@ -884,4 +884,18 @@ def student_status_view(request):
 
     return render(request, "student/status.html", {
         "status": status
+    })
+
+
+# ================= FACULTY SCHEDULE =================
+@login_required
+def faculty_schedule(request):
+
+    if request.user.role != "faculty":
+        return redirect("dashboard")
+
+    schedules = ClassSchedule.objects.filter(faculty=request.user).order_by("date", "start_time")
+
+    return render(request, "faculty/schedule.html", {
+        "schedules": schedules
     })
