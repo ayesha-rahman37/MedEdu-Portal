@@ -1218,53 +1218,118 @@ h2 {
 }
 
 
-/* ================= PAYMENT PAGE ================= */
-.payment-container {
-    width: 85%;
-    margin: 30px auto;
+/* ================= PAYMENT / SALARY DASHBOARD ================= */
+
+.payment-layout {
+    display: flex;
+    gap: 30px;
+    padding: 20px;
 }
 
-.payment-form {
-    background: #f8ebe7;
+/* LEFT TABLE */
+.payment-table-box {
+    width: 68%;
+}
+
+/* MODERN TABLE */
+.modern-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.modern-table thead {
+    background: #e6bdb4;
+}
+
+.modern-table th {
+    padding: 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.modern-table td {
+    padding: 14px;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 14px;
+}
+
+.modern-table tbody tr:hover {
+    background: #faf4f2;
+}
+
+.modern-table tbody tr:nth-child(even) {
+    background: #fcfcfc;
+}
+
+/* RIGHT SIDE CARD */
+.payment-side-box {
+    width: 32%;
+    background: #ffffff;
     padding: 20px;
     border-radius: 12px;
-    margin-bottom: 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* SUMMARY */
+.summary {
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.summary .due {
+    color: #d9534f;
+    margin-top: 6px;
+    font-weight: 500;
+}
+
+/* FORM */
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .payment-form input,
 .payment-form select {
-    width: 100%;
     padding: 10px;
-    margin: 10px 0;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
+    font-size: 14px;
 }
 
+.payment-form input:focus,
+.payment-form select:focus {
+    outline: none;
+    border-color: #e6bdb4;
+}
+
+/* BUTTON */
 .payment-form button {
-    width: 100%;
     padding: 10px;
-    background: #e6bdb4;
     border: none;
+    background: #e6bdb4;
     border-radius: 8px;
     cursor: pointer;
+    font-weight: 500;
 }
 
 .payment-form button:hover {
     background: #d9a79c;
 }
 
-.payment-total {
-    margin-bottom: 20px;
-}
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .payment-layout {
+        flex-direction: column;
+    }
 
-.payment-history {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.payment-card {
-    background: #f3d4cc;
-    padding: 15px;
-    border-radius: 10px;
+    .payment-table-box,
+    .payment-side-box {
+        width: 100%;
+    }
 }
