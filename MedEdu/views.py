@@ -1007,3 +1007,36 @@ def mark_attendance(request):
         "students": students,
         "subjects": subjects
     })
+    
+    
+# ================= EXAM RESULTS VIEW (FACULTY) =================
+@login_required
+def exam_results(request):
+
+    # only faculty allowed
+    if request.user.role != "faculty":
+        return redirect("dashboard")
+
+    results = Result.objects.select_related('user', 'topic')
+
+    data = []
+
+    for r in results:
+        if r.marks is not None:
+            percent = (r.marks / r.topic.full_marks) * 100
+            status = "Pass" if percent >= 60 else "Fail"
+        else:
+            percent = 0
+            status = "Pending"
+
+        data.append({
+            "student": r.user.username,
+            "topic": r.topic.title,
+            "marks": r.marks,
+            "percent": round(percent, 2),
+            "status": status
+        })
+
+    return render(request, "faculty/exam_results.html", {
+        "data": data
+    })

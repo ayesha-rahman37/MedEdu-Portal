@@ -76,4 +76,5 @@ urlpatterns = [
     path("faculty/upload-marks/", views.upload_marks, name="upload_marks"),
     path("faculty/edit-marks/", views.edit_marks, name="edit_marks"),
     path("faculty/attendance/", views.mark_attendance, name="mark_attendance"),
+    path('faculty/results/', views.exam_results, name='exam_results'),
 ]
