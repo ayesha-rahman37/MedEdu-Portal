@@ -65,4 +65,11 @@ urlpatterns = [
     
     # ================= PAYMENT URLS =================
     path('payment/', views.payment_dashboard, name='payment'),
+
+
+    # ================= ACADEMIC STATUS CHECK ========
+    path('students/', views.student_records, name='student_records'),
+    path('admin/check/<int:user_id>/', views.admin_check_student, name='admin_check'),
+    path('student/status/', views.student_academic_status, name='student_status'),
+    
 ]

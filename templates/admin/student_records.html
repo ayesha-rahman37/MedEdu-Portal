@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>ID</th>
+        <th>Check</th>
+    </tr>
+
+    {% for s in students %}
+    <tr>
+        <td>{{ s.username }}</td>
+        <td>{{ s.medu_id }}</td>
+        <td>
+            <a href="/admin/check/{{ s.id }}/?exam=card">Card</a> |
+            <a href="/admin/check/{{ s.id }}/?exam=term">Term</a> |
+            <a href="/admin/check/{{ s.id }}/?exam=prof">Prof</a>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}
