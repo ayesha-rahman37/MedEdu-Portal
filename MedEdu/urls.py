@@ -65,4 +65,19 @@ urlpatterns = [
     
     # ================= PAYMENT URLS =================
     path('payment/', views.payment_dashboard, name='payment'),
+
+    # ================= ELIGIBILITY URLS =================
+    path('admin/student-record/', views.student_record_view, name='student_record'),
+    path('admin/eligibility/', views.eligibility_view, name='eligibility'),
+    path('student/status/', views.student_status_view, name='student_status'),
+    
+    # ================= FACULTY SCHEDULE =================
+    path('faculty/schedule/', views.faculty_schedule, name='faculty_schedule'),
+    path("faculty/upload-marks/", views.upload_marks, name="upload_marks"),
+    path("faculty/edit-marks/", views.edit_marks, name="edit_marks"),
+    path("faculty/attendance/", views.mark_attendance, name="mark_attendance"),
+    path('faculty/results/', views.exam_results, name='exam_results'),
+
+    # ================= ANALYTICS URLS =================
+    path('analytics/', views.dashboard_analytics, name='analytics'),
 ]

@@ -194,8 +194,9 @@
                     </div>
                 </div>
 
-                <a href="{% url 'payment' %}">Payment</a>
+                <a href="{% url 'student_status' %}">Status</a>
                 <a href="{% url 'student_library' %}">Library</a>
+                <a href="{% url 'payment' %}">Payment</a>
                 <a href="#">Notifications</a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
@@ -203,11 +204,11 @@
             {% elif user.role == "faculty" %}
 
                 <a href="{% url 'faculty_dashboard' %}">Home</a>
-                <a href="#">Class Schedule</a>
-                <a href="#">Upload Marks</a>
-                <a href="#">Edit Marks</a>
-                <a href="#">Exam Results</a>
-                <a href="#">Attendance</a>
+                <a href="{% url 'faculty_schedule' %}">Class Schedule</a>
+                <a href="{% url 'upload_marks' %}">Upload Marks</a>
+                <a href="{% url 'edit_marks' %}">Edit Marks</a>
+                <a href="{% url 'exam_results' %}">Exam Results</a>
+                <a href="{% url 'mark_attendance' %}">Attendance</a>
                 <a href="#">Notifications</a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
@@ -258,11 +259,11 @@
             {% elif user.role == "admin" %}
 
                 <a href="{% url 'admin_dashboard' %}">Home</a>
-                <a href="#">Student Records</a>
-                <a href="{% url 'payment' %}">Payments</a>
+                <a href="{% url 'student_record' %}">Student Record</a>
+                <a href="{% url 'eligibility' %}">Eligibility</a>
                 <a href="{% url 'add_notice' %}">Academic Notice</a>
-                <a href="#">Eligibility</a>
-                <a href="#">Reports</a>
+                <a href="{% url 'payment' %}">Payments</a>
+                <a href="{% url 'analytics' %}">Analytics</a>
                 <a href="#">Notifications</a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>

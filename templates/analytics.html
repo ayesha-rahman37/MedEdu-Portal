@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="analytics-container">
+
+    {% if no_data %}
+        <p>No data available</p>
+    {% else %}
+
+    <div class="analytics-box">
+        <h3>Average Performance</h3>
+        <p>{{ avg }}%</p>
+    </div>
+
+    <div class="analytics-box">
+        <h3>Pass Rate</h3>
+        <p>{{ pass_rate }}%</p>
+    </div>
+
+    <div class="analytics-box">
+        <h3>Total Exams</h3>
+        <p>{{ total }}</p>
+    </div>
+
+    <div class="analytics-box">
+        <h3>Improvement</h3>
+
+        {% if improvement > 0 %}
+            <p class="up">↑ Improved {{ improvement }}%</p>
+        {% elif improvement < 0 %}
+            <p class="down">↓ Dropped {{ improvement }}%</p>
+        {% else %}
+            <p>No Change</p>
+        {% endif %}
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

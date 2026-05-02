@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary
+from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule,  Attendance
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
+
 
 # ================= HOME =================
 def home(request):
@@ -816,3 +817,272 @@ def payment_dashboard(request):
         return render(request, "payment/salary.html", {
             "salaries": salaries
         })
+
+# ================ STUDENT ELIGIBILITY CHECK =================
+def check_eligibility(record):
+
+    if record.attendance < 75:
+        return "Not Eligible (Low Attendance)"
+
+    if not record.item_pass:
+        return "Not Eligible for Card"
+
+    if record.item_pass and not record.card_pass:
+        return "Eligible for Card"
+
+    if record.card_pass and not record.term_pass:
+        return "Eligible for Term"
+
+    if record.term_pass:
+        return "Eligible for Professional Exam"
+
+    return "Not Eligible"
+
+# ================= STUDENT RECORD VIEW (ADMIN) =================
+@login_required
+def student_record_view(request):
+
+    if request.user.role != "admin":
+        return redirect("dashboard")
+
+    records = StudentRecord.objects.select_related("user")
+
+    return render(request, "admin/student_record.html", {
+        "records": records
+    })
+
+
+@login_required
+def eligibility_view(request):
+
+    if request.user.role != "admin":
+        return redirect("dashboard")
+
+    records = StudentRecord.objects.all()
+
+    data = []
+    for r in records:
+        status = check_eligibility(r)
+        data.append({
+            "user": r.user,
+            "status": status
+        })
+
+    return render(request, "admin/eligibility.html", {
+        "data": data
+    })
+
+# ================= STUDENT STATUS VIEW (STUDENT) =================
+@login_required
+def student_status_view(request):
+
+    record = StudentRecord.objects.filter(user=request.user).first()
+
+    if not record:
+        return render(request, "student/status.html", {"status": "No Data"})
+
+    status = check_eligibility(record)
+
+    return render(request, "student/status.html", {
+        "status": status
+    })
+
+
+# ================= FACULTY SCHEDULE =================
+@login_required
+def faculty_schedule(request):
+
+    if request.user.role != "faculty":
+        return redirect("dashboard")
+
+    schedules = ClassSchedule.objects.filter(faculty=request.user).order_by("date", "start_time")
+
+    return render(request, "faculty/schedule.html", {
+        "schedules": schedules
+    })
+    
+
+# ================= UPLOAD MARKS =================
+@login_required
+def upload_marks(request):
+
+    if request.user.role != "faculty":
+        return redirect("dashboard")
+
+    students = User.objects.filter(role__in=["medical_student", "dental_student"])
+    topics = Topic.objects.all()
+
+    if request.method == "POST":
+        student_id = request.POST.get("student")
+        topic_id = request.POST.get("topic")
+        marks = int(request.POST.get("marks"))
+
+        student = User.objects.get(id=student_id)
+        topic = Topic.objects.get(id=topic_id)
+
+        # PASS/FAIL LOGIC (60%)
+        if marks >= (topic.full_marks * 0.6):
+            status = "clear"
+        else:
+            status = "pending"
+
+        Result.objects.update_or_create(
+            user=student,
+            topic=topic,
+            defaults={
+                "marks": marks,
+                "status": status,
+                "date": date.today()
+            }
+        )
+
+        return redirect("upload_marks")
+
+    return render(request, "faculty/upload_marks.html", {
+        "students": students,
+        "topics": topics
+    })
+    
+
+# ================= EDIT MARKS =================
+@login_required
+def edit_marks(request):
+
+    if request.user.role != "faculty":
+        return redirect("dashboard")
+
+    results = Result.objects.select_related("user", "topic").all()
+
+    if request.method == "POST":
+        result_id = request.POST.get("result_id")
+        new_marks = int(request.POST.get("marks"))
+
+        result = Result.objects.get(id=result_id)
+
+        # pass/fail update
+        if new_marks >= (result.topic.full_marks * 0.6):
+            result.status = "clear"
+        else:
+            result.status = "pending"
+
+        result.marks = new_marks
+        result.save()
+
+        return redirect("edit_marks")
+
+    return render(request, "faculty/edit_marks.html", {
+        "results": results
+    })
+    
+    
+
+# ================= MARK ATTENDANCE =================
+@login_required
+def mark_attendance(request):
+
+    if request.user.role != "faculty":
+        return redirect("dashboard")
+
+    students = User.objects.filter(role__in=["medical_student", "dental_student"])
+    subjects = Subject.objects.all()
+
+    if request.method == "POST":
+        student_id = request.POST.get("student")
+        subject_id = request.POST.get("subject")
+        status = request.POST.get("status")
+
+        student = User.objects.get(id=student_id)
+        subject = Subject.objects.get(id=subject_id)
+
+        Attendance.objects.create(
+            student=student,
+            subject=subject,
+            date=date.today(),
+            status=status
+        )
+
+        return redirect("mark_attendance")
+
+    return render(request, "faculty/attendance.html", {
+        "students": students,
+        "subjects": subjects
+    })
+    
+    
+# ================= EXAM RESULTS VIEW (FACULTY) =================
+@login_required
+def exam_results(request):
+
+    # only faculty allowed
+    if request.user.role != "faculty":
+        return redirect("dashboard")
+
+    results = Result.objects.select_related('user', 'topic')
+
+    data = []
+
+    for r in results:
+        if r.marks is not None:
+            percent = (r.marks / r.topic.full_marks) * 100
+            status = "Pass" if percent >= 60 else "Fail"
+        else:
+            percent = 0
+            status = "Pending"
+
+        data.append({
+            "student": r.user.username,
+            "topic": r.topic.title,
+            "marks": r.marks,
+            "percent": round(percent, 2),
+            "status": status
+        })
+
+    return render(request, "faculty/exam_results.html", {
+        "data": data
+    })
+
+
+# ================= DASHBOARD ANALYTICS =================
+@login_required
+def dashboard_analytics(request):
+
+    if request.user.role == "faculty" or request.user.role == "admin":
+        results = Result.objects.all()
+    else:
+        results = Result.objects.filter(user=request.user)
+
+    total = results.count()
+
+    if total == 0:
+        return render(request, "analytics.html", {"no_data": True})
+
+    marks_list = []
+    pass_count = 0
+
+    for r in results:
+        if r.marks is not None:
+            percent = (r.marks / r.topic.full_marks) * 100
+            marks_list.append(percent)
+
+            if percent >= 60:
+                pass_count += 1
+
+    avg = sum(marks_list) / len(marks_list) if marks_list else 0
+    pass_rate = (pass_count / total) * 100
+
+    # 🔥 Improvement Logic (last 5 vs previous 5)
+    last5 = marks_list[-5:]
+    prev5 = marks_list[:-5]
+
+    if prev5:
+        prev_avg = sum(prev5) / len(prev5)
+        improvement = avg - prev_avg
+    else:
+        improvement = 0
+
+    return render(request, "analytics.html", {
+        "avg": round(avg, 2),
+        "pass_rate": round(pass_rate, 2),
+        "total": total,
+        "improvement": round(improvement, 2)
+    })
