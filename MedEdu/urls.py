@@ -77,4 +77,6 @@ urlpatterns = [
     path("faculty/edit-marks/", views.edit_marks, name="edit_marks"),
     path("faculty/attendance/", views.mark_attendance, name="mark_attendance"),
     path('faculty/results/', views.exam_results, name='exam_results'),
+    # ================= ANALYTICS URLS =================
+    path('analytics/', views.dashboard_analytics, name='analytics'),
 ]
