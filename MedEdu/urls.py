@@ -66,10 +66,31 @@ urlpatterns = [
     # ================= PAYMENT URLS =================
     path('payment/', views.payment_dashboard, name='payment'),
 
-
-    # ================= ACADEMIC STATUS CHECK ========
-    path('students/', views.student_records, name='student_records'),
-    path('admin/check/<int:user_id>/', views.admin_check_student, name='admin_check'),
-    path('student/status/', views.student_academic_status, name='student_status'),
+    # ================= ELIGIBILITY URLS =================
+    path('admin/student-record/', views.student_record_view, name='student_record'),
+    path('admin/eligibility/', views.eligibility_view, name='eligibility'),
+    path('student/status/', views.student_status_view, name='student_status'),
     
+    # ================= FACULTY SCHEDULE =================
+    path('faculty/schedule/', views.faculty_schedule, name='faculty_schedule'),
+    path("faculty/upload-marks/", views.upload_marks, name="upload_marks"),
+    path("faculty/edit-marks/", views.edit_marks, name="edit_marks"),
+    path("faculty/attendance/", views.mark_attendance, name="mark_attendance"),
+    path('faculty/results/', views.exam_results, name='exam_results'),
+
+    # ================= ANALYTICS URLS =================
+    path('analytics/', views.dashboard_analytics, name='analytics'),
+
+    # ================= OT SCHEDULE =================
+    path('ot/', views.ot_schedule, name='ot_schedule'),
+
+    # ================= INTERN DUTY SCHEDULE =================
+    path('assign-duty/', views.assign_duty, name='assign_duty'),
+    path('intern-duty/', views.intern_duty, name='intern_duty'),
+
+    # ================= CLINICAL CASES =================
+    path('clinical-case/', views.clinical_case, name='clinical_case'),
+
+    # ================= NOTIFICATIONS =================
+    path('notifications/', views.notifications_view, name='notifications'),
 ]

@@ -114,10 +114,6 @@ class Result(models.Model):
     status = models.CharField(max_length=10, choices=STATUS)
     date = models.DateField(null=True, blank=True)
 
-    def __str__(self):
-        return f"{self.user} - {self.topic}"
-
-
 # ================= DOCTOR SCHEDULE =================
 class DoctorSchedule(models.Model):
 
@@ -243,38 +239,163 @@ class Salary(models.Model):
         return f"{self.user} - {self.month}"
     
 
-# ================= ATTENDANCE =================
+# ================= STUDENT ACADEMIC RECORD =================
+class StudentRecord(models.Model):
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    attendance = models.IntegerField(default=0)
+
+    item_pass = models.BooleanField(default=False)
+    card_pass = models.BooleanField(default=False)
+    term_pass = models.BooleanField(default=False)
+
+    payment_clear = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.username
+
+
+# ================= FACULTY CLASS SCHEDULE =================
+class ClassSchedule(models.Model):
+
+    faculty = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    year = models.CharField(max_length=50)   # e.g. 1st Year
+    subject = models.CharField(max_length=100)
+
+    room = models.CharField(max_length=100)
+
+    date = models.DateField()
+
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    def __str__(self):
+        return f"{self.faculty} - {self.subject} ({self.date})"
+
+# ================= ATTENDANCE =================  
 class Attendance(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
+    STATUS = (
+        ("present", "Present"),
+        ("absent", "Absent"),
+    )
 
-    class_attendance = models.FloatField(default=0)
-    ward_attendance = models.FloatField(default=0)
-    duty_attendance = models.FloatField(default=0)
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
-    def is_eligible(self):
-        return (
-            self.class_attendance >= 75 and
-            self.ward_attendance >= 75 and
-            self.duty_attendance >= 75
-        )
+    date = models.DateField()
+    status = models.CharField(max_length=10, choices=STATUS)
 
-    def _str_(self):
-        return f"{self.user} Attendance"
+    def __str__(self):
+        return f"{self.student} - {self.status}"
+    
 
+# ================= OT MANAGEMENT =================
+class OperationSchedule(models.Model):
 
-# ================= ELIGIBILITY =================
-class Eligibility(models.Model):
-    EXAM_CHOICES = (
-        ("card", "Card"),
-        ("term", "Term"),
-        ("prof", "Prof"),
+    doctor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        limit_choices_to={'role': 'doctor'}
+    )
+
+    patient_name = models.CharField(max_length=200)
+    disease = models.CharField(max_length=200)
+
+    room = models.CharField(max_length=100)
+
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    # students + interns who can attend
+    participants = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="ot_classes",
+        blank=True
+    )
+
+    def __str__(self):
+        return f"{self.patient_name} - {self.doctor}"
+    
+# ================= INTERNSHIP DUTY =================
+class DutySchedule(models.Model):
+
+    ROLE_TYPE = (
+        ("intern", "Intern"),
+        ("student", "Student"),
     )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    exam_type = models.CharField(max_length=10, choices=EXAM_CHOICES)
 
-    eligible = models.BooleanField(default=False)
-    note = models.TextField(blank=True)
+    role_type = models.CharField(max_length=10, choices=ROLE_TYPE)
 
-    def _str_(self):
-        return f"{self.user} - {self.exam_type}"
+    ward = models.CharField(max_length=100)
+
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    task = models.TextField()   # what to do
+    doctor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="supervisor"
+    )
+
+    round_required = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user} - {self.ward}"
+    
+
+# ================= SHIFT SWAP =================
+class DutySwapRequest(models.Model):
+
+    STATUS = (
+        ("pending", "Pending"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
+    )
+
+    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="from_user")
+    to_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="to_user")
+
+    duty = models.ForeignKey(DutySchedule, on_delete=models.CASCADE)
+
+    status = models.CharField(max_length=10, choices=STATUS, default="pending")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.from_user} → {self.to_user} ({self.status})"
+
+# ================= CLINICAL CASES =================    
+class ClinicalCase(models.Model):
+    intern = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    
+    patient_name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
+    disease = models.CharField(max_length=200)
+    history = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.patient_name} - {self.intern}"
+    
+# ================= NOTIFICATIONS =================
+class Notification(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.message[:20]}"
