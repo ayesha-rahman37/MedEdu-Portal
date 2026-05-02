@@ -1040,3 +1040,47 @@ def exam_results(request):
     return render(request, "faculty/exam_results.html", {
         "data": data
     })
+    # ================= DASHBOARD ANALYTICS =================
+@login_required
+def dashboard_analytics(request):
+
+    if request.user.role == "faculty" or request.user.role == "admin":
+        results = Result.objects.all()
+    else:
+        results = Result.objects.filter(user=request.user)
+
+    total = results.count()
+
+    if total == 0:
+        return render(request, "analytics.html", {"no_data": True})
+
+    marks_list = []
+    pass_count = 0
+
+    for r in results:
+        if r.marks is not None:
+            percent = (r.marks / r.topic.full_marks) * 100
+            marks_list.append(percent)
+
+            if percent >= 60:
+                pass_count += 1
+
+    avg = sum(marks_list) / len(marks_list) if marks_list else 0
+    pass_rate = (pass_count / total) * 100
+
+    # 🔥 Improvement Logic (last 5 vs previous 5)
+    last5 = marks_list[-5:]
+    prev5 = marks_list[:-5]
+
+    if prev5:
+        prev_avg = sum(prev5) / len(prev5)
+        improvement = avg - prev_avg
+    else:
+        improvement = 0
+
+    return render(request, "analytics.html", {
+        "avg": round(avg, 2),
+        "pass_rate": round(pass_rate, 2),
+        "total": total,
+        "improvement": round(improvement, 2)
+    })
