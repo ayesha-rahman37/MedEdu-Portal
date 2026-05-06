@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+<table class="modern-table">
+    <tr>
+        <th>Ward</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Task</th>
+        <th>Doctor</th>
+        <th>Round</th>
+    </tr>
+
+    {% for d in duties %}
+    <tr>
+        <td>{{ d.ward }}</td>
+        <td>{{ d.date }}</td>
+        <td>{{ d.start_time }} - {{ d.end_time }}</td>
+        <td>{{ d.task }}</td>
+        <td>{{ d.doctor }}</td>
+        <td>
+            {% if d.round_required %}
+                Yes
+            {% else %}
+                No
+            {% endif %}
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="6">No duty assigned</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

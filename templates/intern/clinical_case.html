@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="case-container">
+
+    <h2 class="case-title">Clinical Case Log</h2>
+
+    <!-- ================= ADD CASE FORM ================= -->
+    <div class="case-card">
+        <form method="POST">
+            {% csrf_token %}
+
+            <input type="text" name="patient_name" placeholder="Patient Name" required>
+
+            <input type="text" name="phone" placeholder="Phone Number" required>
+
+            <input type="text" name="disease" placeholder="Disease" required>
+
+            <textarea name="history" placeholder="Patient History" rows="4" required></textarea>
+
+            <button type="submit">Add Case</button>
+        </form>
+    </div>
+
+
+    <!-- ================= PREVIOUS CASES ================= -->
+    <div class="case-card">
+
+        <h3 style="margin-bottom: 15px;">Previous Cases</h3>
+
+        <table class="case-table">
+
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Phone</th>
+                    <th>Disease</th>
+                    <th>History</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for case in cases %}
+                <tr>
+                    <td>{{ case.patient_name }}</td>
+                    <td>{{ case.phone }}</td>
+                    <td>{{ case.disease }}</td>
+                    <td>{{ case.history }}</td>
+                    <td>{{ case.created_at|date:"M d, Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No cases yet</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

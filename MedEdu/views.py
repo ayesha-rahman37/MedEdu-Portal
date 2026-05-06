@@ -4,10 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule,  Attendance
+from .models import DutySchedule, ClinicalCase, DutySwapRequest, User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule,  Attendance, OperationSchedule
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
-
 
 # ================= HOME =================
 def home(request):
@@ -1039,4 +1038,174 @@ def exam_results(request):
 
     return render(request, "faculty/exam_results.html", {
         "data": data
+    })
+
+
+# ================= DASHBOARD ANALYTICS =================
+@login_required
+def dashboard_analytics(request):
+
+    if request.user.role == "faculty" or request.user.role == "admin":
+        results = Result.objects.all()
+    else:
+        results = Result.objects.filter(user=request.user)
+
+    total = results.count()
+
+    if total == 0:
+        return render(request, "analytics.html", {"no_data": True})
+
+    marks_list = []
+    pass_count = 0
+
+    for r in results:
+        if r.marks is not None:
+            percent = (r.marks / r.topic.full_marks) * 100
+            marks_list.append(percent)
+
+            if percent >= 60:
+                pass_count += 1
+
+    avg = sum(marks_list) / len(marks_list) if marks_list else 0
+    pass_rate = (pass_count / total) * 100
+
+    # 🔥 Improvement Logic (last 5 vs previous 5)
+    last5 = marks_list[-5:]
+    prev5 = marks_list[:-5]
+
+    if prev5:
+        prev_avg = sum(prev5) / len(prev5)
+        improvement = avg - prev_avg
+    else:
+        improvement = 0
+
+    return render(request, "analytics.html", {
+        "avg": round(avg, 2),
+        "pass_rate": round(pass_rate, 2),
+        "total": total,
+        "improvement": round(improvement, 2)
+    })
+
+
+# ================= OT SCHEDULE VIEW =================
+@login_required
+def ot_schedule(request):
+    user = request.user
+
+    # doctor view
+    if user.role == "doctor":
+        schedules = OperationSchedule.objects.filter(doctor=user)
+
+    # student + intern view
+    elif user.role in ["medical_student", "dental_student", "intern"]:
+        schedules = OperationSchedule.objects.filter(participants=user)
+
+    else:
+        schedules = []
+
+    return render(request, "ot/schedule.html", {
+        "schedules": schedules
+    })
+
+
+
+
+# ================= ADMIN ASSIGN DUTY =================
+@login_required
+def assign_duty(request):
+    if request.user.role != "admin":
+        return redirect("dashboard")
+
+    users = User.objects.filter(role__in=["intern", "student"])
+
+    if request.method == "POST":
+        user_id = request.POST.get("user")
+        role_type = request.POST.get("role_type")
+        ward = request.POST.get("ward")
+        date = request.POST.get("date")
+        start_time = request.POST.get("start_time")
+        end_time = request.POST.get("end_time")
+        task = request.POST.get("task")
+        doctor_id = request.POST.get("doctor")
+        round_required = request.POST.get("round") == "on"
+
+        user = User.objects.get(id=user_id)
+        doctor = User.objects.get(id=doctor_id) if doctor_id else None
+
+        DutySchedule.objects.create(
+            user=user,
+            role_type=role_type,
+            ward=ward,
+            date=date,
+            start_time=start_time,
+            end_time=end_time,
+            task=task,
+            doctor=doctor,
+            round_required=round_required
+        )
+
+        return redirect("assign_duty")
+
+    doctors = User.objects.filter(role="doctor")
+
+    return render(request, "admin/assign_duty.html", {
+        "users": users,
+        "doctors": doctors
+    })
+
+
+# ================= INTERN/STUDENT VIEW =================
+@login_required
+def intern_duty(request):
+    duties = DutySchedule.objects.filter(user=request.user).order_by('-date')
+
+    return render(request, "intern/duty.html", {
+        "duties": duties
+    })
+
+
+# ================= REQUEST DUTY SWAP =================
+@login_required
+def request_swap(request, duty_id):
+    duty = DutySchedule.objects.get(id=duty_id)
+
+    if request.method == "POST":
+        to_user_id = request.POST.get("to_user")
+
+        to_user = User.objects.get(id=to_user_id)
+
+        DutySwapRequest.objects.create(
+            from_user=request.user,
+            to_user=to_user,
+            duty=duty
+        )
+
+    return redirect("intern_duty")
+
+
+@login_required
+def clinical_case(request):
+    if request.user.role != "intern":
+        return redirect("dashboard")
+
+    if request.method == "POST":
+        patient_name = request.POST.get("patient_name")
+        phone = request.POST.get("phone")
+        disease = request.POST.get("disease")
+        history = request.POST.get("history")
+
+        ClinicalCase.objects.create(
+            intern=request.user,
+            patient_name=patient_name,
+            phone=phone,
+            disease=disease,
+            history=history
+        )
+
+        return redirect("clinical_case")
+
+    cases = ClinicalCase.objects.filter(intern=request.user).order_by("-created_at")
+
+    return render(request, "intern/clinical_case.html", {
+        "cases": cases
     })

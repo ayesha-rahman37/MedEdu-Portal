@@ -1618,3 +1618,200 @@ h2 {
     color: red;
     font-weight: bold;
 }
+
+
+/* ================= ANALYTICS ================= */
+
+.analytics-container {
+    width: 80%;
+    margin: 40px auto;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.analytics-box {
+    width: 22%;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.analytics-box h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.analytics-box p {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.up {
+    color: green;
+}
+
+.down {
+    color: red;
+}
+
+
+/* ================= OT ================= */
+
+.ot-container {
+    width: 85%;
+    margin: 40px auto;
+}
+
+.ot-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.ot-table th {
+    background: #f3d4cc;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.ot-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.ot-table tr:hover {
+    background: #f5f6fa;
+}
+
+
+/* ================= DUTY SCHEDULE ================= */
+
+.duty-container {
+    width: 85%;
+    margin: 40px auto;
+}
+
+.duty-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.duty-table th {
+    background: #f3d4cc;
+    padding: 10px;
+}
+
+.duty-table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+
+/* ================= CLINICAL CASE FIX ================= */
+
+
+/* container same theme */
+
+.case-container {
+    width: 75%;
+    margin: 40px auto;
+}
+
+
+/* form + table card */
+
+.case-card {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    margin-bottom: 25px;
+}
+
+
+/* inputs */
+
+.case-card input,
+.case-card textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #f5eeee;
+    /* match auth form */
+    font-family: inherit;
+}
+
+
+/* button (remove green) */
+
+.case-card button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #d4b4b4;
+    color: white;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.case-card button:hover {
+    background: #c79a9a;
+}
+
+
+/* table wrapper */
+
+.case-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+
+/* table header */
+
+.case-table th {
+    background: #e6bdb4;
+    /* theme color */
+    color: #3a2f2f;
+    padding: 12px;
+    text-align: center;
+}
+
+
+/* table body */
+
+.case-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+
+/* hover */
+
+.case-table tr:hover {
+    background: #f3d8d2;
+}
+
+
+/* title */
+
+.case-title {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #4a3f3f;
+}
