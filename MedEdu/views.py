@@ -4,10 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import OperationSchedule, User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule,  Attendance
+from .models import DutySchedule, ClinicalCase, DutySwapRequest, User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule,  Attendance, OperationSchedule
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
-
 
 # ================= HOME =================
 def home(request):
@@ -1040,7 +1039,9 @@ def exam_results(request):
     return render(request, "faculty/exam_results.html", {
         "data": data
     })
-    # ================= DASHBOARD ANALYTICS =================
+
+
+# ================= DASHBOARD ANALYTICS =================
 @login_required
 def dashboard_analytics(request):
 
@@ -1085,7 +1086,8 @@ def dashboard_analytics(request):
         "improvement": round(improvement, 2)
     })
 
-# ================= OT SCHEDULE =================
+
+# ================= OT SCHEDULE VIEW =================
 @login_required
 def ot_schedule(request):
     user = request.user
@@ -1103,4 +1105,107 @@ def ot_schedule(request):
 
     return render(request, "ot/schedule.html", {
         "schedules": schedules
+    })
+
+
+
+
+# ================= ADMIN ASSIGN DUTY =================
+@login_required
+def assign_duty(request):
+    if request.user.role != "admin":
+        return redirect("dashboard")
+
+    users = User.objects.filter(role__in=["intern", "student"])
+
+    if request.method == "POST":
+        user_id = request.POST.get("user")
+        role_type = request.POST.get("role_type")
+        ward = request.POST.get("ward")
+        date = request.POST.get("date")
+        start_time = request.POST.get("start_time")
+        end_time = request.POST.get("end_time")
+        task = request.POST.get("task")
+        doctor_id = request.POST.get("doctor")
+        round_required = request.POST.get("round") == "on"
+
+        user = User.objects.get(id=user_id)
+        doctor = User.objects.get(id=doctor_id) if doctor_id else None
+
+        DutySchedule.objects.create(
+            user=user,
+            role_type=role_type,
+            ward=ward,
+            date=date,
+            start_time=start_time,
+            end_time=end_time,
+            task=task,
+            doctor=doctor,
+            round_required=round_required
+        )
+
+        return redirect("assign_duty")
+
+    doctors = User.objects.filter(role="doctor")
+
+    return render(request, "admin/assign_duty.html", {
+        "users": users,
+        "doctors": doctors
+    })
+
+
+# ================= INTERN/STUDENT VIEW =================
+@login_required
+def intern_duty(request):
+    duties = DutySchedule.objects.filter(user=request.user).order_by('-date')
+
+    return render(request, "intern/duty.html", {
+        "duties": duties
+    })
+
+
+# ================= REQUEST DUTY SWAP =================
+@login_required
+def request_swap(request, duty_id):
+    duty = DutySchedule.objects.get(id=duty_id)
+
+    if request.method == "POST":
+        to_user_id = request.POST.get("to_user")
+
+        to_user = User.objects.get(id=to_user_id)
+
+        DutySwapRequest.objects.create(
+            from_user=request.user,
+            to_user=to_user,
+            duty=duty
+        )
+
+    return redirect("intern_duty")
+
+
+@login_required
+def clinical_case(request):
+    if request.user.role != "intern":
+        return redirect("dashboard")
+
+    if request.method == "POST":
+        patient_name = request.POST.get("patient_name")
+        phone = request.POST.get("phone")
+        disease = request.POST.get("disease")
+        history = request.POST.get("history")
+
+        ClinicalCase.objects.create(
+            intern=request.user,
+            patient_name=patient_name,
+            phone=phone,
+            disease=disease,
+            history=history
+        )
+
+        return redirect("clinical_case")
+
+    cases = ClinicalCase.objects.filter(intern=request.user).order_by("-created_at")
+
+    return render(request, "intern/clinical_case.html", {
+        "cases": cases
     })
