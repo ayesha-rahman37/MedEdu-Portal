@@ -1654,3 +1654,34 @@ h2 {
 .down {
     color: red;
 }
+
+/* ================= OT ================= */
+
+.ot-container {
+    width: 85%;
+    margin: 40px auto;
+}
+
+.ot-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.ot-table th {
+    background: #f3d4cc;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.ot-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.ot-table tr:hover {
+    background: #f5f6fa;
+}

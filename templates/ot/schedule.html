@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="ot-container">
+
+    <table class="ot-table">
+        <tr>
+            <th>Patient</th>
+            <th>Disease</th>
+            <th>Doctor</th>
+            <th>Room</th>
+            <th>Date</th>
+            <th>Time</th>
+        </tr>
+
+        {% for s in schedules %}
+        <tr>
+            <td>{{ s.patient_name }}</td>
+            <td>{{ s.disease }}</td>
+            <td>{{ s.doctor.username }}</td>
+            <td>{{ s.room }}</td>
+            <td>{{ s.date }}</td>
+            <td>{{ s.start_time }} - {{ s.end_time }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No OT Schedule</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}
