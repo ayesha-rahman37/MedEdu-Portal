@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule,  Attendance
+from .models import OperationSchedule, User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule,  Attendance
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
@@ -1083,4 +1083,24 @@ def dashboard_analytics(request):
         "pass_rate": round(pass_rate, 2),
         "total": total,
         "improvement": round(improvement, 2)
+    })
+
+# ================= OT SCHEDULE =================
+@login_required
+def ot_schedule(request):
+    user = request.user
+
+    # doctor view
+    if user.role == "doctor":
+        schedules = OperationSchedule.objects.filter(doctor=user)
+
+    # student + intern view
+    elif user.role in ["medical_student", "dental_student", "intern"]:
+        schedules = OperationSchedule.objects.filter(participants=user)
+
+    else:
+        schedules = []
+
+    return render(request, "ot/schedule.html", {
+        "schedules": schedules
     })

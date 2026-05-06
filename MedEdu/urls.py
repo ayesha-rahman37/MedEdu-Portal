@@ -79,4 +79,7 @@ urlpatterns = [
     path('faculty/results/', views.exam_results, name='exam_results'),
     # ================= ANALYTICS URLS =================
     path('analytics/', views.dashboard_analytics, name='analytics'),
+
+    # ================== OT URLS ==================
+    path('ot/', views.ot_schedule, name='ot_schedule'),
 ]
