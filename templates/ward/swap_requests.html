@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="table-wrapper">
+
+    <table class="modern-table">
+
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Ward</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for r in requests %}
+
+            <tr>
+
+                <td>{{ r.requested_by }}</td>
+
+                <td>{{ r.posting.ward_name }}</td>
+
+                <td>{{ r.reason }}</td>
+
+                <td>{{ r.status }}</td>
+
+                <td>
+
+                    <a href="{% url 'update_swap_status' r.id 'accept' %}">
+                        Accept
+                    </a>
+
+                    |
+
+                    <a href="{% url 'update_swap_status' r.id 'reject' %}">
+                        Reject
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

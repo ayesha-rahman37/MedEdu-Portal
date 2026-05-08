@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="table-wrapper">
+
+    <table class="modern-table">
+
+        <thead>
+            <tr>
+                <th>Ward</th>
+                <th>Duty</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Swap</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for p in postings %}
+
+            <tr>
+
+                <td>{{ p.ward_name }}</td>
+
+                <td>{{ p.duty_type }}</td>
+
+                <td>{{ p.date }}</td>
+
+                <td>
+                    {{ p.start_time }} - {{ p.end_time }}
+                </td>
+
+                <td>
+                    <a href="{% url 'ward_swap_request' p.id %}">
+                        Request
+                    </a>
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
