@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-container">
+
+    <h2 class="page-title">Notifications</h2>
+
+    <div class="page-box">
+
+        {% for n in notifications %}
+            <div class="notif-card">
+                <p>{{ n.message }}</p>
+                <small>{{ n.created_at|date:"M d, H:i" }}</small>
+            </div>
+        {% empty %}
+            <p>No notifications</p>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

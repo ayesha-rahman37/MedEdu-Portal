@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import DutySchedule, ClinicalCase, DutySwapRequest, User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule,  Attendance, OperationSchedule
+from .models import DutySchedule, ClinicalCase, DutySwapRequest, User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule,  Attendance, OperationSchedule, Notification
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
@@ -1208,4 +1208,18 @@ def clinical_case(request):
 
     return render(request, "intern/clinical_case.html", {
         "cases": cases
+    })
+
+# ================= NOTIFICATIONS VIEW =================
+@login_required
+def notifications_view(request):
+    notifications = Notification.objects.filter(
+        user=request.user
+    ).order_by('-created_at')
+
+    # mark as read when opened
+    notifications.update(is_read=True)
+
+    return render(request, 'notifications.html', {
+        'notifications': notifications
     })
