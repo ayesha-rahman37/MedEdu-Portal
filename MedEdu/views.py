@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import DutySchedule, ClinicalCase, DutySwapRequest, User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, ClassSchedule,  Attendance, OperationSchedule, Notification
+from .models import DutySchedule, ClinicalCase, DutySwapRequest, User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, WardSwapRequest, ClassSchedule,  Attendance, Notification, OperationSchedule, WardPosting
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
@@ -1223,3 +1223,120 @@ def notifications_view(request):
     return render(request, 'notifications.html', {
         'notifications': notifications
     })
+    
+    
+    
+# ================= WARD POSTING =================
+@login_required
+def ward_posting_manage(request):
+
+    if request.user.role != "ward":
+        return redirect("home")
+
+    users = User.objects.filter(
+        role__in=["medical_student", "dental_student", "intern"]
+    )
+
+    if request.method == "POST":
+
+        user_id = request.POST.get("user")
+        ward_name = request.POST.get("ward_name")
+        duty_type = request.POST.get("duty_type")
+        date = request.POST.get("date")
+        start_time = request.POST.get("start_time")
+        end_time = request.POST.get("end_time")
+
+        selected_user = User.objects.get(id=user_id)
+
+        role_type = "student"
+
+        if selected_user.role == "intern":
+            role_type = "intern"
+
+        WardPosting.objects.create(
+            user=selected_user,
+            role_type=role_type,
+            ward_name=ward_name,
+            duty_type=duty_type,
+            date=date,
+            start_time=start_time,
+            end_time=end_time,
+            assigned_by=request.user
+        )
+
+        return redirect("ward_posting_manage")
+
+    postings = WardPosting.objects.all().order_by("-date")
+
+    return render(request, "ward/manage_posting.html", {
+        "users": users,
+        "postings": postings
+    })
+    
+@login_required
+def my_ward_posting(request):
+
+    postings = WardPosting.objects.filter(
+        user=request.user
+    ).order_by("-date")
+
+    return render(request, "ward/my_posting.html", {
+        "postings": postings
+    })
+    
+@login_required
+def ward_swap_request(request, posting_id):
+
+    posting = WardPosting.objects.get(id=posting_id)
+
+    users = User.objects.filter(
+        role=posting.user.role
+    ).exclude(id=request.user.id)
+
+    if request.method == "POST":
+
+        swap_user = request.POST.get("swap_with")
+        reason = request.POST.get("reason")
+
+        WardSwapRequest.objects.create(
+            posting=posting,
+            requested_by=request.user,
+            swap_with_id=swap_user,
+            reason=reason
+        )
+
+        return redirect("my_ward_posting")
+
+    return render(request, "ward/swap_request.html", {
+        "posting": posting,
+        "users": users
+    })
+    
+@login_required
+def ward_swap_requests(request):
+
+    if request.user.role != "ward":
+        return redirect("home")
+
+    requests = WardSwapRequest.objects.all().order_by("-created_at")
+
+    return render(request, "ward/swap_requests.html", {
+        "requests": requests
+    })
+
+
+@login_required
+def update_swap_status(request, request_id, action):
+
+    swap = WardSwapRequest.objects.get(id=request_id)
+
+    if action == "accept":
+        swap.status = "accepted"
+
+    elif action == "reject":
+        swap.status = "rejected"
+
+    swap.save()
+
+    return redirect("ward_swap_requests")
+    

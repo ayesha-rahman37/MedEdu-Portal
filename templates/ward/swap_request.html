@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-container">
+
+    <div class="page-box">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <select name="swap_with">
+
+                {% for u in users %}
+
+                <option value="{{ u.id }}">
+                    {{ u.username }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+            <textarea
+                name="reason"
+                placeholder="Reason"
+            ></textarea>
+
+            <button type="submit">
+                Submit Request
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

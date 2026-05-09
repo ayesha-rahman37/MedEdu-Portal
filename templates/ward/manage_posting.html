@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-container">
+
+    <div class="page-box">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <select name="user" required>
+                <option value="">Select User</option>
+
+                {% for u in users %}
+                    <option value="{{ u.id }}">
+                        {{ u.username }} ({{ u.role }})
+                    </option>
+                {% endfor %}
+            </select>
+
+            <input type="text" name="ward_name" placeholder="Ward Name">
+
+            <input type="text" name="duty_type" placeholder="Duty Type">
+
+            <input type="date" name="date">
+
+            <input type="time" name="start_time">
+
+            <input type="time" name="end_time">
+
+            <button type="submit">
+                Assign Duty
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

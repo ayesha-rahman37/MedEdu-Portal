@@ -195,6 +195,7 @@
                 </div>
 
                 <a href="{% url 'intern_duty' %}">Ward Practice</a>
+                <a href="{% url 'my_ward_posting' %}"> Ward Posting</a>
                 <a href="{% url 'ot_schedule' %}">OT</a>
                 <a href="{% url 'student_status' %}">Status</a>
                 <a href="{% url 'student_library' %}">Library</a>
@@ -227,6 +228,7 @@
 
                 <a href="{% url 'intern_dashboard' %}">Home</a>
                 <a href="{% url 'intern_duty' %}">Duty Schedule</a>
+                <a href="{% url 'my_ward_posting' %}">Ward Posting</a>
                 <a href="{% url 'clinical_case' %}">Clinical Case</a>
                 <a href="{%url 'ot_schedule' %}">OT</a>
                 <a href="{% url 'payment' %}">Payment</a>
@@ -243,6 +245,7 @@
 
                 <a href="{% url 'doctor_dashboard' %}">Home</a>
                 <a href="{% url 'doctor_schedule' %}">Schedule</a>
+                <a href="{% url 'my_ward_posting' %}">Ward Schedule</a>
                 <a href="{%url 'ot_schedule' %}">OT</a>
                 <a href="#">Case Review</a>
                 <a href="{% url 'payment' %}">Payment</a>
@@ -258,7 +261,8 @@
 
                 <a href="{% url 'ward_dashboard' %}">Home</a>
                 <a href="#">Attendance</a>
-                <a href="#">Duty List</a>
+                <a href="{% url 'ward_posting_manage' %}"> Ward Posting</a>
+                <a href="{% url 'ward_swap_requests' %}">Swap Requests</a>
                 <a href="#">Reports</a>
                 <a href="{% url 'payment' %}">Payment</a>
                <a href="{% url 'notifications' %}">Notifications
