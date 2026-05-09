@@ -200,7 +200,11 @@
                 <a href="{% url 'student_status' %}">Status</a>
                 <a href="{% url 'student_library' %}">Library</a>
                 <a href="{% url 'payment' %}">Payment</a>
-                <a href="#">Notifications</a>
+                 <a href="{% url 'notifications' %}">Notifications
+                    {% if notification_count > 0 %}
+                        <span class="notif-badge">{{ notification_count }}</span>
+                    {% endif %}
+                </a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
 
@@ -212,7 +216,11 @@
                 <a href="{% url 'edit_marks' %}">Edit Marks</a>
                 <a href="{% url 'exam_results' %}">Exam Results</a>
                 <a href="{% url 'mark_attendance' %}">Attendance</a>
-                <a href="#">Notifications</a>
+                 <a href="{% url 'notifications' %}">Notifications
+                    {% if notification_count > 0 %}
+                        <span class="notif-badge">{{ notification_count }}</span>
+                    {% endif %}
+                </a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
 
@@ -224,7 +232,11 @@
                 <a href="{% url 'clinical_case' %}">Clinical Case</a>
                 <a href="{%url 'ot_schedule' %}">OT</a>
                 <a href="{% url 'payment' %}">Payment</a>
-                <a href="#">Notifications</a>
+                 <a href="{% url 'notifications' %}">Notifications
+                    {% if notification_count > 0 %}
+                        <span class="notif-badge">{{ notification_count }}</span>
+                    {% endif %}
+                </a>
                 <a href="{% url 'intern_resources' %}">Clinical Resources</a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
@@ -237,7 +249,11 @@
                 <a href="{%url 'ot_schedule' %}">OT</a>
                 <a href="#">Case Review</a>
                 <a href="{% url 'payment' %}">Payment</a>
-                <a href="#">Notifications</a>
+                <a href="{% url 'notifications' %}">Notifications
+                    {% if notification_count > 0 %}
+                        <span class="notif-badge">{{ notification_count }}</span>
+                    {% endif %}
+                </a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
 
@@ -249,7 +265,11 @@
                 <a href="{% url 'ward_swap_requests' %}">Swap Requests</a>
                 <a href="#">Reports</a>
                 <a href="{% url 'payment' %}">Payment</a>
-                <a href="#">Notifications</a>
+               <a href="{% url 'notifications' %}">Notifications
+                    {% if notification_count > 0 %}
+                        <span class="notif-badge">{{ notification_count }}</span>
+                    {% endif %}
+                </a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
 
@@ -260,7 +280,11 @@
                 <a href="{% url 'return_book' %}">Return</a>
                 <a href="{% url 'records' %}">Records</a>
                 <a href="{% url 'history' %}">History</a>
-                <a href="#">Notifications</a>
+                 <a href="{% url 'notifications' %}">Notifications
+                    {% if notification_count > 0 %}
+                        <span class="notif-badge">{{ notification_count }}</span>
+                    {% endif %}
+                </a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
 
@@ -273,7 +297,11 @@
                 <a href="{% url 'add_notice' %}">Academic Notice</a>
                 <a href="{% url 'payment' %}">Payments</a>
                 <a href="{% url 'analytics' %}">Analytics</a>
-                <a href="#">Notifications</a>
+                <a href="{% url 'notifications' %}">Notifications
+                    {% if notification_count > 0 %}
+                        <span class="notif-badge">{{ notification_count }}</span>
+                    {% endif %}
+                </a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
 

@@ -90,6 +90,11 @@ urlpatterns = [
 
     # ================= CLINICAL CASES =================
     path('clinical-case/', views.clinical_case, name='clinical_case'),
+
+    
+    # ================= NOTIFICATIONS =================
+    path('notifications/', views.notifications_view, name='notifications'),
+
     
     # ================= WARD POSTING =================
     path("ward-manage/", views.ward_posting_manage, name="ward_posting_manage"),
