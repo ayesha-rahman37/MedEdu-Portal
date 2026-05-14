@@ -1344,7 +1344,6 @@ def update_swap_status(request, request_id, action):
     swap.save()
 
     return redirect("ward_swap_requests")
-
 @login_required
 def student_report(request):
 
@@ -1401,7 +1400,6 @@ def student_report(request):
 
     })
 
-
 @login_required
 def admin_monitoring(request):
 
@@ -1457,4 +1455,30 @@ def admin_monitoring(request):
 @login_required
 def download_report(request):
 
-    return render(request, "reports/download_report.html")
+    student = request.user
+
+    results = Result.objects.filter(user=student)
+
+    attendance_total = Attendance.objects.filter(
+        student=student
+    ).count()
+
+    attendance_present = Attendance.objects.filter(
+        student=student,
+        status="present"
+    ).count()
+
+    attendance_percentage = 0
+
+    if attendance_total > 0:
+        attendance_percentage = (
+            attendance_present / attendance_total
+        ) * 100
+
+    return render(request, "reports/download_report.html", {
+
+        "student": student,
+        "results": results,
+        "attendance_percentage": round(attendance_percentage, 1)
+
+    })
