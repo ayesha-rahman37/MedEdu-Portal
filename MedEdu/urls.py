@@ -14,7 +14,7 @@ urlpatterns = [
     # ================= ACCOUNT =================
     path('verify/<int:user_id>/', views.verify_account, name="verify_account"),
 
-    # ================= FORGOT PASSWORD =================
+    # ONLY ONE FORGOT PASSWORD (FIXED)
     path('forgot-password/', views.forgot_password, name='forgot_password'),
 
     # ================= PROFILE =================
@@ -50,7 +50,7 @@ urlpatterns = [
 
     # ================= DOCTOR SCHEDULE =================
     path("doctor/schedule/", views.doctor_schedule, name="doctor_schedule"),
-
+    
     # ================= LIBRARY URLS =================
     path('library/issue/', views.issue_book, name='issue_book'),
     path('library/return/', views.return_book, name='return_book'),
@@ -62,7 +62,7 @@ urlpatterns = [
 
     # ================= INTERN URLS =================
     path('intern/resources/', views.intern_resources, name='intern_resources'),
-
+    
     # ================= PAYMENT URLS =================
     path('payment/', views.payment_dashboard, name='payment'),
 
@@ -70,25 +70,25 @@ urlpatterns = [
     path('admin/student-record/', views.student_record_view, name='student_record'),
     path('admin/eligibility/', views.eligibility_view, name='eligibility'),
     path('student/status/', views.student_status_view, name='student_status'),
-
-    # ================= FACULTY =================
+    
+    # ================= FACULTY SCHEDULE =================
     path('faculty/schedule/', views.faculty_schedule, name='faculty_schedule'),
     path("faculty/upload-marks/", views.upload_marks, name="upload_marks"),
     path("faculty/edit-marks/", views.edit_marks, name="edit_marks"),
     path("faculty/attendance/", views.mark_attendance, name="mark_attendance"),
     path('faculty/results/', views.exam_results, name='exam_results'),
 
-    # ================= ANALYTICS =================
+    # ================= ANALYTICS URLS =================
     path('analytics/', views.dashboard_analytics, name='analytics'),
 
     # ================= OT SCHEDULE =================
     path('ot/', views.ot_schedule, name='ot_schedule'),
 
-    # ================= INTERN DUTY =================
+    # ================= INTERN DUTY SCHEDULE =================
     path('assign-duty/', views.assign_duty, name='assign_duty'),
     path('intern-duty/', views.intern_duty, name='intern_duty'),
 
-    # ================= CLINICAL CASE =================
+    # ================= CLINICAL CASES =================
     path('clinical-case/', views.clinical_case, name='clinical_case'),
 
     # ================= NOTIFICATIONS =================
@@ -101,13 +101,15 @@ urlpatterns = [
     path("swap-requests/", views.ward_swap_requests, name="ward_swap_requests"),
     path("swap-update/<int:request_id>/<str:action>/", views.update_swap_status, name="update_swap_status"),
 
-    # ================= REPORTS =================
-    path("student-report/", views.student_report, name="student_report"),
-    path("download-report/", views.download_report, name="download_report"),
-    path("admin-monitoring/", views.admin_monitoring, name="admin_monitoring"),
+    # ================= INTERNSHIP ELIGIBILITY =================
+    path('internship-eligibility/', views.internship_eligibility, name='internship_eligibility'),
 
     path("medical-updates/",views.medical_updates,name="medical_updates"),
 
     path("create-medical-update/",views.create_medical_update,name="create_medical_update"),
 
+    # ================= REPORTS & MONITORING =================
+    path("student-report/", views.student_report, name="student_report"),
+    path("admin-monitoring/", views.admin_monitoring, name="admin_monitoring"),
+    path("download-report/", views.download_report, name="download_report"),
 ]

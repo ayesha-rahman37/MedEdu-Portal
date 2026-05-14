@@ -1,23 +1,28 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
 
-<div class="page-container">
+<div class="notification-container">
 
-    <h2 class="page-title">Notifications</h2>
+    <h2>Notifications</h2>
 
-    <div class="page-box">
+    {% for notification in notifications %}
 
-        {% for n in notifications %}
-            <div class="notif-card">
-                <p>{{ n.message }}</p>
-                <small>{{ n.created_at|date:"M d, H:i" }}</small>
-            </div>
-        {% empty %}
-            <p>No notifications</p>
-        {% endfor %}
+        <div class="notification-card">
 
-    </div>
+            <p>{{ notification.message }}</p>
+
+            <small>
+                {{ notification.created_at }}
+            </small>
+
+        </div>
+
+    {% empty %}
+
+        <p>No notifications available.</p>
+
+    {% endfor %}
 
 </div>
 

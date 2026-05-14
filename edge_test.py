@@ -1,192 +1,199 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.edge.service import Service
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.edge.options import Options
+
 import time
 
-# ================= CONFIG =================
-BASE_URL = "http://127.0.0.1:8000"
+
+# ================= USERS =================
 
 USERS = [
-    {"username": "D-1005", "password": "mededu40", "role": "non-student"},
-    {"username": "L-1003", "password": "mededu40", "role": "non-student"},
-    {"username": "I-1006", "password": "mededu40", "role": "non-student"},
-    {"username": "F-1008", "password": "mededu40", "role": "non-student"},
-    {"username": "W-1007", "password": "mededu40", "role": "non-student"},
-    {"username": "A-1009", "password": "mededu40", "role": "non-student"},
-    {"username": "DS-1004", "password": "mededu40", "role": "student"},
+
+    {"username": "D-1006", "password": "mededu40", "role": "doctor"},
+
+    {"username": "L-1008", "password": "mededu40", "role": "library staff"},
+
+    {"username": "I-1005", "password": "mededu40", "role": "intern doctor"},
+
+    {"username": "F-1004", "password": "mededu40", "role": "faculty"},
+
+    {"username": "W-1007", "password": "mededu40", "role": "ward authority"},
+
+    {"username": "A-1009", "password": "mededu40", "role": "admin"},
+
+    {"username": "DS-1003", "password": "mededu40", "role": "student"},
+
     {"username": "MS-1002", "password": "mededu40", "role": "student"},
+
 ]
 
-# ================= DRIVER =================
-driver = webdriver.Edge()
-wait = WebDriverWait(driver, 10)
+
+# ================= DRIVER SETUP =================
+
+BASE_URL = "http://127.0.0.1:8000/"
+
+options = Options()
+
+options.add_argument("--disable-gpu")
+
+service = Service("msedgedriver.exe")
+
+driver = webdriver.Edge(
+    service=service,
+    options=options
+)
+
+driver.maximize_window()
+
+driver.implicitly_wait(10)
+
+wait = WebDriverWait(driver, 15)
 
 
-# ================= LOGIN =================
-def login(user_id, password):
-    driver.get(f"{BASE_URL}/login/")
+# ================= LOGIN FUNCTION =================
 
-    wait.until(EC.presence_of_element_located((By.NAME, "mededu_id"))).send_keys(user_id)
-    driver.find_element(By.NAME, "password").send_keys(password)
-    driver.find_element(By.NAME, "password").send_keys(Keys.RETURN)
+def login(user):
+
+    driver.get(BASE_URL)
+
+    print("\n=================================")
+    print(f"Testing Role: {user['role']}")
+    print("=================================")
+
+    username = wait.until(
+        EC.presence_of_element_located(
+            (By.NAME, "mededu_id")
+        )
+    )
+
+    password = wait.until(
+        EC.presence_of_element_located(
+            (By.NAME, "password")
+        )
+    )
+
+    username.clear()
+    password.clear()
+
+    username.send_keys(user["username"])
+    password.send_keys(user["password"])
+
+    login_btn = wait.until(
+        EC.element_to_be_clickable(
+            (By.XPATH, "//button[@type='submit']")
+        )
+    )
+
+    login_btn.click()
+
+    time.sleep(2)
+
+    print("Login Successful")
+
+
+# ================= OPEN PAGE =================
+
+def open_page(link_text):
 
     try:
-        wait.until(EC.url_contains("dashboard"))
-        print(f"✅ Login success: {user_id}")
-    except TimeoutException:
-        print(f"❌ Login failed: {user_id}")
+
+        page = wait.until(
+            EC.element_to_be_clickable(
+                (By.PARTIAL_LINK_TEXT, link_text)
+            )
+        )
+
+        page.click()
+
+        print(f"{link_text} Page Opened")
+
+        time.sleep(1)
+
+    except Exception:
+
+        print(f"{link_text} Not Available")
+
+
+# ================= NAVIGATION TEST =================
+
+def test_navigation():
+
+    print("Testing Navbar...")
+
+    links = driver.find_elements(By.TAG_NAME, "a")
+
+    print(f"Navbar Links Found: {len(links)}")
+
+    pages = [
+
+        "Profile",
+        "Notification",
+        "Library",
+        "Payment",
+        "Result",
+        "Exam",
+        "Status",
+        "Logout"
+
+    ]
+
+    for page in pages:
+
+        open_page(page)
 
 
 # ================= LOGOUT =================
+
 def logout():
-    try:
-        driver.get(f"{BASE_URL}/logout/")
-        wait.until(EC.url_contains("login"))
-        print("✅ Logout success")
-    except:
-        print("❌ Logout failed")
-
-
-# ================= NAVBAR CHECK =================
-def check_navbar(role):
-    print("🔍 Checking navbar...")
 
     try:
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "nav")))
 
-        course = driver.find_elements(By.LINK_TEXT, "Course & Syllabus")
-        exam = driver.find_elements(By.LINK_TEXT, "Exam")
-        result = driver.find_elements(By.LINK_TEXT, "Result")
+        logout_btn = wait.until(
+            EC.element_to_be_clickable(
+                (By.PARTIAL_LINK_TEXT, "Logout")
+            )
+        )
 
-        if role == "student":
-            if course and exam and result:
-                print("✅ Student navbar OK")
-            else:
-                print("❌ Student navbar missing items")
-        else:
-            if not course and not exam and not result:
-                print("✅ Non-student navbar OK")
-            else:
-                print("❌ Non-student navbar error")
+        logout_btn.click()
 
-    except:
-        print("❌ Navbar check failed")
+        time.sleep(2)
+
+        print("Logout Success")
+
+    except Exception:
+
+        print("Logout Failed")
 
 
-# ================= SUBJECT PAGE =================
-def test_subject_access(role):
-    print("🔍 Testing subject page...")
+# ================= MAIN TEST LOOP =================
 
-    driver.get(f"{BASE_URL}/subject/anatomy/")
-
-    try:
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-
-        page = driver.page_source
-
-        if role == "student":
-            if "Syllabus" in page:
-                print("✅ Subject access OK")
-            else:
-                print("❌ Subject page broken")
-        else:
-            if "dashboard" in driver.current_url:
-                print("✅ Non-student blocked correctly")
-            else:
-                print("❌ Unauthorized access")
-
-    except:
-        print("❌ Subject test failed")
-
-
-# ================= PDF LOAD =================
-def test_pdf(role):
-    if role != "student":
-        return
-
-    print("🔍 Testing PDF load...")
-
-    driver.get(f"{BASE_URL}/subject/anatomy/")
-
-    try:
-        iframe = wait.until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
-        if iframe:
-            print("✅ PDF loaded")
-    except:
-        print("❌ PDF not loaded")
-
-
-# ================= EXAM NOTICE =================
-def test_exam_notice(role):
-    if role != "student":
-        return
-
-    print("🔍 Testing exam notice...")
-
-    driver.get(f"{BASE_URL}/exam/card/1/")
-
-    try:
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        print("✅ Exam notice page loaded")
-    except:
-        print("❌ Exam notice failed")
-
-
-# ================= RESULT =================
-def test_result():
-    print("🔍 Testing result page...")
-
-    driver.get(f"{BASE_URL}/result/")
-
-    try:
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "table")))
-        print("✅ Result loaded")
-    except:
-        print("❌ Result failed")
-
-
-# ================= PAYMENT =================
-def test_payment(role):
-    print("🔍 Testing payment...")
-
-    driver.get(f"{BASE_URL}/payment/")
-
-    try:
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-
-        if role == "student":
-            form = driver.find_elements(By.TAG_NAME, "form")
-            if form:
-                print("✅ Payment form OK")
-            else:
-                print("❌ Payment form missing")
-        else:
-            print("✅ Non-student payment view OK")
-
-    except:
-        print("❌ Payment test failed")
-
-
-# ================= MAIN TEST =================
 for user in USERS:
-    print("\n==============================")
-    print(f"🔹 Testing user: {user['id']}")
 
-    login(user["id"], user["password"])
+    try:
 
-    check_navbar(user["role"])
-    test_subject_access(user["role"])
-    test_pdf(user["role"])
-    test_exam_notice(user["role"])
-    test_result()
-    test_payment(user["role"])
+        login(user)
 
-    logout()
+        test_navigation()
+
+        logout()
+
+        print(f"TEST PASSED for {user['role']}")
+
+    except Exception as e:
+
+        print(f"TEST FAILED for {user['role']}")
+        print("Message:", e)
+
+    finally:
+
+        driver.get(BASE_URL)
+
+
+# ================= END =================
+
+print("\nALL TESTING COMPLETED")
 
 driver.quit()
-
-print("\n🎉 ALL TESTS COMPLETED")

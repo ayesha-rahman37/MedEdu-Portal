@@ -272,23 +272,7 @@ class ClassSchedule(models.Model):
     end_time = models.TimeField()
 
     def __str__(self):
-        return f"{self.faculty} - {self.subject} ({self.date})"
-    
-class Attendance(models.Model):
-    
-    STATUS = (
-        ("present", "Present"),
-        ("absent", "Absent"),
-    )
-
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-
-    date = models.DateField()
-    status = models.CharField(max_length=10, choices=STATUS)
-
-    def __str__(self):
-        return f"{self.student} - {self.status}"
+        return f"{self.faculty} - {self.subject} ({self.date})"    
     
 
 # ================= OT MANAGEMENT =================
@@ -390,15 +374,26 @@ class ClinicalCase(models.Model):
         return f"{self.patient_name} - {self.intern}"
     
 
-    # ================= NOTIFICATIONS =================
+# ================= NOTIFICATIONS =================
 class Notification(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
     message = models.TextField()
-    is_read = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    is_read = models.BooleanField(
+        default=False
+    )
 
     def __str__(self):
-        return f"{self.user} - {self.message[:20]}"
+        return self.message
    
 # ================= WARD POSTING =================
 class WardPosting(models.Model):
