@@ -19,7 +19,6 @@
             {% if user.role == "medical_student" or user.role == "dental_student" %}
 
                 <a href="{% url 'student_dashboard' %}">Home</a>
-                <a href="#">Class Schedule</a>
 
                 <!-- COURSE -->
                 <div class="nav-select">
@@ -194,10 +193,11 @@
                     </div>
                 </div>
 
-                <a href="{% url 'intern_duty' %}">Ward Practice</a>
-                <a href="{% url 'my_ward_posting' %}"> Ward Posting</a>
+                <!-- <a href="{% url 'intern_duty' %}">Ward Practice</a>my_ward_posting -->
+                <a href="{% url 'intern_duty' %}"> Ward Posting</a>
                 <a href="{% url 'ot_schedule' %}">OT</a>
                 <a href="{% url 'student_status' %}">Status</a>
+                <a href="{% url 'student_report' %}">Report</a>
                 <a href="{% url 'student_library' %}">Library</a>
                 <a href="{% url 'payment' %}">Payment</a>
                 <a href="{% url 'notifications' %}">Notifications</a>
@@ -222,7 +222,7 @@
                 <a href="{% url 'intern_duty' %}">Duty Schedule</a>
                 <a href="{% url 'my_ward_posting' %}">Ward Posting</a>
                 <a href="{% url 'clinical_case' %}">Clinical Case</a>
-                <a href="{%url 'ot_schedule' %}">OT</a>
+                <a href="{% url 'ot_schedule' %}">OT</a>
                 <a href="{% url 'payment' %}">Payment</a>
                 <a href="{% url 'notifications' %}">Notifications</a>
                 <a href="{% url 'intern_resources' %}">Clinical Resources</a>
@@ -234,8 +234,7 @@
                 <a href="{% url 'doctor_dashboard' %}">Home</a>
                 <a href="{% url 'doctor_schedule' %}">Schedule</a>
                 <a href="{% url 'my_ward_posting' %}">Ward Schedule</a>
-                <a href="{%url 'ot_schedule' %}">OT</a>
-                <a href="#">Case Review</a>
+                <a href="{% url 'ot_schedule' %}">OT</a>
                 <a href="{% url 'payment' %}">Payment</a>
                 <a href="{% url 'notifications' %}">Notifications</a>
                 <a href="{% url 'profile' %}">Profile</a>
@@ -269,6 +268,7 @@
                 <a href="{% url 'assign_duty' %}">Manage Duty</a>
                 <a href="{% url 'add_notice' %}">Academic Notice</a>
                 <a href="{% url 'analytics' %}">Analytics</a>
+                <a href="{% url 'admin_monitoring' %}">Monitoring</a>
                 <a href="{% url 'notifications' %}">Notifications</a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>

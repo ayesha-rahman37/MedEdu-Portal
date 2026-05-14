@@ -1,23 +1,12 @@
 {% extends "base.html" %}
-{% load static %}
-
 {% block content %}
 
 <div class="report-container">
 
     <div class="report-card">
 
-        <div class="report-header">
+        <h2>Your Academic Report</h2>
 
-            <h2>Your Academic Report</h2>
-
-            <a href="{% url 'download_report' %}" class="download-btn">
-                Download Report
-            </a>
-
-        </div>
-
-        <!-- SUMMARY -->
         <div class="report-grid">
 
             <div class="report-box">
@@ -26,71 +15,31 @@
             </div>
 
             <div class="report-box">
-                <h3>Cleared</h3>
+                <h3>Cleared Exams</h3>
                 <p>{{ cleared_results }}</p>
             </div>
 
             <div class="report-box">
-                <h3>Pending</h3>
+                <h3>Pending Exams</h3>
                 <p>{{ pending_results }}</p>
             </div>
 
         </div>
 
-        <!-- CHART -->
-        <div class="chart-box">
+        <div class="subject-box">
 
-            <canvas id="progressChart"></canvas>
+            <h3>Cleared Subjects</h3>
 
-        </div>
-
-        <!-- RESULT TABLE -->
-        <div class="table-wrapper">
-
-            <table class="modern-table">
-
-                <thead>
-                    <tr>
-                        <th>Topic</th>
-                        <th>Marks</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    {% for r in results %}
-
-                    <tr>
-
-                        <td>{{ r.topic.title }}</td>
-
-                        <td>{{ r.marks }}</td>
-
-                        <td>{{ r.status }}</td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
+            <ul>
+                {% for s in cleared_subjects %}
+                    <li>{{ s.topic.subject.name }}</li>
+                {% endfor %}
+            </ul>
 
         </div>
 
     </div>
 
 </div>
-
-<!-- CHART JS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-
-const chartLabels = {{ chart_labels|safe }};
-const chartMarks = {{ chart_marks|safe }};
-
-</script>
 
 {% endblock %}

@@ -7,6 +7,7 @@ from django.conf import settings
 from .models import DutySchedule, ClinicalCase, DutySwapRequest, User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, WardSwapRequest, ClassSchedule,  Attendance, Notification, OperationSchedule, WardPosting
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
+from django.db.models import Count
 
 def create_notification(user, message):
 
@@ -1468,4 +1469,149 @@ def internship_eligibility(request):
         "eligible": eligible,
         "total": total,
         "cleared": cleared
+    })
+
+
+# ================= STUDENT REPORT =================
+@login_required
+def student_report(request):
+
+    student = request.user
+
+    # attendance
+    total_attendance = Attendance.objects.filter(
+        student=student
+    ).count()
+
+    present_count = Attendance.objects.filter(
+        student=student,
+        status="present"
+    ).count()
+
+    attendance_percentage = 0
+
+    if total_attendance > 0:
+        attendance_percentage = (
+            present_count / total_attendance
+        ) * 100
+
+    # results
+    total_results = Result.objects.filter(
+        user=student
+    ).count()
+
+    cleared_results = Result.objects.filter(
+        user=student,
+        status="clear"
+    ).count()
+
+    pending_results = Result.objects.filter(
+        user=student,
+        status="pending"
+    ).count()
+
+    # cleared subjects
+    cleared_subjects = Result.objects.filter(
+        user=student,
+        status="clear"
+    )
+
+    return render(request, "reports/student_report.html", {
+
+        "attendance_percentage": round(attendance_percentage, 1),
+
+        "total_results": total_results,
+
+        "cleared_results": cleared_results,
+
+        "pending_results": pending_results,
+
+        "cleared_subjects": cleared_subjects,
+
+    })
+
+
+# ================= ADMIN MONITORING VIEW =================
+@login_required
+def admin_monitoring(request):
+
+    if request.user.role != "admin":
+        return redirect("home")
+
+    students = User.objects.filter(
+        role__in=["medical_student", "dental_student"]
+    )
+
+    monitoring_data = []
+
+    for student in students:
+
+        total_attendance = Attendance.objects.filter(
+            student=student
+        ).count()
+
+        present = Attendance.objects.filter(
+            student=student,
+            status="present"
+        ).count()
+
+        attendance_percentage = 0
+
+        if total_attendance > 0:
+            attendance_percentage = (
+                present / total_attendance
+            ) * 100
+
+        cleared = Result.objects.filter(
+            user=student,
+            status="clear"
+        ).count()
+
+        pending = Result.objects.filter(
+            user=student,
+            status="pending"
+        ).count()
+
+        monitoring_data.append({
+            "student": student,
+            "attendance": round(attendance_percentage, 1),
+            "cleared": cleared,
+            "pending": pending
+        })
+
+    return render(request, "reports/admin_monitoring.html", {
+        "monitoring_data": monitoring_data
+    })
+
+
+# ================= DOWNLOAD REPORT =================
+@login_required
+def download_report(request):
+
+    student = request.user
+
+    results = Result.objects.filter(user=student)
+
+    attendance_total = Attendance.objects.filter(
+        student=student
+    ).count()
+
+    attendance_present = Attendance.objects.filter(
+        student=student,
+        status="present"
+    ).count()
+
+    attendance_percentage = 0
+
+    if attendance_total > 0:
+        attendance_percentage = (
+            attendance_present / attendance_total
+        ) * 100
+
+    return render(request, "reports/download_report.html", {
+
+        "student": student,
+        "results": results,
+        "attendance_percentage": round(attendance_percentage, 1)
+
     })
