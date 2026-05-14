@@ -8,6 +8,14 @@ from .models import DutySchedule, ClinicalCase, DutySwapRequest, User, Subject, 
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 
+def create_notification(user, message):
+
+    Notification.objects.create(
+        user=user,
+        message=message
+    )
+
+
 # ================= HOME =================
 def home(request):
     return render(request, "home.html")
@@ -755,6 +763,7 @@ def add_exam_notice(request):
         return redirect('home')
 
     if request.method == "POST":
+
         exam_type = request.POST.get('exam_type')
         course = request.POST.get('course')
         phase = request.POST.get('phase')
@@ -770,6 +779,22 @@ def add_exam_notice(request):
             description=description,
             date=date
         )
+
+        # 🔥 SEND NOTIFICATION
+        students = User.objects.filter(
+            role__in=[
+                "medical_student",
+                "dental_student",
+                "intern"
+            ]
+        )
+
+        for student in students:
+
+            create_notification(
+                student,
+                f"New {exam_type} exam notice published."
+            )
 
         return redirect('add_notice')
 
@@ -792,12 +817,19 @@ def payment_dashboard(request):
             bank = request.POST.get("bank")
 
             if amount and method and purpose:
+
                 Payment.objects.create(
                     user=user,
                     amount=int(amount),
                     method=method,
                     purpose=purpose,
                     bank_name=bank
+                )
+
+                # 🔥 NOTIFICATION
+                create_notification(
+                    request.user,
+                    "Payment submitted successfully."
                 )
 
         payments = Payment.objects.filter(user=user).order_by('-date')
@@ -816,6 +848,7 @@ def payment_dashboard(request):
         return render(request, "payment/salary.html", {
             "salaries": salaries
         })
+    
 
 # ================ STUDENT ELIGIBILITY CHECK =================
 def check_eligibility(record):
@@ -1113,12 +1146,16 @@ def ot_schedule(request):
 # ================= ADMIN ASSIGN DUTY =================
 @login_required
 def assign_duty(request):
+
     if request.user.role != "admin":
         return redirect("dashboard")
 
-    users = User.objects.filter(role__in=["intern", "student"])
+    users = User.objects.filter(
+        role__in=["intern", "student"]
+    )
 
     if request.method == "POST":
+
         user_id = request.POST.get("user")
         role_type = request.POST.get("role_type")
         ward = request.POST.get("ward")
@@ -1130,7 +1167,11 @@ def assign_duty(request):
         round_required = request.POST.get("round") == "on"
 
         user = User.objects.get(id=user_id)
-        doctor = User.objects.get(id=doctor_id) if doctor_id else None
+
+        doctor = None
+
+        if doctor_id:
+            doctor = User.objects.get(id=doctor_id)
 
         DutySchedule.objects.create(
             user=user,
@@ -1142,6 +1183,12 @@ def assign_duty(request):
             task=task,
             doctor=doctor,
             round_required=round_required
+        )
+
+        # 🔥 NOTIFICATION
+        create_notification(
+            user,
+            f"New duty assigned in {ward} ward."
         )
 
         return redirect("assign_duty")
@@ -1185,10 +1232,12 @@ def request_swap(request, duty_id):
 
 @login_required
 def clinical_case(request):
+
     if request.user.role != "intern":
         return redirect("dashboard")
 
     if request.method == "POST":
+
         patient_name = request.POST.get("patient_name")
         phone = request.POST.get("phone")
         disease = request.POST.get("disease")
@@ -1202,9 +1251,17 @@ def clinical_case(request):
             history=history
         )
 
+        # 🔥 NOTIFICATION
+        create_notification(
+            request.user,
+            "Clinical case added successfully."
+        )
+
         return redirect("clinical_case")
 
-    cases = ClinicalCase.objects.filter(intern=request.user).order_by("-created_at")
+    cases = ClinicalCase.objects.filter(
+        intern=request.user
+    ).order_by("-created_at")
 
     return render(request, "intern/clinical_case.html", {
         "cases": cases
@@ -1213,16 +1270,18 @@ def clinical_case(request):
 # ================= NOTIFICATIONS VIEW =================
 @login_required
 def notifications_view(request):
+
     notifications = Notification.objects.filter(
         user=request.user
     ).order_by('-created_at')
 
-    # mark as read when opened
-    notifications.update(is_read=True)
-
-    return render(request, 'notifications.html', {
-        'notifications': notifications
-    })
+    return render(
+        request,
+        'notifications.html',
+        {
+            'notifications': notifications
+        }
+    )
     
     
     
@@ -1234,7 +1293,11 @@ def ward_posting_manage(request):
         return redirect("home")
 
     users = User.objects.filter(
-        role__in=["medical_student", "dental_student", "intern"]
+        role__in=[
+            "medical_student",
+            "dental_student",
+            "intern"
+        ]
     )
 
     if request.method == "POST":
@@ -1264,6 +1327,12 @@ def ward_posting_manage(request):
             assigned_by=request.user
         )
 
+        # 🔥 NOTIFICATION
+        create_notification(
+            selected_user,
+            f"You have a new ward posting in {ward_name}."
+        )
+
         return redirect("ward_posting_manage")
 
     postings = WardPosting.objects.all().order_by("-date")
@@ -1272,6 +1341,7 @@ def ward_posting_manage(request):
         "users": users,
         "postings": postings
     })
+
     
 @login_required
 def my_ward_posting(request):
@@ -1283,7 +1353,9 @@ def my_ward_posting(request):
     return render(request, "ward/my_posting.html", {
         "postings": postings
     })
-    
+
+
+# ================= REQUEST WARD SWAP =================
 @login_required
 def ward_swap_request(request, posting_id):
 
@@ -1305,12 +1377,24 @@ def ward_swap_request(request, posting_id):
             reason=reason
         )
 
+        # 🔥 NOTIFICATION TO WARD AUTHORITY
+        ward_users = User.objects.filter(role="ward")
+
+        for ward_user in ward_users:
+
+            create_notification(
+                ward_user,
+                "A new ward swap request has been submitted."
+            )
+
         return redirect("my_ward_posting")
 
     return render(request, "ward/swap_request.html", {
         "posting": posting,
         "users": users
     })
+
+
     
 @login_required
 def ward_swap_requests(request):
@@ -1325,18 +1409,36 @@ def ward_swap_requests(request):
     })
 
 
+# ================= UPDATE SWAP STATUS =================
 @login_required
 def update_swap_status(request, request_id, action):
 
     swap = WardSwapRequest.objects.get(id=request_id)
 
     if action == "accept":
+
         swap.status = "accepted"
 
     elif action == "reject":
+
         swap.status = "rejected"
 
     swap.save()
+
+    # 🔥 NOTIFICATION
+    if action == "accept":
+
+        create_notification(
+            swap.requested_by,
+            "Your ward swap request was accepted."
+        )
+
+    else:
+
+        create_notification(
+            swap.requested_by,
+            "Your ward swap request was rejected."
+        )
 
     return redirect("ward_swap_requests")
 
