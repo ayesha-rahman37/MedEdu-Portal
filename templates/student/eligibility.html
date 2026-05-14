@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="status-container">
+
+    <div class="status-card">
+
+        {% if eligible %}
+            <h2 style="color: green;">✅ Eligible for Internship</h2>
+        {% else %}
+            <h2 style="color: red;">❌ Not Eligible</h2>
+        {% endif %}
+
+        <p>Total Exams: {{ total }}</p>
+        <p>Cleared: {{ cleared }}</p>
+
+    </div>
+
+</div>
+
+{% endblock %}
