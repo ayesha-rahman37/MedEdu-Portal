@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
-from .models import DutySchedule, ClinicalCase, DutySwapRequest, User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, WardSwapRequest, ClassSchedule,  Attendance, Notification, OperationSchedule, WardPosting
+from .models import DutySchedule, ClinicalCase, DutySwapRequest, User, Subject, Topic, ExamSchedule, Result, DoctorSchedule, Book, Issue, ExamNotice, Payment, Salary, StudentRecord, WardSwapRequest, ClassSchedule,  Attendance, Notification, OperationSchedule, WardPosting, MedicalUpdate
 from django.shortcuts import render, get_object_or_404
 from datetime import date, timedelta
 from django.db.models import Count
@@ -1614,4 +1614,38 @@ def download_report(request):
         "results": results,
         "attendance_percentage": round(attendance_percentage, 1)
 
+    })
+
+@login_required
+def create_medical_update(request):
+
+    if request.user.role != "admin":
+        return redirect("home")
+
+    if request.method == "POST":
+
+        title = request.POST.get("title")
+        category = request.POST.get("category")
+        description = request.POST.get("description")
+        link = request.POST.get("link")
+
+        MedicalUpdate.objects.create(
+            title=title,
+            category=category,
+            description=description,
+            link=link,
+            posted_by=request.user
+        )
+
+        return redirect("medical_updates")
+
+    return render(request, "medical/create_update.html")
+
+@login_required
+def medical_updates(request):
+
+    updates = MedicalUpdate.objects.all().order_by("-created_at")
+
+    return render(request, "medical/updates.html", {
+        "updates": updates
     })
