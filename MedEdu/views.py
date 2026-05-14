@@ -1344,4 +1344,117 @@ def update_swap_status(request, request_id, action):
     swap.save()
 
     return redirect("ward_swap_requests")
+
+@login_required
+def student_report(request):
+
+    student = request.user
+
+    # attendance
+    total_attendance = Attendance.objects.filter(
+        student=student
+    ).count()
+
+    present_count = Attendance.objects.filter(
+        student=student,
+        status="present"
+    ).count()
+
+    attendance_percentage = 0
+
+    if total_attendance > 0:
+        attendance_percentage = (
+            present_count / total_attendance
+        ) * 100
+
+    # results
+    results = Result.objects.filter(user=student)
+
+    cleared_results = results.filter(
+        status="clear"
+    ).count()
+
+    pending_results = results.filter(
+        status="pending"
+    ).count()
+
+    # chart data
+    chart_labels = []
+    chart_marks = []
+
+    for r in results:
+        chart_labels.append(r.topic.title)
+        chart_marks.append(r.marks if r.marks else 0)
+
+    return render(request, "reports/student_report.html", {
+
+        "attendance_percentage": round(attendance_percentage, 1),
+
+        "cleared_results": cleared_results,
+
+        "pending_results": pending_results,
+
+        "results": results,
+
+        "chart_labels": chart_labels,
+        "chart_marks": chart_marks,
+
+    })
+
+
+@login_required
+def admin_monitoring(request):
+
+    if request.user.role != "admin":
+        return redirect("home")
+
+    students = User.objects.filter(
+        role__in=["medical_student", "dental_student"]
+    )
+
+    monitoring_data = []
+
+    for student in students:
+
+        total_attendance = Attendance.objects.filter(
+            student=student
+        ).count()
+
+        present = Attendance.objects.filter(
+            student=student,
+            status="present"
+        ).count()
+
+        attendance_percentage = 0
+
+        if total_attendance > 0:
+            attendance_percentage = (
+                present / total_attendance
+            ) * 100
+
+        cleared = Result.objects.filter(
+            user=student,
+            status="clear"
+        ).count()
+
+        pending = Result.objects.filter(
+            user=student,
+            status="pending"
+        ).count()
+
+        monitoring_data.append({
+            "student": student,
+            "attendance": round(attendance_percentage, 1),
+            "cleared": cleared,
+            "pending": pending
+        })
+
+    return render(request, "reports/admin_monitoring.html", {
+        "monitoring_data": monitoring_data
+    })
+
     
+@login_required
+def download_report(request):
+
+    return render(request, "reports/download_report.html")

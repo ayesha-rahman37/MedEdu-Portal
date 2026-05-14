@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="table-wrapper">
+
+    <table class="modern-table">
+
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Attendance</th>
+                <th>Cleared</th>
+                <th>Pending</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for d in monitoring_data %}
+
+            <tr>
+
+                <td>{{ d.student.username }}</td>
+
+                <td>{{ d.attendance }}%</td>
+
+                <td>{{ d.cleared }}</td>
+
+                <td>{{ d.pending }}</td>
+
+                <td>
+
+                    {% if d.attendance < 75 or d.pending > 3 %}
+                        🔴 Weak
+                    {% else %}
+                        🟢 Good
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

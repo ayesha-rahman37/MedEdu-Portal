@@ -1863,3 +1863,52 @@ h2 {
     margin-top: 30px;
     font-size: 16px;
 }
+/* ================= REPORT ================= */
+
+.report-container {
+    width: 85%;
+    margin: 40px auto;
+}
+
+.report-card {
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 18px;
+}
+
+.report-grid {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.report-box {
+    flex: 1;
+    background: #f8ebe7;
+    padding: 20px;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.report-box h3 {
+    margin-bottom: 10px;
+}
+
+.report-box p {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.subject-box {
+    margin-top: 30px;
+    background: #f8ebe7;
+    padding: 20px;
+    border-radius: 14px;
+}
+
+.subject-box ul {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
