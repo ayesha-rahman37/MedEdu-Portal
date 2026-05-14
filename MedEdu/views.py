@@ -1182,7 +1182,7 @@ def request_swap(request, duty_id):
 
     return redirect("intern_duty")
 
-
+# ================= CLINICAL CASES =================
 @login_required
 def clinical_case(request):
     if request.user.role != "intern":
@@ -1272,7 +1272,8 @@ def ward_posting_manage(request):
         "users": users,
         "postings": postings
     })
-    
+
+
 @login_required
 def my_ward_posting(request):
 
@@ -1283,7 +1284,9 @@ def my_ward_posting(request):
     return render(request, "ward/my_posting.html", {
         "postings": postings
     })
-    
+
+
+
 @login_required
 def ward_swap_request(request, posting_id):
 
@@ -1312,6 +1315,8 @@ def ward_swap_request(request, posting_id):
         "users": users
     })
     
+
+
 @login_required
 def ward_swap_requests(request):
 

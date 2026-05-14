@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="form-box">
+
+<form method="POST">
+    {% csrf_token %}
+
+    <select name="user" required>
+        <option value="">Select User</option>
+        {% for u in users %}
+            <option value="{{ u.id }}">{{ u.mededu_id }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="role_type" required>
+        <option value="intern">Intern</option>
+        <option value="student">Student</option>
+    </select>
+
+    <input type="text" name="ward" placeholder="Ward" required>
+
+    <input type="date" name="date" required>
+
+    <input type="time" name="start_time" required>
+    <input type="time" name="end_time" required>
+
+    <input type="text" name="task" placeholder="Task" required>
+
+    <select name="doctor">
+        <option value="">Select Doctor</option>
+        {% for d in doctors %}
+            <option value="{{ d.id }}">{{ d.mededu_id }}</option>
+        {% endfor %}
+    </select>
+
+    <label>
+        <input type="checkbox" name="round"> Round Required
+    </label>
+
+    <button type="submit">Assign Duty</button>
+
+</form>
+
+</div>
+
+{% endblock %}
