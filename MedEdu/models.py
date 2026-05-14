@@ -471,3 +471,32 @@ class WardSwapRequest(models.Model):
 
     def __str__(self):
         return f"{self.requested_by} swap request"
+    
+    
+class Attendance(models.Model):
+
+    STATUS = (
+        ("present", "Present"),
+        ("absent", "Absent"),
+    )
+
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.CASCADE
+    )
+
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS
+    )
+
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student} - {self.status}"
+
