@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Academic Report</title>
+
+    <style>
+
+        body{
+            font-family: Arial;
+            padding:40px;
+        }
+
+        table{
+            width:100%;
+            border-collapse: collapse;
+            margin-top:20px;
+        }
+
+        th, td{
+            border:1px solid #ddd;
+            padding:10px;
+        }
+
+        th{
+            background:#f3d4cc;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>Academic Report</h1>
+
+<h3>{{ student.username }}</h3>
+
+<p>
+    Attendance:
+    {{ attendance_percentage }}%
+</p>
+
+<table>
+
+    <thead>
+
+        <tr>
+            <th>Topic</th>
+            <th>Marks</th>
+            <th>Status</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for r in results %}
+
+        <tr>
+
+            <td>{{ r.topic.title }}</td>
+
+            <td>{{ r.marks }}</td>
+
+            <td>{{ r.status }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+<script>
+
+window.print();
+
+</script>
+
+</body>
+</html>

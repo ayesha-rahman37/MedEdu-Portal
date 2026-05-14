@@ -108,3 +108,59 @@ function loadContent(type) {
         c.innerHTML = `<h3>${type}</h3>`;
     }
 }
+
+const ctx = document.getElementById('progressChart');
+
+if (ctx) {
+
+    new Chart(ctx, {
+
+        type: 'line',
+
+        data: {
+
+            labels: chartLabels,
+
+            datasets: [{
+
+                label: 'Marks Progress',
+
+                data: chartMarks,
+
+                borderColor: '#d4b4b4',
+
+                backgroundColor: 'rgba(212,180,180,0.2)',
+
+                tension: 0.4,
+
+                fill: true
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            plugins: {
+
+                legend: {
+                    display: true
+                }
+
+            },
+
+            scales: {
+
+                y: {
+                    beginAtZero: true
+                }
+
+            }
+
+        }
+
+    });
+
+}
