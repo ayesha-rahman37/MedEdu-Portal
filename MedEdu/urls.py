@@ -94,6 +94,13 @@ urlpatterns = [
     # ================= NOTIFICATIONS =================
     path('notifications/', views.notifications_view, name='notifications'),
 
+    # ================= WARD POSTING =================
+    path("ward-manage/", views.ward_posting_manage, name="ward_posting_manage"),
+    path("my-ward-posting/", views.my_ward_posting, name="my_ward_posting"),
+    path("swap-request/<int:posting_id>/", views.ward_swap_request, name="ward_swap_request"),
+    path("swap-requests/", views.ward_swap_requests, name="ward_swap_requests"),
+    path("swap-update/<int:request_id>/<str:action>/", views.update_swap_status, name="update_swap_status"),
+
     # ================= INTERNSHIP ELIGIBILITY =================
     path('internship-eligibility/', views.internship_eligibility, name='internship_eligibility'),
 ]
