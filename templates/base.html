@@ -200,6 +200,7 @@
                 <a href="{% url 'student_report' %}">Report</a>
                 <a href="{% url 'student_library' %}">Library</a>
                 <a href="{% url 'payment' %}">Payment</a>
+                <a href="{% url 'medical_updates' %}">Medical Updates</a>
                  <a href="{% url 'notifications' %}">Notifications
                     {% if notification_count > 0 %}
                         <span class="notif-badge">{{ notification_count }}</span>
@@ -232,6 +233,7 @@
                 <a href="{% url 'clinical_case' %}">Clinical Case</a>
                 <a href="{%url 'ot_schedule' %}">OT</a>
                 <a href="{% url 'payment' %}">Payment</a>
+                <a href="{% url 'medical_updates' %}">Medical Updates</a>
                  <a href="{% url 'notifications' %}">Notifications
                     {% if notification_count > 0 %}
                         <span class="notif-badge">{{ notification_count }}</span>
@@ -298,6 +300,10 @@
                 <a href="{% url 'admin_monitoring' %}">Monitoring</a>
                 <a href="{% url 'analytics' %}">Analytics</a>
                 <a href="{% url 'payment' %}">Payments</a>
+                <a href="{% url 'create_medical_update' %}">Add Update</a>
+
+                <a href="{% url 'medical_updates' %}">Medical Updates</a>
+
                 <a href="{% url 'notifications' %}">Notifications
                     {% if notification_count > 0 %}
                         <span class="notif-badge">{{ notification_count }}</span>

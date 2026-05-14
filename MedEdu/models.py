@@ -500,3 +500,37 @@ class Attendance(models.Model):
     def __str__(self):
         return f"{self.student} - {self.status}"
 
+# ================= MEDICAL UPDATE =================
+
+class MedicalUpdate(models.Model):
+
+    CATEGORY_CHOICES = (
+        ("news", "Medical News"),
+        ("career", "Career Opportunity"),
+        ("research", "Research"),
+        ("seminar", "Seminar"),
+        ("scholarship", "Scholarship"),
+    )
+
+    title = models.CharField(max_length=200)
+
+    category = models.CharField(
+        max_length=30,
+        choices=CATEGORY_CHOICES
+    )
+
+    description = models.TextField()
+
+    link = models.URLField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    posted_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True
+    )
+
+    def _str_(self):
+        return self.title
+

@@ -106,4 +106,8 @@ urlpatterns = [
     path("download-report/", views.download_report, name="download_report"),
     path("admin-monitoring/", views.admin_monitoring, name="admin_monitoring"),
 
+    path("medical-updates/",views.medical_updates,name="medical_updates"),
+
+    path("create-medical-update/",views.create_medical_update,name="create_medical_update"),
+
 ]

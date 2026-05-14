@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-container">
+
+    <div class="page-box">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <input
+                type="text"
+                name="title"
+                placeholder="Update Title"
+                required
+            >
+
+            <select name="category">
+
+                <option value="news">
+                    Medical News
+                </option>
+
+                <option value="career">
+                    Career Opportunity
+                </option>
+
+                <option value="research">
+                    Research
+                </option>
+
+                <option value="seminar">
+                    Seminar
+                </option>
+
+                <option value="scholarship">
+                    Scholarship
+                </option>
+
+            </select>
+
+            <textarea
+                name="description"
+                placeholder="Write details..."
+            ></textarea>
+
+            <input
+                type="url"
+                name="link"
+                placeholder="Optional Link"
+            >
+
+            <button type="submit">
+                Publish Update
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
