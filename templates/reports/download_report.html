@@ -3,28 +3,65 @@
 
 <head>
 
-    <title>Academic Report</title>
+    <title>
+        Student Report
+    </title>
 
     <style>
 
         body{
             font-family: Arial;
-            padding:40px;
+            padding: 40px;
+            background: #ffffff;
+            color: #333;
+        }
+
+        .pdf-container{
+            width: 100%;
+        }
+
+        h1{
+            text-align: center;
+            color: #b97f7f;
+            margin-bottom: 5px;
+        }
+
+        h2{
+            text-align: center;
+            margin-bottom: 35px;
+            color: #444;
+        }
+
+        .info-box{
+            background: #f8eeee;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .info-box p{
+            margin: 10px 0;
+            font-size: 16px;
         }
 
         table{
-            width:100%;
+            width: 100%;
             border-collapse: collapse;
-            margin-top:20px;
         }
 
         th, td{
-            border:1px solid #ddd;
-            padding:10px;
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
         }
 
         th{
-            background:#f3d4cc;
+            background: #e7c4c4;
+            color: #222;
+        }
+
+        tr:nth-child(even){
+            background: #faf5f5;
         }
 
     </style>
@@ -33,46 +70,84 @@
 
 <body>
 
-<h1>Academic Report</h1>
+<div class="pdf-container">
 
-<h3>{{ student.username }}</h3>
+    <h1>
+        MedEdu Portal
+    </h1>
 
-<p>
-    Attendance:
-    {{ attendance_percentage }}%
-</p>
+    <h2>
+        Student Academic Report
+    </h2>
 
-<table>
+    <div class="info-box">
 
-    <thead>
+        <p>
+            <strong>Name:</strong>
+            {{ student.username }}
+        </p>
 
-        <tr>
-            <th>Topic</th>
-            <th>Marks</th>
-            <th>Status</th>
-        </tr>
+        <p>
+            <strong>ID:</strong>
+            {{ student.mededu_id }}
+        </p>
 
-    </thead>
+        <p>
+            <strong>Attendance:</strong>
+            {{ attendance_percentage }}%
+        </p>
 
-    <tbody>
+    </div>
 
-        {% for r in results %}
+    <table>
 
-        <tr>
+        <thead>
 
-            <td>{{ r.topic.title }}</td>
+            <tr>
 
-            <td>{{ r.marks }}</td>
+                <th>
+                    Subject
+                </th>
 
-            <td>{{ r.status }}</td>
+                <th>
+                    Marks
+                </th>
 
-        </tr>
+                <th>
+                    Status
+                </th>
 
-        {% endfor %}
+            </tr>
 
-    </tbody>
+        </thead>
 
-</table>
+        <tbody>
+
+            {% for r in results %}
+
+            <tr>
+
+                <td>
+                    {{ r.topic.subject.name }}
+                </td>
+
+                <td>
+                    {{ r.marks }}
+                </td>
+
+                <td>
+                    {{ r.status }}
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
 
 <script>
 

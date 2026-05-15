@@ -1682,53 +1682,78 @@ def admin_monitoring(request):
         role__in=["medical_student", "dental_student"]
     )
 
-    monitoring_data = []
+    student_data = []
 
-    for student in students:
+    for s in students:
 
-        total_attendance = Attendance.objects.filter(
-            student=student
-        ).count()
+        results = Result.objects.filter(user=s)
 
-        present = Attendance.objects.filter(
-            student=student,
-            status="present"
-        ).count()
+        total = results.count()
 
-        attendance_percentage = 0
+        cleared = results.filter(status="clear").count()
 
-        if total_attendance > 0:
-            attendance_percentage = (
-                present / total_attendance
-            ) * 100
+        avg = 0
 
-        cleared = Result.objects.filter(
-            user=student,
-            status="clear"
-        ).count()
+        if total > 0:
 
-        pending = Result.objects.filter(
-            user=student,
-            status="pending"
-        ).count()
+            marks = []
 
-        monitoring_data.append({
-            "student": student,
-            "attendance": round(attendance_percentage, 1),
-            "cleared": cleared,
-            "pending": pending
+            for r in results:
+
+                if r.marks:
+
+                    percent = (
+                        r.marks / r.topic.full_marks
+                    ) * 100
+
+                    marks.append(percent)
+
+            if marks:
+                avg = sum(marks) / len(marks)
+
+        pass_rate = 0
+
+        if total > 0:
+            pass_rate = (cleared / total) * 100
+
+        eligible = False
+
+        if total > 0 and total == cleared:
+            eligible = True
+
+        student_data.append({
+
+            "id": s.id,
+
+            "username": s.username,
+
+            "mededu_id": s.mededu_id,
+
+            "avg_marks": round(avg, 1),
+
+            "pass_rate": round(pass_rate, 1),
+
+            "eligible": eligible
+
         })
 
-    return render(request, "reports/admin_monitoring.html", {
-        "monitoring_data": monitoring_data
-    })
+    return render(
+        request,
+        "reports/admin_monitoring.html",
+        {
+            "students": student_data
+        }
+    )
 
 
 # ================= DOWNLOAD REPORT =================
 @login_required
-def download_report(request):
+def download_report(request, student_id):
 
-    student = request.user
+    if request.user.role != "admin":
+        return redirect("home")
+
+    student = User.objects.get(id=student_id)
 
     results = Result.objects.filter(user=student)
 
@@ -1744,6 +1769,7 @@ def download_report(request):
     attendance_percentage = 0
 
     if attendance_total > 0:
+
         attendance_percentage = (
             attendance_present / attendance_total
         ) * 100
@@ -1751,7 +1777,9 @@ def download_report(request):
     return render(request, "reports/download_report.html", {
 
         "student": student,
+
         "results": results,
+
         "attendance_percentage": round(attendance_percentage, 1)
 
     })

@@ -1,51 +1,92 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="table-wrapper">
+<div class="analytics-wrapper">
 
-    <table class="modern-table">
+    <h1 class="analytics-title">
+        Student Analytics & Reports
+    </h1>
 
-        <thead>
-            <tr>
-                <th>Student</th>
-                <th>Attendance</th>
-                <th>Cleared</th>
-                <th>Pending</th>
-                <th>Status</th>
-            </tr>
-        </thead>
+    <div class="analytics-grid">
 
-        <tbody>
+        {% for student in students %}
 
-            {% for d in monitoring_data %}
+        <div class="analytics-card">
 
-            <tr>
+            <div class="student-top">
 
-                <td>{{ d.student.username }}</td>
+                <h2>
+                    {{ student.username }}
+                </h2>
 
-                <td>{{ d.attendance }}%</td>
+                <span>
+                    {{ student.mededu_id }}
+                </span>
 
-                <td>{{ d.cleared }}</td>
+            </div>
 
-                <td>{{ d.pending }}</td>
+            <div class="student-stats">
 
-                <td>
+                <div class="mini-box">
 
-                    {% if d.attendance < 75 or d.pending > 3 %}
-                        🔴 Weak
+                    <h4>
+                        Performance
+                    </h4>
+
+                    <p>
+                        {{ student.avg_marks }}%
+                    </p>
+
+                </div>
+
+                <div class="mini-box">
+
+                    <h4>
+                        Pass Rate
+                    </h4>
+
+                    <p>
+                        {{ student.pass_rate }}%
+                    </p>
+
+                </div>
+
+                <div class="mini-box">
+
+                    <h4>
+                        Internship
+                    </h4>
+
+                    {% if student.eligible %}
+
+                    <p class="eligible">
+                        Eligible
+                    </p>
+
                     {% else %}
-                        🟢 Good
+
+                    <p class="not-eligible">
+                        Not Eligible
+                    </p>
+
                     {% endif %}
 
-                </td>
+                </div>
 
-            </tr>
+            </div>
 
-            {% endfor %}
+            <a href="{% url 'download_report' student.id %}"
+               class="download-btn">
 
-        </tbody>
+                Download Report of {{ student.username }}
 
-    </table>
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
 
 </div>
 

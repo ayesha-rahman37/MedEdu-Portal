@@ -1847,39 +1847,101 @@ h2 {
 
 /* ================= ANALYTICS ================= */
 
-.analytics-container {
-    width: 80%;
-    margin: 40px auto;
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+.analytics-wrapper{
+    width: 90%;
+    margin: 50px auto;
 }
 
-.analytics-box {
-    width: 22%;
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
+.analytics-title{
     text-align: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    font-size: 42px;
+    margin-bottom: 40px;
+    color: #4b3636;
+    font-family: "Times New Roman";
 }
 
-.analytics-box h3 {
-    font-size: 16px;
+.analytics-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(340px,1fr));
+    gap: 30px;
+}
+
+.analytics-card{
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.analytics-card:hover{
+    transform: translateY(-5px);
+}
+
+.student-top{
+    margin-bottom: 25px;
+}
+
+.student-top h2{
+    color: #4b3636;
+    margin-bottom: 8px;
+    font-size: 28px;
+}
+
+.student-top span{
+    color: #666;
+    font-size: 15px;
+}
+
+.student-stats{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.mini-box{
+    background: rgba(255,255,255,0.7);
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+}
+
+.mini-box h4{
     margin-bottom: 10px;
+    color: #555;
+    font-size: 15px;
 }
 
-.analytics-box p {
+.mini-box p{
     font-size: 22px;
     font-weight: bold;
+    color: #3f2d2d;
 }
 
-.up {
-    color: green;
+.eligible{
+    color: green !important;
 }
 
-.down {
-    color: red;
+.not-eligible{
+    color: crimson !important;
+}
+
+.download-btn{
+    display: block;
+    text-align: center;
+    background: #c89a9a;
+    color: white;
+    padding: 14px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.download-btn:hover{
+    background: #b97f7f;
 }
 
 
