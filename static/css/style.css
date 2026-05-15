@@ -1939,3 +1939,373 @@ h2 {
     padding: 20px;
     border-radius: 14px;
 }
+
+
+/* ================= MEDICAL UPDATES ================= */
+
+.updates-container {
+    width: 80%;
+    margin: 40px auto;
+}
+
+.update-card {
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.update-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.update-category {
+    background: #e6bdb4;
+    color: #3a2f2f;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.update-date {
+    color: #777;
+    font-size: 14px;
+}
+
+.update-card h2 {
+    margin-bottom: 12px;
+}
+
+.update-card p {
+    line-height: 1.7;
+    margin-bottom: 15px;
+}
+
+.update-card a {
+    display: inline-block;
+    padding: 10px 14px;
+    background: #d4b4b4;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.update-card a:hover {
+    background: #c79a9a;
+}
+
+
+/* ================= CREATE MEDICAL UPDATE ================= */
+
+.create-update-container{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-top:70px;
+}
+
+.create-update-card{
+
+    width:600px;
+
+    background:rgba(255,255,255,0.65);
+
+    backdrop-filter:blur(10px);
+
+    padding:30px;
+
+    border-radius:22px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
+}
+
+
+.create-title{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+    color:#4a3434;
+
+    font-size:28px;
+
+    font-family:"Times New Roman", serif;
+
+    font-weight:bold;
+}
+
+.create-form{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+}
+
+.create-form input,
+.create-form select,
+.create-form textarea{
+
+    width:100%;
+
+    padding:13px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#fff;
+
+    font-size:15px;
+
+    outline:none;
+
+    box-shadow:0 3px 10px rgba(0,0,0,0.08);
+
+    font-family:"Times New Roman", serif;
+}
+
+
+.create-form button{
+
+    padding:13px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#c89191;
+
+    color:white;
+
+    font-size:17px;
+
+    font-family:"Times New Roman", serif;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.create-form button:hover{
+
+    background:#b97a7a;
+
+    transform:translateY(-2px);
+}
+
+
+/* ================= WARD MODULE ================= */
+
+.ward-container,
+.swap-container{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    margin-top:60px;
+}
+
+.ward-card,
+.swap-card{
+
+    width:760px;
+
+    background:rgba(255,255,255,0.65);
+
+    backdrop-filter:blur(10px);
+
+    padding:35px;
+
+    border-radius:25px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,0.12);
+}
+
+.ward-title,
+.swap-title,
+.table-title{
+
+    text-align:center;
+
+    font-size:36px;
+
+    margin-bottom:30px;
+
+    color:#4a3434;
+
+    font-family:"Times New Roman", serif;
+}
+
+.ward-form,
+.swap-form{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:20px;
+}
+
+.form-row{
+
+    display:flex;
+
+    gap:20px;
+}
+
+.input-group{
+
+    flex:1;
+
+    display:flex;
+    flex-direction:column;
+}
+
+.input-group label,
+.swap-form label{
+
+    margin-bottom:8px;
+
+    font-weight:bold;
+
+    color:#4a3434;
+
+    font-family:"Times New Roman", serif;
+}
+
+.input-group input,
+.input-group select,
+.swap-form select,
+.swap-form textarea{
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:white;
+
+    box-shadow:0 3px 10px rgba(0,0,0,0.08);
+
+    font-size:15px;
+
+    outline:none;
+
+    font-family:"Times New Roman", serif;
+}
+
+.swap-form textarea{
+
+    height:140px;
+
+    resize:none;
+}
+
+.ward-btn,
+.swap-form button,
+.action-btn,
+.accept-btn,
+.reject-btn{
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    color:white;
+
+    font-weight:bold;
+
+    font-family:"Times New Roman", serif;
+
+    transition:0.3s;
+
+    cursor:pointer;
+}
+
+.ward-btn,
+.swap-form button,
+.action-btn{
+
+    background:#c58f8f;
+}
+
+.accept-btn{
+
+    background:#7ba97b;
+}
+
+.reject-btn{
+
+    background:#c66b6b;
+}
+
+.ward-btn:hover,
+.swap-form button:hover,
+.action-btn:hover,
+.accept-btn:hover,
+.reject-btn:hover{
+
+    transform:translateY(-2px);
+
+    opacity:0.9;
+}
+
+.table-container{
+
+    width:90%;
+
+    margin:50px auto;
+}
+
+.styled-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+    background:white;
+
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+.styled-table thead{
+
+    background:#c58f8f;
+
+    color:white;
+}
+
+.styled-table th,
+.styled-table td{
+
+    padding:18px;
+
+    text-align:center;
+
+    font-family:"Times New Roman", serif;
+}
+
+.styled-table tbody tr:nth-child(even){
+
+    background:#f8f3f3;
+}

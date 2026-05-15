@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="page-container">
+<div class="swap-container">
 
-    <div class="page-box">
+    <div class="swap-card">
 
-        <form method="POST">
+        <form method="POST" class="swap-form">
 
             {% csrf_token %}
+
+            <label>Select Swap User</label>
 
             <select name="swap_with">
 
@@ -21,13 +23,17 @@
 
             </select>
 
+            <label>Reason</label>
+
             <textarea
                 name="reason"
-                placeholder="Reason"
+                placeholder="Write your reason..."
             ></textarea>
 
             <button type="submit">
+
                 Submit Request
+
             </button>
 
         </form>

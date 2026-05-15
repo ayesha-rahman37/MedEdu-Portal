@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="updates-container">
+
+    {% for u in updates %}
+
+    <div class="update-card">
+
+        <div class="update-top">
+
+            <span class="update-category">
+                {{ u.category }}
+            </span>
+
+            <span class="update-date">
+                {{ u.created_at|date:"M d, Y" }}
+            </span>
+
+        </div>
+
+        <h2>{{ u.title }}</h2>
+
+        <p>{{ u.description }}</p>
+
+        {% if u.link %}
+
+        <a href="{{ u.link }}" target="_blank">
+
+            Read More
+
+        </a>
+
+        {% endif %}
+
+    </div>
+
+    {% empty %}
+
+    <div class="update-card">
+
+        No updates available.
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,18 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="table-wrapper">
+<div class="table-container">
 
-    <table class="modern-table">
+    <table class="styled-table">
 
         <thead>
+
             <tr>
+
                 <th>User</th>
+
                 <th>Ward</th>
+
                 <th>Reason</th>
+
                 <th>Status</th>
+
                 <th>Action</th>
+
             </tr>
+
         </thead>
 
         <tbody>
@@ -31,13 +39,17 @@
 
                 <td>
 
-                    <a href="{% url 'update_swap_status' r.id 'accept' %}">
+                    <a
+                        href="{% url 'update_swap_status' r.id 'accept' %}"
+                        class="accept-btn"
+                    >
                         Accept
                     </a>
 
-                    |
-
-                    <a href="{% url 'update_swap_status' r.id 'reject' %}">
+                    <a
+                        href="{% url 'update_swap_status' r.id 'reject' %}"
+                        class="reject-btn"
+                    >
                         Reject
                     </a>
 

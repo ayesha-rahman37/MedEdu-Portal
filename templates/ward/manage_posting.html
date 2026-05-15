@@ -1,35 +1,114 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="page-container">
+<div class="ward-container">
 
-    <div class="page-box">
+    <div class="ward-card">
 
-        <form method="POST">
+        <form method="POST" class="ward-form">
+
             {% csrf_token %}
 
-            <select name="user" required>
-                <option value="">Select User</option>
+            <div class="form-row">
 
-                {% for u in users %}
-                    <option value="{{ u.id }}">
-                        {{ u.username }} ({{ u.role }})
-                    </option>
-                {% endfor %}
-            </select>
+                <div class="input-group">
 
-            <input type="text" name="ward_name" placeholder="Ward Name">
+                    <label>Select User</label>
 
-            <input type="text" name="duty_type" placeholder="Duty Type">
+                    <select name="user" required>
 
-            <input type="date" name="date">
+                        <option value="">
+                            Select User
+                        </option>
 
-            <input type="time" name="start_time">
+                        {% for u in users %}
 
-            <input type="time" name="end_time">
+                        <option value="{{ u.id }}">
+                            {{ u.username }} ({{ u.role }})
+                        </option>
 
-            <button type="submit">
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Ward Name</label>
+
+                    <input
+                        type="text"
+                        name="ward_name"
+                        placeholder="Enter ward name"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="form-row">
+
+                <div class="input-group">
+
+                    <label>Duty Type</label>
+
+                    <input
+                        type="text"
+                        name="duty_type"
+                        placeholder="Morning / Night"
+                        required
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Date</label>
+
+                    <input
+                        type="date"
+                        name="date"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="form-row">
+
+                <div class="input-group">
+
+                    <label>Start Time</label>
+
+                    <input
+                        type="time"
+                        name="start_time"
+                        required
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>End Time</label>
+
+                    <input
+                        type="time"
+                        name="end_time"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+            <button type="submit" class="ward-btn">
+
                 Assign Duty
+
             </button>
 
         </form>
