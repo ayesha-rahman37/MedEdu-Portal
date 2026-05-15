@@ -430,6 +430,7 @@ class WardPosting(models.Model):
 
 
 # ================= SWAP REQUEST =================
+# ================= SWAP REQUEST =================
 class WardSwapRequest(models.Model):
 
     STATUS_CHOICES = (
@@ -445,13 +446,14 @@ class WardSwapRequest(models.Model):
 
     requested_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="swap_requested_by"
     )
 
     swap_with = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="swap_partner"
+        related_name="swap_with_user"
     )
 
     reason = models.TextField()
@@ -462,10 +464,12 @@ class WardSwapRequest(models.Model):
         default="pending"
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     def __str__(self):
-        return f"{self.requested_by} swap request"
+        return f"{self.requested_by} -> {self.swap_with}"
     
     
 class Attendance(models.Model):

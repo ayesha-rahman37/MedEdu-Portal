@@ -1464,7 +1464,7 @@ def notifications_view(request):
 def ward_posting_manage(request):
 
     if request.user.role != "ward":
-        return redirect("home")
+        return redirect("dashboard")
 
     users = User.objects.filter(
         role__in=[
@@ -1477,21 +1477,25 @@ def ward_posting_manage(request):
     if request.method == "POST":
 
         user_id = request.POST.get("user")
+
         ward_name = request.POST.get("ward_name")
         duty_type = request.POST.get("duty_type")
+
         date = request.POST.get("date")
+
         start_time = request.POST.get("start_time")
         end_time = request.POST.get("end_time")
 
-        selected_user = User.objects.get(id=user_id)
+        user = User.objects.get(id=user_id)
 
-        role_type = "student"
-
-        if selected_user.role == "intern":
+        # role detect
+        if user.role == "intern":
             role_type = "intern"
+        else:
+            role_type = "student"
 
         WardPosting.objects.create(
-            user=selected_user,
+            user=user,
             role_type=role_type,
             ward_name=ward_name,
             duty_type=duty_type,
@@ -1501,19 +1505,16 @@ def ward_posting_manage(request):
             assigned_by=request.user
         )
 
-        # 🔥 NOTIFICATION
-        create_notification(
-            selected_user,
-            f"You have a new ward posting in {ward_name}."
+        # notification
+        Notification.objects.create(
+            user=user,
+            message=f"You have been assigned to {ward_name} ward."
         )
 
         return redirect("ward_posting_manage")
 
-    postings = WardPosting.objects.all().order_by("-date")
-
     return render(request, "ward/manage_posting.html", {
-        "users": users,
-        "postings": postings
+        "users": users
     })
 
     
@@ -1533,32 +1534,45 @@ def my_ward_posting(request):
 @login_required
 def ward_swap_request(request, posting_id):
 
-    posting = WardPosting.objects.get(id=posting_id)
+    posting = get_object_or_404(
+        WardPosting,
+        id=posting_id
+    )
 
     users = User.objects.filter(
-        role=posting.user.role
+        role__in=[
+            "medical_student",
+            "dental_student",
+            "intern"
+        ]
     ).exclude(id=request.user.id)
 
     if request.method == "POST":
 
-        swap_user = request.POST.get("swap_with")
+        swap_user_id = request.POST.get("swap_with")
+
         reason = request.POST.get("reason")
+
+        swap_user = User.objects.get(
+            id=swap_user_id
+        )
 
         WardSwapRequest.objects.create(
             posting=posting,
             requested_by=request.user,
-            swap_with_id=swap_user,
-            reason=reason
+            swap_with=swap_user,
+            reason=reason,
+            status="pending"
         )
 
-        # 🔥 NOTIFICATION TO WARD AUTHORITY
-        ward_users = User.objects.filter(role="ward")
+        # notification to ward authority
+        wards = User.objects.filter(role="ward")
 
-        for ward_user in ward_users:
+        for ward in wards:
 
-            create_notification(
-                ward_user,
-                "A new ward swap request has been submitted."
+            Notification.objects.create(
+                user=ward,
+                message=f"{request.user.username} sent a ward swap request."
             )
 
         return redirect("my_ward_posting")
@@ -1574,9 +1588,11 @@ def ward_swap_request(request, posting_id):
 def ward_swap_requests(request):
 
     if request.user.role != "ward":
-        return redirect("home")
+        return redirect("dashboard")
 
-    requests = WardSwapRequest.objects.all().order_by("-created_at")
+    requests = WardSwapRequest.objects.all().order_by(
+        "-created_at"
+    )
 
     return render(request, "ward/swap_requests.html", {
         "requests": requests
@@ -1587,32 +1603,46 @@ def ward_swap_requests(request):
 @login_required
 def update_swap_status(request, request_id, action):
 
-    swap = WardSwapRequest.objects.get(id=request_id)
+    if request.user.role != "ward":
+        return redirect("dashboard")
+
+    swap_request = get_object_or_404(
+        WardSwapRequest,
+        id=request_id
+    )
 
     if action == "accept":
 
-        swap.status = "accepted"
+        swap_request.status = "accepted"
 
-    elif action == "reject":
+        # swap posting owner
+        posting = swap_request.posting
 
-        swap.status = "rejected"
+        posting.user = swap_request.swap_with
 
-    swap.save()
+        posting.save()
 
-    # 🔥 NOTIFICATION
-    if action == "accept":
+        # notification
+        Notification.objects.create(
+            user=swap_request.requested_by,
+            message="Your ward swap request was accepted."
+        )
 
-        create_notification(
-            swap.requested_by,
-            "Your ward swap request was accepted."
+        Notification.objects.create(
+            user=swap_request.swap_with,
+            message="You received a new swapped ward posting."
         )
 
     else:
 
-        create_notification(
-            swap.requested_by,
-            "Your ward swap request was rejected."
+        swap_request.status = "rejected"
+
+        Notification.objects.create(
+            user=swap_request.requested_by,
+            message="Your ward swap request was rejected."
         )
+
+    swap_request.save()
 
     return redirect("ward_swap_requests")
 
