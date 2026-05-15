@@ -6,19 +6,108 @@
     <table class="modern-table">
 
         <thead>
+
             <tr>
+
                 <th>Student</th>
-                <th>Status</th>
+
+                <th>Attendance</th>
+
+                <th>Item</th>
+
+                <th>Card</th>
+
+                <th>Term</th>
+
+                <th>Payment</th>
+
+                <th>Internship</th>
+
             </tr>
+
         </thead>
 
         <tbody>
+
             {% for d in data %}
+
             <tr>
-                <td>{{ d.user.username }}</td>
-                <td class="status">{{ d.status }}</td>
+
+                <td>
+                    {{ d.user.username }}
+                </td>
+
+                <td>
+
+                    {% if d.attendance >= 75 %}
+                        <span style="color:green;">✓ Eligible</span>
+                    {% else %}
+                        <span style="color:red;">✕ Low</span>
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {% if d.item %}
+                        <span style="color:green;">✓</span>
+                    {% else %}
+                        <span style="color:red;">✕</span>
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {% if d.card %}
+                        <span style="color:green;">✓</span>
+                    {% else %}
+                        <span style="color:red;">✕</span>
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {% if d.term %}
+                        <span style="color:green;">✓</span>
+                    {% else %}
+                        <span style="color:red;">✕</span>
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {% if d.payment %}
+                        <span style="color:green;">✓ Paid</span>
+                    {% else %}
+                        <span style="color:red;">✕ Due</span>
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {% if d.internship %}
+                        <span style="color:green; font-weight:bold;">
+                            Eligible
+                        </span>
+
+                    {% else %}
+
+                        <span style="color:red; font-weight:bold;">
+                            Not Eligible
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
             </tr>
+
             {% endfor %}
+
         </tbody>
 
     </table>

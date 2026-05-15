@@ -946,24 +946,52 @@ def payment_dashboard(request):
     
 
 # ================ STUDENT ELIGIBILITY CHECK =================
+@login_required
 def check_eligibility(record):
 
+    # Attendance check
     if record.attendance < 75:
-        return "Not Eligible (Low Attendance)"
+        return {
+            "item": False,
+            "card": False,
+            "term": False,
+            "internship": False,
+            "message": "Low Attendance"
+        }
 
-    if not record.item_pass:
-        return "Not Eligible for Card"
+    # ITEM
+    item_eligible = True
 
-    if record.item_pass and not record.card_pass:
-        return "Eligible for Card"
+    # CARD
+    card_eligible = False
 
-    if record.card_pass and not record.term_pass:
-        return "Eligible for Term"
+    if record.item_pass:
+        card_eligible = True
 
-    if record.term_pass:
-        return "Eligible for Professional Exam"
+    # TERM
+    term_eligible = False
 
-    return "Not Eligible"
+    if record.item_pass and record.card_pass:
+        term_eligible = True
+
+    # INTERNSHIP
+    internship_eligible = False
+
+    if (
+        record.item_pass and
+        record.card_pass and
+        record.term_pass and
+        record.payment_clear
+    ):
+        internship_eligible = True
+
+    return {
+        "item": item_eligible,
+        "card": card_eligible,
+        "term": term_eligible,
+        "internship": internship_eligible,
+        "message": "Eligibility Checked"
+    }
 
 # ================= STUDENT RECORD VIEW (ADMIN) =================
 @login_required
@@ -990,10 +1018,16 @@ def eligibility_view(request):
     data = []
     for r in records:
         status = check_eligibility(r)
+
         data.append({
             "user": r.user,
-            "status": status
-        })
+            "item": status["item"],
+            "card": status["card"],
+            "term": status["term"],
+            "internship": status["internship"],
+            "attendance": r.attendance,
+            "payment": r.payment_clear,
+            })
 
     return render(request, "admin/eligibility.html", {
         "data": data
@@ -1003,15 +1037,27 @@ def eligibility_view(request):
 @login_required
 def student_status_view(request):
 
-    record = StudentRecord.objects.filter(user=request.user).first()
+    record = StudentRecord.objects.filter(
+        user=request.user
+    ).first()
 
     if not record:
-        return render(request, "student/status.html", {"status": "No Data"})
+
+        return render(request, "student/status.html", {
+            "no_data": True
+        })
 
     status = check_eligibility(record)
 
     return render(request, "student/status.html", {
-        "status": status
+
+        "item": status["item"],
+        "card": status["card"],
+        "term": status["term"],
+        "internship": status["internship"],
+
+        "attendance": record.attendance,
+        "payment": record.payment_clear,
     })
 
 

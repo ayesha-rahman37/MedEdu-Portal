@@ -1,10 +1,106 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="status-container">
+<div class="status-page">
 
-    <div class="status-card">
-        {{ status }}
+    <div class="status-box">
+
+        <h1>Internship Eligibility Status</h1>
+
+        {% if no_data %}
+
+            <div class="danger-box">
+                No Academic Record Found
+            </div>
+
+        {% else %}
+
+            <div class="status-grid">
+
+                <div class="status-card">
+
+                    <h3>Attendance</h3>
+
+                    {% if attendance >= 75 %}
+                        <p class="success">Eligible ✓</p>
+                    {% else %}
+                        <p class="danger">Below 75% ✕</p>
+                    {% endif %}
+
+                </div>
+
+                <div class="status-card">
+
+                    <h3>Item Eligibility</h3>
+
+                    {% if item %}
+                        <p class="success">Eligible ✓</p>
+                    {% else %}
+                        <p class="danger">Not Eligible ✕</p>
+                    {% endif %}
+
+                </div>
+
+                <div class="status-card">
+
+                    <h3>Card Eligibility</h3>
+
+                    {% if card %}
+                        <p class="success">Eligible ✓</p>
+                    {% else %}
+                        <p class="danger">Not Eligible ✕</p>
+                    {% endif %}
+
+                </div>
+
+                <div class="status-card">
+
+                    <h3>Term Eligibility</h3>
+
+                    {% if term %}
+                        <p class="success">Eligible ✓</p>
+                    {% else %}
+                        <p class="danger">Not Eligible ✕</p>
+                    {% endif %}
+
+                </div>
+
+                <div class="status-card">
+
+                    <h3>Payment Status</h3>
+
+                    {% if payment %}
+                        <p class="success">Clear ✓</p>
+                    {% else %}
+                        <p class="danger">Due Remaining ✕</p>
+                    {% endif %}
+
+                </div>
+
+                <div class="status-card big-card">
+
+                    <h2>Internship Status</h2>
+
+                    {% if internship %}
+
+                        <div class="eligible-box">
+                            ✅ Eligible for Internship
+                        </div>
+
+                    {% else %}
+
+                        <div class="not-eligible-box">
+                            ❌ Not Eligible for Internship
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
     </div>
 
 </div>

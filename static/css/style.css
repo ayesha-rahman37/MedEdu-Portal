@@ -2534,3 +2534,79 @@ h2 {
 
     background:#f8f3f3;
 }
+
+
+.status-page{
+    width: 90%;
+    margin: 40px auto;
+    font-family: "Times New Roman", serif;
+}
+
+.status-box{
+    background: rgba(255,255,255,0.55);
+    padding: 40px;
+    border-radius: 22px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.status-box h1{
+    text-align:center;
+    margin-bottom:35px;
+    color:#4b3535;
+}
+
+.status-grid{
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    gap:25px;
+}
+
+.status-card{
+    background:#f8f2f2;
+    padding:25px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+
+.big-card{
+    grid-column: span 3;
+}
+
+.success{
+    color:green;
+    font-weight:bold;
+}
+
+.danger{
+    color:red;
+    font-weight:bold;
+}
+
+.eligible-box{
+    background:#d4f5dd;
+    padding:18px;
+    border-radius:14px;
+    color:green;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.not-eligible-box{
+    background:#ffd6d6;
+    padding:18px;
+    border-radius:14px;
+    color:red;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.danger-box{
+    background:#ffd6d6;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    font-weight:bold;
+    color:red;
+}
