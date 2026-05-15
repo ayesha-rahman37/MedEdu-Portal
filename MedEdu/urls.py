@@ -104,10 +104,6 @@ urlpatterns = [
     # ================= INTERNSHIP ELIGIBILITY =================
     path('internship-eligibility/', views.internship_eligibility, name='internship_eligibility'),
 
-    path("medical-updates/",views.medical_updates,name="medical_updates"),
-
-    path("create-medical-update/",views.create_medical_update,name="create_medical_update"),
-
     # ================= REPORTS & MONITORING =================
     path("student-report/", views.student_report, name="student_report"),
     path("admin-monitoring/", views.admin_monitoring, name="admin_monitoring"),
