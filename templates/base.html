@@ -213,7 +213,6 @@
                 <a href="{% url 'edit_marks' %}">Edit Marks</a>
                 <a href="{% url 'exam_results' %}">Exam Results</a>
                 <a href="{% url 'mark_attendance' %}">Attendance</a>
-                <a href="{% url 'notifications' %}">Notifications</a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
 
@@ -225,20 +224,17 @@
                 <a href="{% url 'clinical_case' %}">Clinical Case</a>
                 <a href="{% url 'ot_schedule' %}">OT</a>
                 <a href="{% url 'medical_updates' %}">Medical Updates</a>
-                <a href="{% url 'payment' %}">Payment</a>
-                <a href="{% url 'notifications' %}">Notifications</a>
                 <a href="{% url 'intern_resources' %}">Clinical Resources</a>
+                <a href="{% url 'notifications' %}">Notifications</a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
 
             {% elif user.role == "doctor" %}
 
                 <a href="{% url 'doctor_dashboard' %}">Home</a>
-                <a href="{% url 'doctor_schedule' %}">Schedule</a>
-                <a href="{% url 'my_ward_posting' %}">Ward Schedule</a>
+                <a href="{% url 'doctor_schedule' %}">Work Schedule</a>
                 <a href="{% url 'ot_schedule' %}">OT</a>
                 <a href="{% url 'payment' %}">Payment</a>
-                <a href="{% url 'notifications' %}">Notifications</a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
 
@@ -247,7 +243,6 @@
                 <a href="{% url 'ward_dashboard' %}">Home</a>
                 <a href="{% url 'ward_posting_manage' %}"> Ward Posting</a>
                 <a href="{% url 'ward_swap_requests' %}">Swap Requests</a>
-                <a href="{% url 'notifications' %}">Notifications</a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
 
@@ -273,7 +268,6 @@
                 <a href="{% url 'add_notice' %}">Academic Notice</a>
                 <a href="{% url 'analytics' %}">Analytics</a>
                 <a href="{% url 'admin_monitoring' %}">Monitoring</a>
-                <a href="{% url 'notifications' %}">Notifications</a>
                 <a href="{% url 'profile' %}">Profile</a>
                 <a href="{% url 'logout' %}">Logout</a>
 

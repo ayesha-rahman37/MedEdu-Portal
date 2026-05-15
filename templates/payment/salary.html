@@ -1,38 +1,74 @@
 {% extends "base.html" %}
+
 {% block content %}
 
-<div class="payment-layout">
+<div class="salary-page">
 
-    <!-- ONLY TABLE (NO SIDE FORM) -->
-    <div class="payment-table-box" style="width:100%;">
+    {% if salaries %}
 
-        <table class="modern-table">
-            <thead>
-                <tr>
-                    <th>Month</th>
-                    <th>Amount</th>
-                    <th>Bank</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
+    <div class="salary-grid">
 
-            <tbody>
-                {% for s in salaries %}
-                <tr>
-                    <td>{{ s.month }}</td>
-                    <td>{{ s.amount }} Tk</td>
-                    <td>{{ s.bank_name }}</td>
-                    <td>{{ s.date }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="4" style="text-align:center;">No salary data</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% for s in salaries %}
+
+        <div class="salary-card">
+
+            <div class="salary-top">
+
+                <div>
+
+                    <h2>{{ s.month }}</h2>
+
+                    <span class="paid-badge">
+                        Paid
+                    </span>
+
+                </div>
+
+                <div class="money-icon">
+                    💰
+                </div>
+
+            </div>
+
+            <div class="salary-amount">
+
+                ৳ {{ s.amount }}
+
+            </div>
+
+            <div class="salary-info">
+
+                <div class="info-box">
+
+                    <span>Bank</span>
+
+                    <p>{{ s.bank_name }}</p>
+
+                </div>
+
+                <div class="info-box">
+
+                    <span>Date</span>
+
+                    <p>{{ s.date }}</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
 
     </div>
+
+    {% else %}
+
+    <div class="empty-payment">
+        No salary records available
+    </div>
+
+    {% endif %}
 
 </div>
 

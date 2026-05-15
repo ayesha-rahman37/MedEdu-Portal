@@ -4,23 +4,23 @@
 <div class="analytics-wrapper">
 
     <h1 class="analytics-title">
-        Student Analytics & Reports
+        Student Analytics
     </h1>
 
     <div class="analytics-grid">
 
-        {% for student in students %}
+        {% for s in students %}
 
         <div class="analytics-card">
 
             <div class="student-top">
 
                 <h2>
-                    {{ student.username }}
+                    {{ s.username }}
                 </h2>
 
                 <span>
-                    {{ student.mededu_id }}
+                    {{ s.mededu_id }}
                 </span>
 
             </div>
@@ -28,57 +28,36 @@
             <div class="student-stats">
 
                 <div class="mini-box">
-
-                    <h4>
-                        Performance
-                    </h4>
-
-                    <p>
-                        {{ student.avg_marks }}%
-                    </p>
-
+                    <h4>Average</h4>
+                    <p>{{ s.avg_marks }}%</p>
                 </div>
 
                 <div class="mini-box">
-
-                    <h4>
-                        Pass Rate
-                    </h4>
-
-                    <p>
-                        {{ student.pass_rate }}%
-                    </p>
-
+                    <h4>Pass Rate</h4>
+                    <p>{{ s.pass_rate }}%</p>
                 </div>
 
                 <div class="mini-box">
+                    <h4>Status</h4>
 
-                    <h4>
-                        Internship
-                    </h4>
-
-                    {% if student.eligible %}
-
-                    <p class="eligible">
-                        Eligible
-                    </p>
-
+                    {% if s.eligible %}
+                        <p class="eligible">
+                            Eligible
+                        </p>
                     {% else %}
-
-                    <p class="not-eligible">
-                        Not Eligible
-                    </p>
-
+                        <p class="not-eligible">
+                            Pending
+                        </p>
                     {% endif %}
 
                 </div>
 
             </div>
 
-            <a href="{% url 'download_report' student.id %}"
+            <a href="{% url 'download_report' s.id %}"
                class="download-btn">
 
-                Download Report of {{ student.username }}
+               Download Report
 
             </a>
 

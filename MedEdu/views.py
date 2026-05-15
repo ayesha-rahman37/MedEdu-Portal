@@ -1219,46 +1219,79 @@ def exam_results(request):
 @login_required
 def dashboard_analytics(request):
 
-    if request.user.role == "faculty" or request.user.role == "admin":
-        results = Result.objects.all()
-    else:
-        results = Result.objects.filter(user=request.user)
+    if request.user.role != "admin":
+        return redirect("dashboard")
 
-    total = results.count()
+    students = User.objects.filter(
+        role__in=[
+            "medical_student",
+            "dental_student"
+        ]
+    )
 
-    if total == 0:
-        return render(request, "analytics.html", {"no_data": True})
+    student_data = []
 
-    marks_list = []
-    pass_count = 0
+    for s in students:
 
-    for r in results:
-        if r.marks is not None:
-            percent = (r.marks / r.topic.full_marks) * 100
-            marks_list.append(percent)
+        results = Result.objects.filter(
+            user=s
+        )
 
-            if percent >= 60:
-                pass_count += 1
+        total = results.count()
 
-    avg = sum(marks_list) / len(marks_list) if marks_list else 0
-    pass_rate = (pass_count / total) * 100
+        cleared = results.filter(
+            status="clear"
+        ).count()
 
-    # 🔥 Improvement Logic (last 5 vs previous 5)
-    last5 = marks_list[-5:]
-    prev5 = marks_list[:-5]
+        avg = 0
 
-    if prev5:
-        prev_avg = sum(prev5) / len(prev5)
-        improvement = avg - prev_avg
-    else:
-        improvement = 0
+        if total > 0:
 
-    return render(request, "analytics.html", {
-        "avg": round(avg, 2),
-        "pass_rate": round(pass_rate, 2),
-        "total": total,
-        "improvement": round(improvement, 2)
-    })
+            marks = []
+
+            for r in results:
+
+                if r.marks:
+
+                    percent = (
+                        r.marks /
+                        r.topic.full_marks
+                    ) * 100
+
+                    marks.append(percent)
+
+            if marks:
+                avg = sum(marks) / len(marks)
+
+        pass_rate = 0
+
+        if total > 0:
+            pass_rate = (
+                cleared / total
+            ) * 100
+
+        student_data.append({
+
+            "id": s.id,
+
+            "username": s.username,
+
+            "mededu_id": s.mededu_id,
+
+            "avg_marks": round(avg, 1),
+
+            "pass_rate": round(pass_rate, 1),
+
+            "eligible": total == cleared and total > 0
+        })
+
+    return render(
+        request,
+        "reports/admin_monitoring.html",
+        {
+            "students": student_data
+        }
+    )
 
 
 # ================= OT SCHEDULE VIEW =================
