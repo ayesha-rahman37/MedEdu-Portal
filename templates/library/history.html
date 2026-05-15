@@ -1,32 +1,49 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="page-container">
+<div class="library-dashboard">
 
-    <div class="card-box">
-        <h2>Book History</h2>
+    <div class="library-card">
 
-        <table class="table-custom">
+        <table class="table-modern">
+
             <tr>
                 <th>Student</th>
                 <th>Book</th>
                 <th>Issue Date</th>
-                <th>Returned</th>
+                <th>Status</th>
             </tr>
 
-            {% for issue in issues %}
+            {% for issue in history %}
+
             <tr>
+
                 <td>{{ issue.student.username }}</td>
+
                 <td>{{ issue.book.title }}</td>
+
                 <td>{{ issue.issue_date }}</td>
+
                 <td>
+
                     {% if issue.returned %}
-                        Yes
+
+                    <span class="status-returned">
+                        Returned
+                    </span>
+
                     {% else %}
-                        No
+
+                    <span class="status-overdue">
+                        Borrowed
+                    </span>
+
                     {% endif %}
+
                 </td>
+
             </tr>
+
             {% endfor %}
 
         </table>

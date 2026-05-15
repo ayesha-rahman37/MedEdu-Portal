@@ -1,66 +1,86 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="library-container">
+<div class="issue-container">
 
-    <div class="library-wrapper">
+    <div class="issue-card">
 
-        <!-- LEFT CARD -->
-        <div class="card issue-card">
+        <form method="POST" class="issue-form">
 
-            <h2>📚 Issue Book</h2>
+            {% csrf_token %}
 
-            <form method="POST">
-                {% csrf_token %}
+            <div class="input-group">
 
-                <label>Student</label>
-                <select name="student">
+                <label>
+
+                    Select Student
+
+                </label>
+
+                <select name="student" required>
+
                     {% for user in users %}
-                        <option value="{{ user.id }}">
-                            {{ user.username }} ({{ user.mededu_id }})
-                        </option>
+
+                    <option value="{{ user.id }}">
+
+                        {{ user.username }} ({{ user.mededu_id }})
+
+                    </option>
+
                     {% endfor %}
+
                 </select>
 
-                <label>Book</label>
-                <select name="book">
-                    {% for book in books %}
-                        <option value="{{ book.id }}">
-                            {{ book.title }} ({{ book.available_copies }} left)
-                        </option>
-                    {% endfor %}
-                </select>
-
-                <label>Due Date</label>
-                <input type="date" name="due_date">
-
-                <button type="submit">Issue Book</button>
-
-            </form>
-
-        </div>
-
-        <!-- RIGHT CARD -->
-        <div class="card info-card">
-
-            <h2>📊 Quick Info</h2>
-
-            <div class="info-row">
-                <div>
-                    <h4>Total Books</h4>
-                    <p>{{ total_books }}</p>
-                </div>
-                <div>
-                    <h4>Available</h4>
-                    <p>{{ available_books }}</p>
-                </div>
-                <div>
-                    <h4>Issued</h4>
-                    <p>{{ issued_books }}</p>
-                </div>
             </div>
 
-        </div>
+            <div class="input-group">
+
+                <label>
+
+                    Select Book
+
+                </label>
+
+                <select name="book" required>
+
+                    {% for book in books %}
+
+                    <option value="{{ book.id }}">
+
+                        {{ book.title }} 
+                        ({{ book.available_copies }} available)
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+
+                    Due Date
+
+                </label>
+
+                <input
+                    type="date"
+                    name="due_date"
+                    required
+                >
+
+            </div>
+
+            <button type="submit" class="issue-btn">
+
+                Issue Book
+
+            </button>
+
+        </form>
 
     </div>
 

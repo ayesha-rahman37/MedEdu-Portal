@@ -511,8 +511,31 @@ def library_dashboard(request):
 @login_required
 def issue_book(request):
 
-    users = User.objects.all()
+    users = User.objects.filter(
+        role__in=["medical_student", "dental_student"]
+    )
+
     books = Book.objects.all()
+
+    total_books = Book.objects.count()
+
+    available_books = Book.objects.filter(
+        available_copies__gt=0
+    ).count()
+
+    issued_books = Issue.objects.filter(
+        returned=False
+    ).count()
+
+    overdue_books = Issue.objects.filter(
+        returned=False,
+        due_date__lt=date.today()
+    ).count()
+
+    recent_issues = Issue.objects.select_related(
+        'student',
+        'book'
+    ).order_by('-issue_date')[:5]
 
     if request.method == 'POST':
 
@@ -524,6 +547,7 @@ def issue_book(request):
         book = Book.objects.get(id=book_id)
 
         if book.available_copies > 0:
+
             Issue.objects.create(
                 student=student,
                 book=book,
@@ -533,11 +557,24 @@ def issue_book(request):
             book.available_copies -= 1
             book.save()
 
-        return redirect('library_dashboard')
+            Notification.objects.create(
+                user=student,
+                message=f"You borrowed '{book.title}'. Return before {due_date}."
+            )
+
+        return redirect('issue_book')
 
     return render(request, 'library/issue_book.html', {
+
         'users': users,
-        'books': books
+        'books': books,
+
+        'total_books': total_books,
+        'available_books': available_books,
+        'issued_books': issued_books,
+        'overdue_books': overdue_books,
+
+        'recent_issues': recent_issues,
     })
 
 
@@ -545,10 +582,26 @@ def issue_book(request):
 @login_required
 def return_book(request):
 
-    issued_books = Issue.objects.filter(returned=False)
+    issues = Issue.objects.filter(
+        returned=False
+    ).select_related(
+        'student',
+        'book'
+    )
+
+    for issue in issues:
+
+        if date.today() > issue.due_date:
+
+            late_days = (date.today() - issue.due_date).days
+
+            issue.fine = late_days * 5
+
+        else:
+            issue.fine = 0
 
     return render(request, 'library/return_book.html', {
-        'issued_books': issued_books
+        'issues': issues
     })
 
 
@@ -559,12 +612,19 @@ def return_book_action(request, issue_id):
     issue = Issue.objects.get(id=issue_id)
 
     if not issue.returned:
+
         issue.returned = True
         issue.save()
 
         book = issue.book
+
         book.available_copies += 1
         book.save()
+
+        Notification.objects.create(
+            user=issue.student,
+            message=f"You returned '{issue.book.title}' successfully."
+        )
 
     return redirect('return_book')
 
@@ -575,8 +635,27 @@ def records(request):
 
     books = Book.objects.all()
 
+    data = []
+
+    for book in books:
+
+        issued_count = Issue.objects.filter(
+            book=book,
+            returned=False
+        ).count()
+
+        data.append({
+
+            'title': book.title,
+            'author': book.author,
+
+            'total': book.total_copies,
+            'available': book.available_copies,
+            'issued': issued_count,
+        })
+
     return render(request, 'library/records.html', {
-        'books': books
+        'data': data
     })
 
 
@@ -584,7 +663,10 @@ def records(request):
 @login_required
 def history(request):
 
-    history = Issue.objects.all().order_by('-issue_date')
+    history = Issue.objects.select_related(
+        'student',
+        'book'
+    ).order_by('-issue_date')
 
     return render(request, 'library/history.html', {
         'history': history
@@ -614,9 +696,21 @@ def renew_book(request, issue_id):
 # ================= STUDENT LIBRARY VIEW =================
 @login_required
 def student_library(request):
-    user = request.user
 
-    issues = Issue.objects.filter(student=user)
+    issues = Issue.objects.filter(
+        student=request.user
+    ).select_related('book')
+
+    for issue in issues:
+
+        if not issue.returned and date.today() > issue.due_date:
+
+            late_days = (date.today() - issue.due_date).days
+
+            issue.fine = late_days * 5
+
+        else:
+            issue.fine = 0
 
     return render(request, 'library/my_books.html', {
         'issues': issues

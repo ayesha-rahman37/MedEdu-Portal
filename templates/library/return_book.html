@@ -1,37 +1,50 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="page-container">
+<div class="library-dashboard">
 
-    <div class="card-box">
-        <h2>Return Book</h2>
+    <div class="library-card">
 
-        <table class="table-custom">
+        <table class="table-modern">
+
             <tr>
                 <th>Student</th>
                 <th>Book</th>
-                <th>Issue Date</th>
-                <th>Due Date</th>
+                <th>Issue</th>
+                <th>Due</th>
+                <th>Fine</th>
                 <th>Action</th>
             </tr>
 
             {% for issue in issues %}
+
             <tr>
+
                 <td>{{ issue.student.username }}</td>
+
                 <td>{{ issue.book.title }}</td>
+
                 <td>{{ issue.issue_date }}</td>
+
                 <td>{{ issue.due_date }}</td>
+
+                <td>{{ issue.fine }} BDT</td>
+
                 <td>
-                    <a href="{% url 'return_book_action' issue.id %}" class="btn-custom">
+
+                    <a href="{% url 'return_book_action' issue.id %}"
+                       class="return-btn">
+
                         Return
+
                     </a>
+
                 </td>
+
             </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5">No issued books</td>
-            </tr>
+
             {% endfor %}
+
         </table>
 
     </div>
